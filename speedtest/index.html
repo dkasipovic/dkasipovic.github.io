@@ -1,0 +1,1939 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Speed Test</title>
+  
+  <!-- Leaflet CSS for maps -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  
+  <style>
+    :root {
+      --bg-primary: #0f172a;
+      --bg-secondary: #1e293b;
+      --bg-tertiary: #334155;
+      --text-primary: #f1f5f9;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --accent: #3b82f6;
+      --accent-hover: #2563eb;
+      --success: #22c55e;
+      --warning: #eab308;
+      --danger: #ef4444;
+      --border: #475569;
+      --gauge-bg: #1e293b;
+      --gauge-track: #334155;
+    }
+
+    [data-theme="light"] {
+      --bg-primary: #f8fafc;
+      --bg-secondary: #ffffff;
+      --bg-tertiary: #e2e8f0;
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #94a3b8;
+      --border: #cbd5e1;
+      --gauge-bg: #ffffff;
+      --gauge-track: #e2e8f0;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    /* Header */
+    .header {
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .theme-toggle {
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: all 0.2s;
+    }
+
+    .theme-toggle:hover {
+      background: var(--border);
+    }
+
+    /* Navigation */
+    .nav {
+      display: flex;
+      gap: 0;
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+    }
+
+    .nav-btn {
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      padding: 1rem 1.5rem;
+      cursor: pointer;
+      font-size: 1rem;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s;
+    }
+
+    .nav-btn:hover {
+      color: var(--text-primary);
+      background: var(--bg-tertiary);
+    }
+
+    .nav-btn.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+
+    /* Main Content */
+    .main {
+      padding: 2rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    /* Speed Test Tab */
+    .test-container {
+      display: grid;
+      grid-template-columns: 1fr 350px;
+      gap: 2rem;
+    }
+
+    @media (max-width: 1024px) {
+      .test-container {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .test-main {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    /* Gauge */
+    .gauge-container {
+      position: relative;
+      width: 320px;
+      height: 320px;
+    }
+
+    .gauge-svg {
+      width: 100%;
+      height: 100%;
+      transform: rotate(-90deg);
+    }
+
+    .gauge-bg {
+      fill: none;
+      stroke: var(--gauge-track);
+      stroke-width: 20;
+    }
+
+    .gauge-fill {
+      fill: none;
+      stroke: var(--accent);
+      stroke-width: 20;
+      stroke-linecap: round;
+      stroke-dasharray: 565.48;
+      stroke-dashoffset: 565.48;
+      transition: stroke-dashoffset 0.3s ease-out, stroke 0.3s;
+    }
+
+    .gauge-center {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+    }
+
+    .gauge-value {
+      font-size: 4rem;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .gauge-unit {
+      font-size: 1.25rem;
+      color: var(--text-secondary);
+      margin-top: 0.25rem;
+    }
+
+    .gauge-label {
+      font-size: 1rem;
+      color: var(--text-muted);
+      margin-top: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    /* Test Status */
+    .test-status {
+      display: flex;
+      gap: 2rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .status-item {
+      text-align: center;
+      min-width: 100px;
+    }
+
+    .status-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--bg-tertiary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 0.5rem;
+      font-size: 1.25rem;
+    }
+
+    .status-icon.active {
+      background: var(--accent);
+      animation: pulse 1s infinite;
+    }
+
+    .status-icon.done {
+      background: var(--success);
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    .status-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .status-value {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-top: 0.25rem;
+    }
+
+    /* Start Button */
+    .start-btn {
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 1rem 3rem;
+      font-size: 1.25rem;
+      font-weight: 600;
+      border-radius: 9999px;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .start-btn:hover {
+      background: var(--accent-hover);
+      transform: scale(1.05);
+    }
+
+    .start-btn:disabled {
+      background: var(--bg-tertiary);
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .start-btn.running {
+      background: var(--danger);
+    }
+
+    /* Device Info Panel */
+    .device-panel {
+      background: var(--bg-secondary);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      border: 1px solid var(--border);
+    }
+
+    .panel-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .info-section {
+      margin-bottom: 1.5rem;
+    }
+
+    .info-section:last-child {
+      margin-bottom: 0;
+    }
+
+    .info-section-title {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 0.75rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.375rem 0;
+      font-size: 0.875rem;
+    }
+
+    .info-label {
+      color: var(--text-muted);
+    }
+
+    .info-value {
+      color: var(--text-primary);
+      font-weight: 500;
+      text-align: right;
+      max-width: 60%;
+      word-break: break-all;
+    }
+
+    .info-value.loading {
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    /* Results Panel */
+    .results-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    @media (max-width: 768px) {
+      .results-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .result-card {
+      background: var(--bg-secondary);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      text-align: center;
+      border: 1px solid var(--border);
+    }
+
+    .result-icon {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .result-value {
+      font-size: 2rem;
+      font-weight: 700;
+    }
+
+    .result-unit {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+
+    .result-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-top: 0.5rem;
+    }
+
+    /* Save Dialog */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.2s;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal {
+      background: var(--bg-secondary);
+      border-radius: 1rem;
+      padding: 2rem;
+      max-width: 500px;
+      width: 90%;
+      border: 1px solid var(--border);
+    }
+
+    .modal-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+
+    .modal-input {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border-radius: 0.5rem;
+      border: 1px solid var(--border);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-size: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .modal-input:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: flex-end;
+    }
+
+    .modal-btn {
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.5rem;
+      border: none;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .modal-btn.primary {
+      background: var(--accent);
+      color: white;
+    }
+
+    .modal-btn.primary:hover {
+      background: var(--accent-hover);
+    }
+
+    .modal-btn.secondary {
+      background: var(--bg-tertiary);
+      color: var(--text-primary);
+    }
+
+    .modal-btn.secondary:hover {
+      background: var(--border);
+    }
+
+    /* History Tab */
+    .history-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .history-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+
+    .history-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .btn {
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      border: 1px solid var(--border);
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      font-size: 0.875rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn:hover {
+      background: var(--bg-tertiary);
+    }
+
+    .btn.danger {
+      border-color: var(--danger);
+      color: var(--danger);
+    }
+
+    .btn.danger:hover {
+      background: var(--danger);
+      color: white;
+    }
+
+    /* History Table */
+    .history-table-container {
+      background: var(--bg-secondary);
+      border-radius: 1rem;
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .history-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .history-table th,
+    .history-table td {
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .history-table th {
+      background: var(--bg-tertiary);
+      font-weight: 600;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-secondary);
+    }
+
+    .history-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .history-table tr:hover td {
+      background: var(--bg-tertiary);
+    }
+
+    .history-name {
+      font-weight: 500;
+    }
+
+    .history-date {
+      color: var(--text-muted);
+      font-size: 0.875rem;
+    }
+
+    .history-speed {
+      font-weight: 600;
+    }
+
+    .history-speed.download {
+      color: var(--success);
+    }
+
+    .history-speed.upload {
+      color: var(--accent);
+    }
+
+    .history-actions-cell {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .icon-btn {
+      background: var(--bg-tertiary);
+      border: none;
+      color: var(--text-secondary);
+      width: 32px;
+      height: 32px;
+      border-radius: 0.375rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .icon-btn:hover {
+      background: var(--border);
+      color: var(--text-primary);
+    }
+
+    .icon-btn.danger:hover {
+      background: var(--danger);
+      color: white;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 4rem 2rem;
+      color: var(--text-muted);
+    }
+
+    .empty-state-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+    }
+
+    /* Map Tab */
+    .map-container {
+      height: 600px;
+      border-radius: 1rem;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+
+    #history-map {
+      height: 100%;
+      width: 100%;
+    }
+
+    .leaflet-popup-content {
+      font-family: inherit;
+    }
+
+    .map-popup {
+      min-width: 200px;
+    }
+
+    .map-popup-title {
+      font-weight: 600;
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .map-popup-date {
+      color: #666;
+      font-size: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .map-popup-speeds {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .map-popup-speed {
+      text-align: center;
+    }
+
+    .map-popup-speed-value {
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+
+    .map-popup-speed-label {
+      font-size: 0.625rem;
+      text-transform: uppercase;
+      color: #666;
+    }
+
+    /* Charts Tab */
+    .chart-container {
+      background: var(--bg-secondary);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      border: 1px solid var(--border);
+    }
+
+    .chart-canvas {
+      max-height: 400px;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .header {
+        padding: 1rem;
+      }
+
+      .nav {
+        padding: 0 1rem;
+        overflow-x: auto;
+      }
+
+      .main {
+        padding: 1rem;
+      }
+
+      .gauge-container {
+        width: 260px;
+        height: 260px;
+      }
+
+      .gauge-value {
+        font-size: 3rem;
+      }
+
+      .history-table {
+        display: block;
+        overflow-x: auto;
+      }
+    }
+
+    /* Quality Colors */
+    .quality-excellent { color: var(--success); }
+    .quality-good { color: #22d3ee; }
+    .quality-fair { color: var(--warning); }
+    .quality-poor { color: var(--danger); }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg-primary);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="logo">⚡ SpeedTest</div>
+    <div class="header-actions">
+      <button class="theme-toggle" onclick="toggleTheme()">🌙 Dark</button>
+    </div>
+  </header>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <button class="nav-btn active" data-tab="test">🚀 Speed Test</button>
+    <button class="nav-btn" data-tab="history">📋 History</button>
+    <button class="nav-btn" data-tab="map">🗺️ Map</button>
+    <button class="nav-btn" data-tab="charts">📊 Charts</button>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="main">
+    <!-- Speed Test Tab -->
+    <div id="tab-test" class="tab-content active">
+      <div class="test-container">
+        <div class="test-main">
+          <!-- Gauge -->
+          <div class="gauge-container">
+            <svg class="gauge-svg" viewBox="0 0 200 200">
+              <circle class="gauge-bg" cx="100" cy="100" r="90" />
+              <circle class="gauge-fill" id="gauge-fill" cx="100" cy="100" r="90" />
+            </svg>
+            <div class="gauge-center">
+              <div class="gauge-value" id="gauge-value">0</div>
+              <div class="gauge-unit">Mbps</div>
+              <div class="gauge-label" id="gauge-label">Ready</div>
+            </div>
+          </div>
+
+          <!-- Test Status -->
+          <div class="test-status">
+            <div class="status-item">
+              <div class="status-icon" id="status-latency">📶</div>
+              <div class="status-label">Latency</div>
+              <div class="status-value" id="value-latency">--</div>
+            </div>
+            <div class="status-item">
+              <div class="status-icon" id="status-download">⬇️</div>
+              <div class="status-label">Download</div>
+              <div class="status-value" id="value-download">--</div>
+            </div>
+            <div class="status-item">
+              <div class="status-icon" id="status-upload">⬆️</div>
+              <div class="status-label">Upload</div>
+              <div class="status-value" id="value-upload">--</div>
+            </div>
+            <div class="status-item">
+              <div class="status-icon" id="status-jitter">📊</div>
+              <div class="status-label">Jitter</div>
+              <div class="status-value" id="value-jitter">--</div>
+            </div>
+          </div>
+
+          <!-- Start Button -->
+          <button class="start-btn" id="start-btn" onclick="toggleTest()">Start Test</button>
+
+          <!-- Results Grid (shown after test) -->
+          <div class="results-grid" id="results-grid" style="display: none;">
+            <div class="result-card">
+              <div class="result-icon">⬇️</div>
+              <div class="result-value" id="result-download">0</div>
+              <div class="result-unit">Mbps</div>
+              <div class="result-label">Download</div>
+            </div>
+            <div class="result-card">
+              <div class="result-icon">⬆️</div>
+              <div class="result-value" id="result-upload">0</div>
+              <div class="result-unit">Mbps</div>
+              <div class="result-label">Upload</div>
+            </div>
+            <div class="result-card">
+              <div class="result-icon">📶</div>
+              <div class="result-value" id="result-latency">0</div>
+              <div class="result-unit">ms</div>
+              <div class="result-label">Latency</div>
+            </div>
+            <div class="result-card">
+              <div class="result-icon">📊</div>
+              <div class="result-value" id="result-jitter">0</div>
+              <div class="result-unit">ms</div>
+              <div class="result-label">Jitter</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Device Info Panel -->
+        <aside class="device-panel">
+          <h3 class="panel-title">📱 Device & Network Info</h3>
+          
+          <div class="info-section">
+            <div class="info-section-title">Device</div>
+            <div class="info-row">
+              <span class="info-label">Type</span>
+              <span class="info-value" id="info-device-type">Detecting...</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Brand</span>
+              <span class="info-value" id="info-device-brand">Detecting...</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Model</span>
+              <span class="info-value" id="info-device-model">Detecting...</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">OS</span>
+              <span class="info-value" id="info-os">Detecting...</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Browser</span>
+              <span class="info-value" id="info-browser">Detecting...</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Screen</span>
+              <span class="info-value" id="info-screen">Detecting...</span>
+            </div>
+          </div>
+
+          <div class="info-section">
+            <div class="info-section-title">Network</div>
+            <div class="info-row">
+              <span class="info-label">External IP</span>
+              <span class="info-value loading" id="info-external-ip">Fetching...</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Internal IP</span>
+              <span class="info-value loading" id="info-internal-ip">Detecting...</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Connection</span>
+              <span class="info-value" id="info-connection">Detecting...</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Effective Type</span>
+              <span class="info-value" id="info-effective-type">Detecting...</span>
+            </div>
+          </div>
+
+          <div class="info-section">
+            <div class="info-section-title">Location</div>
+            <div class="info-row">
+              <span class="info-label">Latitude</span>
+              <span class="info-value loading" id="info-lat">Requesting...</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Longitude</span>
+              <span class="info-value loading" id="info-lng">Requesting...</span>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    <!-- History Tab -->
+    <div id="tab-history" class="tab-content">
+      <div class="history-header">
+        <h2 class="history-title">Test History</h2>
+        <div class="history-actions">
+          <button class="btn" onclick="exportHistory()">📥 Export</button>
+          <button class="btn" onclick="importHistory()">📤 Import</button>
+          <button class="btn danger" onclick="clearHistory()">🗑️ Clear All</button>
+        </div>
+      </div>
+      
+      <div class="history-table-container">
+        <table class="history-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Date</th>
+              <th>Download</th>
+              <th>Upload</th>
+              <th>Latency</th>
+              <th>Device</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="history-tbody">
+          </tbody>
+        </table>
+        <div class="empty-state" id="history-empty">
+          <div class="empty-state-icon">📋</div>
+          <p>No test history yet. Run a speed test to get started!</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Map Tab -->
+    <div id="tab-map" class="tab-content">
+      <div class="history-header">
+        <h2 class="history-title">Test Locations</h2>
+      </div>
+      <div class="map-container">
+        <div id="history-map"></div>
+      </div>
+    </div>
+
+    <!-- Charts Tab -->
+    <div id="tab-charts" class="tab-content">
+      <div class="history-header">
+        <h2 class="history-title">Speed Trends</h2>
+      </div>
+      <div class="chart-container">
+        <canvas id="speed-chart" class="chart-canvas"></canvas>
+      </div>
+    </div>
+  </main>
+
+  <!-- Save Modal -->
+  <div class="modal-overlay" id="save-modal">
+    <div class="modal">
+      <h3 class="modal-title">Save Test Result</h3>
+      <input type="text" class="modal-input" id="test-name-input" placeholder="Enter a name for this test...">
+      <div class="modal-actions">
+        <button class="modal-btn secondary" onclick="closeSaveModal()">Cancel</button>
+        <button class="modal-btn primary" onclick="saveTestResult()">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Modal -->
+  <div class="modal-overlay" id="edit-modal">
+    <div class="modal">
+      <h3 class="modal-title">Rename Test</h3>
+      <input type="text" class="modal-input" id="edit-name-input" placeholder="Enter new name...">
+      <div class="modal-actions">
+        <button class="modal-btn secondary" onclick="closeEditModal()">Cancel</button>
+        <button class="modal-btn primary" onclick="updateTestName()">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Detail Modal -->
+  <div class="modal-overlay" id="detail-modal">
+    <div class="modal" style="max-width: 600px;">
+      <h3 class="modal-title" id="detail-title">Test Details</h3>
+      <div id="detail-content"></div>
+      <div class="modal-actions" style="margin-top: 1.5rem;">
+        <button class="modal-btn secondary" onclick="closeDetailModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hidden file input for import -->
+  <input type="file" id="import-input" accept=".json" style="display: none;">
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Cloudflare Speedtest -->
+  <script type="module">
+    import SpeedTest from 'https://esm.sh/@cloudflare/speedtest@1.7.0';
+    window.SpeedTest = SpeedTest;
+  </script>
+
+  <script>
+    // ===== STATE =====
+    let speedTest = null;
+    let isRunning = false;
+    let currentResults = null;
+    let deviceInfo = {};
+    let editingId = null;
+    let map = null;
+    let chart = null;
+    let mapInitialized = false;
+
+    // ===== INITIALIZATION =====
+    document.addEventListener('DOMContentLoaded', async () => {
+      initTheme();
+      initNavigation();
+      await detectDeviceInfo();
+      renderHistory();
+    });
+
+    // ===== THEME =====
+    function initTheme() {
+      const saved = localStorage.getItem('speedtest-theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', saved);
+      updateThemeButton(saved);
+    }
+
+    function toggleTheme() {
+      const current = document.documentElement.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('speedtest-theme', next);
+      updateThemeButton(next);
+    }
+
+    function updateThemeButton(theme) {
+      const btn = document.querySelector('.theme-toggle');
+      btn.textContent = theme === 'dark' ? '☀️ Light' : '🌙 Dark';
+    }
+
+    // ===== NAVIGATION =====
+    function initNavigation() {
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const tab = btn.dataset.tab;
+          
+          document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          
+          document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+          document.getElementById(`tab-${tab}`).classList.add('active');
+          
+          if (tab === 'map') {
+            setTimeout(() => initMap(), 100);
+          } else if (tab === 'charts') {
+            setTimeout(() => initChart(), 100);
+          }
+        });
+      });
+    }
+
+    // ===== DEVICE DETECTION =====
+    async function detectDeviceInfo() {
+      const ua = navigator.userAgent;
+      
+      // Device type
+      const isMobile = /Mobile|Android|iPhone|iPad|iPod/i.test(ua);
+      const isTablet = /iPad|Android(?!.*Mobile)/i.test(ua);
+      deviceInfo.deviceType = isTablet ? 'Tablet' : isMobile ? 'Mobile' : 'Desktop';
+      
+      // Parse user agent for brand and model
+      const deviceDetails = parseUserAgent(ua);
+      deviceInfo.deviceBrand = deviceDetails.brand;
+      deviceInfo.deviceModel = deviceDetails.model;
+      deviceInfo.os = deviceDetails.os;
+      deviceInfo.browser = deviceDetails.browser;
+      
+      // Screen
+      deviceInfo.screenResolution = `${window.screen.width}×${window.screen.height}`;
+      
+      // Network Information API
+      if (navigator.connection) {
+        deviceInfo.connectionType = navigator.connection.type || 'Unknown';
+        deviceInfo.effectiveType = navigator.connection.effectiveType || 'Unknown';
+      } else {
+        deviceInfo.connectionType = 'N/A';
+        deviceInfo.effectiveType = 'N/A';
+      }
+      
+      // Update UI
+      updateDeviceUI();
+      
+      // Async operations
+      await Promise.all([
+        fetchExternalIP(),
+        fetchInternalIP(),
+        fetchLocation()
+      ]);
+    }
+
+    function parseUserAgent(ua) {
+      let brand = 'Unknown';
+      let model = 'Unknown';
+      let os = 'Unknown';
+      let browser = 'Unknown';
+      
+      // OS Detection
+      if (/Windows NT 10/.test(ua)) os = 'Windows 10/11';
+      else if (/Windows NT 6.3/.test(ua)) os = 'Windows 8.1';
+      else if (/Windows NT 6.2/.test(ua)) os = 'Windows 8';
+      else if (/Windows NT 6.1/.test(ua)) os = 'Windows 7';
+      else if (/Mac OS X ([\d_]+)/.test(ua)) {
+        const ver = ua.match(/Mac OS X ([\d_]+)/)[1].replace(/_/g, '.');
+        os = `macOS ${ver}`;
+      }
+      else if (/iPhone OS ([\d_]+)/.test(ua)) {
+        const ver = ua.match(/iPhone OS ([\d_]+)/)[1].replace(/_/g, '.');
+        os = `iOS ${ver}`;
+      }
+      else if (/Android ([\d.]+)/.test(ua)) {
+        const ver = ua.match(/Android ([\d.]+)/)[1];
+        os = `Android ${ver}`;
+      }
+      else if (/Linux/.test(ua)) os = 'Linux';
+      else if (/CrOS/.test(ua)) os = 'Chrome OS';
+      
+      // Browser Detection
+      if (/Edg\/([\d.]+)/.test(ua)) {
+        browser = `Edge ${ua.match(/Edg\/([\d.]+)/)[1]}`;
+      } else if (/Chrome\/([\d.]+)/.test(ua) && !/Chromium/.test(ua)) {
+        browser = `Chrome ${ua.match(/Chrome\/([\d.]+)/)[1].split('.')[0]}`;
+      } else if (/Firefox\/([\d.]+)/.test(ua)) {
+        browser = `Firefox ${ua.match(/Firefox\/([\d.]+)/)[1].split('.')[0]}`;
+      } else if (/Safari\/([\d.]+)/.test(ua) && !/Chrome/.test(ua)) {
+        const safariVer = ua.match(/Version\/([\d.]+)/);
+        browser = safariVer ? `Safari ${safariVer[1]}` : 'Safari';
+      } else if (/Opera|OPR\/([\d.]+)/.test(ua)) {
+        browser = `Opera ${ua.match(/(?:Opera|OPR)\/([\d.]+)/)?.[1] || ''}`;
+      }
+      
+      // Device Brand & Model (mostly for mobile)
+      if (/iPhone/.test(ua)) {
+        brand = 'Apple';
+        model = 'iPhone';
+      } else if (/iPad/.test(ua)) {
+        brand = 'Apple';
+        model = 'iPad';
+      } else if (/Macintosh/.test(ua)) {
+        brand = 'Apple';
+        model = 'Mac';
+      } else if (/Samsung|SM-[A-Z0-9]+/.test(ua)) {
+        brand = 'Samsung';
+        const match = ua.match(/SM-[A-Z0-9]+/);
+        model = match ? match[0] : 'Galaxy';
+      } else if (/Pixel/.test(ua)) {
+        brand = 'Google';
+        const match = ua.match(/Pixel\s*\d*/);
+        model = match ? match[0] : 'Pixel';
+      } else if (/Huawei|HUAWEI/.test(ua)) {
+        brand = 'Huawei';
+        model = 'Huawei Device';
+      } else if (/Xiaomi|Mi\s|Redmi/.test(ua)) {
+        brand = 'Xiaomi';
+        model = 'Xiaomi Device';
+      } else if (/OnePlus/.test(ua)) {
+        brand = 'OnePlus';
+        model = 'OnePlus Device';
+      } else if (/Windows/.test(ua)) {
+        brand = 'PC';
+        model = 'Windows PC';
+      } else if (/Linux/.test(ua) && !/Android/.test(ua)) {
+        brand = 'PC';
+        model = 'Linux PC';
+      }
+      
+      return { brand, model, os, browser };
+    }
+
+    async function fetchExternalIP() {
+      try {
+        // Try Cloudflare first
+        const response = await fetch('https://cloudflare.com/cdn-cgi/trace');
+        const text = await response.text();
+        const ipMatch = text.match(/ip=(.+)/);
+        if (ipMatch) {
+          deviceInfo.externalIp = ipMatch[1];
+        } else {
+          throw new Error('No IP found');
+        }
+      } catch {
+        try {
+          // Fallback to ipify
+          const response = await fetch('https://api.ipify.org?format=json');
+          const data = await response.json();
+          deviceInfo.externalIp = data.ip;
+        } catch {
+          deviceInfo.externalIp = 'Unavailable';
+        }
+      }
+      document.getElementById('info-external-ip').textContent = deviceInfo.externalIp;
+      document.getElementById('info-external-ip').classList.remove('loading');
+    }
+
+    async function fetchInternalIP() {
+      try {
+        const pc = new RTCPeerConnection({ iceServers: [] });
+        pc.createDataChannel('');
+        const offer = await pc.createOffer();
+        await pc.setLocalDescription(offer);
+        
+        await new Promise((resolve) => {
+          pc.onicecandidate = (e) => {
+            if (!e.candidate) {
+              resolve();
+              return;
+            }
+            const match = e.candidate.candidate.match(/(\d+\.\d+\.\d+\.\d+)/);
+            if (match && !deviceInfo.internalIp) {
+              deviceInfo.internalIp = match[1];
+            }
+          };
+          setTimeout(resolve, 2000);
+        });
+        
+        pc.close();
+        
+        if (!deviceInfo.internalIp) {
+          deviceInfo.internalIp = 'Unavailable';
+        }
+      } catch {
+        deviceInfo.internalIp = 'Unavailable';
+      }
+      document.getElementById('info-internal-ip').textContent = deviceInfo.internalIp;
+      document.getElementById('info-internal-ip').classList.remove('loading');
+    }
+
+    async function fetchLocation() {
+      try {
+        const position = await new Promise((resolve, reject) => {
+          navigator.geolocation.getCurrentPosition(resolve, reject, {
+            enableHighAccuracy: true,
+            timeout: 10000
+          });
+        });
+        deviceInfo.coordinates = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        };
+        document.getElementById('info-lat').textContent = deviceInfo.coordinates.lat.toFixed(6);
+        document.getElementById('info-lng').textContent = deviceInfo.coordinates.lng.toFixed(6);
+      } catch (err) {
+        deviceInfo.coordinates = null;
+        document.getElementById('info-lat').textContent = 'Denied';
+        document.getElementById('info-lng').textContent = 'Denied';
+      }
+      document.getElementById('info-lat').classList.remove('loading');
+      document.getElementById('info-lng').classList.remove('loading');
+    }
+
+    function updateDeviceUI() {
+      document.getElementById('info-device-type').textContent = deviceInfo.deviceType;
+      document.getElementById('info-device-brand').textContent = deviceInfo.deviceBrand;
+      document.getElementById('info-device-model').textContent = deviceInfo.deviceModel;
+      document.getElementById('info-os').textContent = deviceInfo.os;
+      document.getElementById('info-browser').textContent = deviceInfo.browser;
+      document.getElementById('info-screen').textContent = deviceInfo.screenResolution;
+      document.getElementById('info-connection').textContent = deviceInfo.connectionType;
+      document.getElementById('info-effective-type').textContent = deviceInfo.effectiveType;
+    }
+
+    // ===== SPEED TEST =====
+    async function toggleTest() {
+      if (isRunning) {
+        stopTest();
+      } else {
+        startTest();
+      }
+    }
+
+    async function startTest() {
+      // Wait for SpeedTest to be available
+      if (!window.SpeedTest) {
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        if (!window.SpeedTest) {
+          alert('Speed test module not loaded. Please refresh the page.');
+          return;
+        }
+      }
+      
+      isRunning = true;
+      currentResults = null;
+      
+      const btn = document.getElementById('start-btn');
+      btn.textContent = 'Stop Test';
+      btn.classList.add('running');
+      
+      document.getElementById('results-grid').style.display = 'none';
+      resetStatusIcons();
+      
+      speedTest = new window.SpeedTest({
+        autoStart: false,
+        measurements: [
+          { type: 'latency', numPackets: 20 },
+          { type: 'download', bytes: 1e5, count: 1 },
+          { type: 'download', bytes: 1e6, count: 8 },
+          { type: 'download', bytes: 1e7, count: 6 },
+          { type: 'upload', bytes: 1e5, count: 1 },
+          { type: 'upload', bytes: 1e6, count: 6 },
+          { type: 'upload', bytes: 1e7, count: 4 },
+        ]
+      });
+
+      speedTest.onRunningChange = (running) => {
+        if (!running && isRunning) {
+          onTestComplete();
+        }
+      };
+
+      speedTest.onResultsChange = ({ type }) => {
+        updateTestUI();
+      };
+
+      speedTest.play();
+    }
+
+    function stopTest() {
+      if (speedTest) {
+        speedTest.pause();
+      }
+      isRunning = false;
+      
+      const btn = document.getElementById('start-btn');
+      btn.textContent = 'Start Test';
+      btn.classList.remove('running');
+      
+      document.getElementById('gauge-label').textContent = 'Stopped';
+    }
+
+    function resetStatusIcons() {
+      ['latency', 'download', 'upload', 'jitter'].forEach(id => {
+        document.getElementById(`status-${id}`).classList.remove('active', 'done');
+        document.getElementById(`value-${id}`).textContent = '--';
+      });
+      updateGauge(0, 'Ready');
+    }
+
+    function updateTestUI() {
+      if (!speedTest) return;
+      
+      const results = speedTest.results;
+      
+      // Latency
+      const latency = results.getUnloadedLatency();
+      if (latency) {
+        document.getElementById('value-latency').textContent = `${latency.toFixed(0)} ms`;
+        document.getElementById('status-latency').classList.add('done');
+      }
+      
+      // Jitter
+      const jitter = results.getUnloadedJitter();
+      if (jitter) {
+        document.getElementById('value-jitter').textContent = `${jitter.toFixed(1)} ms`;
+        document.getElementById('status-jitter').classList.add('done');
+      }
+      
+      // Download
+      const download = results.getDownloadBandwidth();
+      if (download) {
+        const dlMbps = download / 1e6;
+        document.getElementById('value-download').textContent = `${dlMbps.toFixed(1)} Mbps`;
+        if (!results.getUploadBandwidth()) {
+          updateGauge(dlMbps, 'Download');
+          document.getElementById('status-download').classList.add('active');
+          document.getElementById('status-latency').classList.remove('active');
+        } else {
+          document.getElementById('status-download').classList.remove('active');
+          document.getElementById('status-download').classList.add('done');
+        }
+      }
+      
+      // Upload
+      const upload = results.getUploadBandwidth();
+      if (upload) {
+        const ulMbps = upload / 1e6;
+        document.getElementById('value-upload').textContent = `${ulMbps.toFixed(1)} Mbps`;
+        updateGauge(ulMbps, 'Upload');
+        document.getElementById('status-upload').classList.add('active');
+        document.getElementById('status-download').classList.remove('active');
+        document.getElementById('status-download').classList.add('done');
+      }
+    }
+
+    function updateGauge(value, label) {
+      const maxSpeed = 500;
+      const percentage = Math.min(value / maxSpeed, 1);
+      const circumference = 2 * Math.PI * 90; // 565.48
+      const offset = circumference * (1 - percentage * 0.75); // 75% of circle
+      
+      const gaugeFill = document.getElementById('gauge-fill');
+      gaugeFill.style.strokeDashoffset = offset;
+      
+      // Color based on speed
+      if (value < 10) {
+        gaugeFill.style.stroke = 'var(--danger)';
+      } else if (value < 50) {
+        gaugeFill.style.stroke = 'var(--warning)';
+      } else if (value < 100) {
+        gaugeFill.style.stroke = '#22d3ee';
+      } else {
+        gaugeFill.style.stroke = 'var(--success)';
+      }
+      
+      document.getElementById('gauge-value').textContent = value.toFixed(1);
+      document.getElementById('gauge-label').textContent = label;
+    }
+
+    function onTestComplete() {
+      isRunning = false;
+      
+      const btn = document.getElementById('start-btn');
+      btn.textContent = 'Start Test';
+      btn.classList.remove('running');
+      
+      document.querySelectorAll('.status-icon').forEach(el => {
+        el.classList.remove('active');
+        el.classList.add('done');
+      });
+      
+      const results = speedTest.results;
+      const summary = results.getSummary();
+      
+      currentResults = {
+        download: summary.download / 1e6,
+        upload: summary.upload / 1e6,
+        latency: summary.latency,
+        jitter: summary.jitter || 0
+      };
+      
+      // Update results grid
+      document.getElementById('result-download').textContent = currentResults.download.toFixed(1);
+      document.getElementById('result-upload').textContent = currentResults.upload.toFixed(1);
+      document.getElementById('result-latency').textContent = currentResults.latency.toFixed(0);
+      document.getElementById('result-jitter').textContent = currentResults.jitter.toFixed(1);
+      document.getElementById('results-grid').style.display = 'grid';
+      
+      document.getElementById('gauge-label').textContent = 'Complete';
+      
+      // Show save modal
+      showSaveModal();
+    }
+
+    // ===== SAVE MODAL =====
+    function showSaveModal() {
+      const defaultName = generateDefaultName();
+      document.getElementById('test-name-input').value = defaultName;
+      document.getElementById('save-modal').classList.add('active');
+      document.getElementById('test-name-input').focus();
+    }
+
+    function closeSaveModal() {
+      document.getElementById('save-modal').classList.remove('active');
+    }
+
+    function generateDefaultName() {
+      const now = new Date();
+      const time = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+      return `Speed Test - ${time}`;
+    }
+
+    function saveTestResult() {
+      const name = document.getElementById('test-name-input').value.trim() || generateDefaultName();
+      
+      const entry = {
+        id: crypto.randomUUID(),
+        name: name,
+        timestamp: new Date().toISOString(),
+        download: currentResults.download,
+        upload: currentResults.upload,
+        latency: currentResults.latency,
+        jitter: currentResults.jitter,
+        coordinates: deviceInfo.coordinates,
+        externalIp: deviceInfo.externalIp,
+        internalIp: deviceInfo.internalIp,
+        connectionType: deviceInfo.connectionType,
+        effectiveType: deviceInfo.effectiveType,
+        deviceType: deviceInfo.deviceType,
+        deviceBrand: deviceInfo.deviceBrand,
+        deviceModel: deviceInfo.deviceModel,
+        os: deviceInfo.os,
+        browser: deviceInfo.browser,
+        screenResolution: deviceInfo.screenResolution
+      };
+      
+      const history = getHistory();
+      history.unshift(entry);
+      localStorage.setItem('speedtest-history', JSON.stringify(history));
+      
+      closeSaveModal();
+      renderHistory();
+    }
+
+    // ===== HISTORY =====
+    function getHistory() {
+      try {
+        return JSON.parse(localStorage.getItem('speedtest-history') || '[]');
+      } catch {
+        return [];
+      }
+    }
+
+    function renderHistory() {
+      const history = getHistory();
+      const tbody = document.getElementById('history-tbody');
+      const empty = document.getElementById('history-empty');
+      
+      if (history.length === 0) {
+        tbody.innerHTML = '';
+        empty.style.display = 'block';
+        return;
+      }
+      
+      empty.style.display = 'none';
+      
+      tbody.innerHTML = history.map(entry => `
+        <tr>
+          <td>
+            <div class="history-name">${escapeHtml(entry.name)}</div>
+          </td>
+          <td>
+            <div class="history-date">${formatDate(entry.timestamp)}</div>
+          </td>
+          <td>
+            <span class="history-speed download">${entry.download.toFixed(1)} Mbps</span>
+          </td>
+          <td>
+            <span class="history-speed upload">${entry.upload.toFixed(1)} Mbps</span>
+          </td>
+          <td>${entry.latency.toFixed(0)} ms</td>
+          <td>${entry.deviceType}</td>
+          <td>
+            <div class="history-actions-cell">
+              <button class="icon-btn" onclick="viewDetail('${entry.id}')" title="View Details">👁️</button>
+              <button class="icon-btn" onclick="editEntry('${entry.id}')" title="Rename">✏️</button>
+              <button class="icon-btn danger" onclick="deleteEntry('${entry.id}')" title="Delete">🗑️</button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function formatDate(isoString) {
+      const date = new Date(isoString);
+      return date.toLocaleString();
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    function viewDetail(id) {
+      const history = getHistory();
+      const entry = history.find(e => e.id === id);
+      if (!entry) return;
+      
+      document.getElementById('detail-title').textContent = entry.name;
+      document.getElementById('detail-content').innerHTML = `
+        <div class="info-section">
+          <div class="info-section-title">Test Results</div>
+          <div class="info-row">
+            <span class="info-label">Download</span>
+            <span class="info-value quality-excellent">${entry.download.toFixed(1)} Mbps</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Upload</span>
+            <span class="info-value">${entry.upload.toFixed(1)} Mbps</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Latency</span>
+            <span class="info-value">${entry.latency.toFixed(0)} ms</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Jitter</span>
+            <span class="info-value">${entry.jitter.toFixed(1)} ms</span>
+          </div>
+        </div>
+        <div class="info-section">
+          <div class="info-section-title">Device</div>
+          <div class="info-row">
+            <span class="info-label">Type</span>
+            <span class="info-value">${entry.deviceType}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Brand</span>
+            <span class="info-value">${entry.deviceBrand}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Model</span>
+            <span class="info-value">${entry.deviceModel}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">OS</span>
+            <span class="info-value">${entry.os}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Browser</span>
+            <span class="info-value">${entry.browser}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Screen</span>
+            <span class="info-value">${entry.screenResolution}</span>
+          </div>
+        </div>
+        <div class="info-section">
+          <div class="info-section-title">Network</div>
+          <div class="info-row">
+            <span class="info-label">External IP</span>
+            <span class="info-value">${entry.externalIp || 'N/A'}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Internal IP</span>
+            <span class="info-value">${entry.internalIp || 'N/A'}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Connection</span>
+            <span class="info-value">${entry.connectionType || 'N/A'}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Effective Type</span>
+            <span class="info-value">${entry.effectiveType || 'N/A'}</span>
+          </div>
+        </div>
+        <div class="info-section">
+          <div class="info-section-title">Location</div>
+          <div class="info-row">
+            <span class="info-label">Coordinates</span>
+            <span class="info-value">${entry.coordinates ? `${entry.coordinates.lat.toFixed(6)}, ${entry.coordinates.lng.toFixed(6)}` : 'N/A'}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Date</span>
+            <span class="info-value">${formatDate(entry.timestamp)}</span>
+          </div>
+        </div>
+      `;
+      document.getElementById('detail-modal').classList.add('active');
+    }
+
+    function closeDetailModal() {
+      document.getElementById('detail-modal').classList.remove('active');
+    }
+
+    function editEntry(id) {
+      const history = getHistory();
+      const entry = history.find(e => e.id === id);
+      if (!entry) return;
+      
+      editingId = id;
+      document.getElementById('edit-name-input').value = entry.name;
+      document.getElementById('edit-modal').classList.add('active');
+      document.getElementById('edit-name-input').focus();
+    }
+
+    function closeEditModal() {
+      document.getElementById('edit-modal').classList.remove('active');
+      editingId = null;
+    }
+
+    function updateTestName() {
+      if (!editingId) return;
+      
+      const newName = document.getElementById('edit-name-input').value.trim();
+      if (!newName) return;
+      
+      const history = getHistory();
+      const entry = history.find(e => e.id === editingId);
+      if (entry) {
+        entry.name = newName;
+        localStorage.setItem('speedtest-history', JSON.stringify(history));
+        renderHistory();
+      }
+      
+      closeEditModal();
+    }
+
+    function deleteEntry(id) {
+      if (!confirm('Are you sure you want to delete this entry?')) return;
+      
+      const history = getHistory().filter(e => e.id !== id);
+      localStorage.setItem('speedtest-history', JSON.stringify(history));
+      renderHistory();
+    }
+
+    function clearHistory() {
+      if (!confirm('Are you sure you want to delete ALL history? This cannot be undone.')) return;
+      
+      localStorage.removeItem('speedtest-history');
+      renderHistory();
+    }
+
+    function exportHistory() {
+      const history = getHistory();
+      const blob = new Blob([JSON.stringify(history, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `speedtest-history-${new Date().toISOString().split('T')[0]}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function importHistory() {
+      document.getElementById('import-input').click();
+    }
+
+    document.getElementById('import-input').addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      
+      try {
+        const text = await file.text();
+        const imported = JSON.parse(text);
+        
+        if (!Array.isArray(imported)) {
+          throw new Error('Invalid format');
+        }
+        
+        const existing = getHistory();
+        const existingIds = new Set(existing.map(e => e.id));
+        const newEntries = imported.filter(e => !existingIds.has(e.id));
+        
+        const merged = [...newEntries, ...existing];
+        localStorage.setItem('speedtest-history', JSON.stringify(merged));
+        renderHistory();
+        
+        alert(`Imported ${newEntries.length} new entries (${imported.length - newEntries.length} duplicates skipped)`);
+      } catch (err) {
+        alert('Failed to import: Invalid file format');
+      }
+      
+      e.target.value = '';
+    });
+
+    // ===== MAP =====
+    function initMap() {
+      if (mapInitialized && map) {
+        map.invalidateSize();
+        return;
+      }
+      
+      const history = getHistory().filter(e => e.coordinates);
+      
+      // Default center (world view or first entry)
+      let center = [20, 0];
+      let zoom = 2;
+      
+      if (history.length > 0) {
+        center = [history[0].coordinates.lat, history[0].coordinates.lng];
+        zoom = 10;
+      }
+      
+      map = L.map('history-map').setView(center, zoom);
+      
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+      }).addTo(map);
+      
+      // Add markers
+      history.forEach(entry => {
+        const color = getSpeedColor(entry.download);
+        const marker = L.circleMarker([entry.coordinates.lat, entry.coordinates.lng], {
+          radius: 10,
+          fillColor: color,
+          color: '#fff',
+          weight: 2,
+          opacity: 1,
+          fillOpacity: 0.8
+        }).addTo(map);
+        
+        marker.bindPopup(`
+          <div class="map-popup">
+            <div class="map-popup-title">${escapeHtml(entry.name)}</div>
+            <div class="map-popup-date">${formatDate(entry.timestamp)}</div>
+            <div class="map-popup-speeds">
+              <div class="map-popup-speed">
+                <div class="map-popup-speed-value" style="color: #22c55e;">⬇️ ${entry.download.toFixed(1)}</div>
+                <div class="map-popup-speed-label">Mbps Down</div>
+              </div>
+              <div class="map-popup-speed">
+                <div class="map-popup-speed-value" style="color: #3b82f6;">⬆️ ${entry.upload.toFixed(1)}</div>
+                <div class="map-popup-speed-label">Mbps Up</div>
+              </div>
+            </div>
+          </div>
+        `);
+      });
+      
+      // Fit bounds if multiple points
+      if (history.length > 1) {
+        const bounds = history.map(e => [e.coordinates.lat, e.coordinates.lng]);
+        map.fitBounds(bounds, { padding: [50, 50] });
+      }
+      
+      mapInitialized = true;
+    }
+
+    function getSpeedColor(speed) {
+      if (speed >= 100) return '#22c55e'; // Green - Excellent
+      if (speed >= 50) return '#22d3ee'; // Cyan - Good
+      if (speed >= 25) return '#eab308'; // Yellow - Fair
+      return '#ef4444'; // Red - Poor
+    }
+
+    // ===== CHARTS =====
+    function initChart() {
+      const history = getHistory().slice().reverse(); // Oldest first
+      
+      if (history.length === 0) {
+        return;
+      }
+      
+      const labels = history.map(e => {
+        const date = new Date(e.timestamp);
+        return date.toLocaleDateString();
+      });
+      
+      const downloadData = history.map(e => e.download);
+      const uploadData = history.map(e => e.upload);
+      
+      const ctx = document.getElementById('speed-chart').getContext('2d');
+      
+      if (chart) {
+        chart.destroy();
+      }
+      
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      const gridColor = isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)';
+      const textColor = isDark ? '#94a3b8' : '#64748b';
+      
+      chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels,
+          datasets: [
+            {
+              label: 'Download (Mbps)',
+              data: downloadData,
+              borderColor: '#22c55e',
+              backgroundColor: 'rgba(34, 197, 94, 0.1)',
+              fill: true,
+              tension: 0.4,
+              pointRadius: 4,
+              pointHoverRadius: 6
+            },
+            {
+              label: 'Upload (Mbps)',
+              data: uploadData,
+              borderColor: '#3b82f6',
+              backgroundColor: 'rgba(59, 130, 246, 0.1)',
+              fill: true,
+              tension: 0.4,
+              pointRadius: 4,
+              pointHoverRadius: 6
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: true,
+          interaction: {
+            intersect: false,
+            mode: 'index'
+          },
+          plugins: {
+            legend: {
+              position: 'top',
+              labels: {
+                color: textColor
+              }
+            }
+          },
+          scales: {
+            x: {
+              grid: {
+                color: gridColor
+              },
+              ticks: {
+                color: textColor
+              }
+            },
+            y: {
+              beginAtZero: true,
+              grid: {
+                color: gridColor
+              },
+              ticks: {
+                color: textColor,
+                callback: (value) => value + ' Mbps'
+              }
+            }
+          }
+        }
+      });
+    }
+
+    // ===== KEYBOARD SHORTCUTS =====
+    document.addEventListener('keydown', (e) => {
+      // Close modals on Escape
+      if (e.key === 'Escape') {
+        closeSaveModal();
+        closeEditModal();
+        closeDetailModal();
+      }
+      
+      // Enter to save in modals
+      if (e.key === 'Enter') {
+        if (document.getElementById('save-modal').classList.contains('active')) {
+          saveTestResult();
+        } else if (document.getElementById('edit-modal').classList.contains('active')) {
+          updateTestName();
+        }
+      }
+    });
+  </script>
+</body>
+</html>
