@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DocEdit - Simple Document Editor</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="app">
+        <header class="header">
+            <div class="header-left">
+                <button class="menu-toggle" id="menuToggle"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2">
+                        <line x1="3" y1="6" x2="21" y2="6" />
+                        <line x1="3" y1="12" x2="21" y2="12" />
+                        <line x1="3" y1="18" x2="21" y2="18" />
+                    </svg></button>
+                <div class="logo">
+                    <div class="logo-icon">✎</div><span>DocEdit</span>
+                </div>
+            </div>
+            <button class="theme-toggle" id="themeToggle"><span id="themeIcon">◐</span><span
+                    id="themeLabel">Auto</span></button>
+        </header>
+        <main class="main">
+            <div class="sidebar-overlay" id="sidebarOverlay"></div>
+            <aside class="sidebar" id="sidebar">
+                <div class="sidebar-header">
+                    <button class="btn btn-primary btn-block" id="newDocBtn"><svg width="18" height="18"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <line x1="12" y1="5" x2="12" y2="19" />
+                            <line x1="5" y1="12" x2="19" y2="12" />
+                        </svg>New Document</button>
+                    <div class="sort-section">
+                        <span class="sort-label">Sort by</span>
+                        <div class="sort-toggle">
+                            <button class="sort-btn active" id="sortDate"><svg width="14" height="14"
+                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10" />
+                                    <polyline points="12 6 12 12 16 14" />
+                                </svg>Recent</button>
+                            <button class="sort-btn" id="sortTitle"><svg width="14" height="14" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="4" y1="6" x2="20" y2="6" />
+                                    <line x1="4" y1="12" x2="14" y2="12" />
+                                    <line x1="4" y1="18" x2="18" y2="18" />
+                                </svg>A-Z</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="doc-list" id="docList"></div>
+            </aside>
+            <div class="editor-container">
+                <div class="empty-state" id="emptyState">
+                    <div class="empty-state-icon">📄</div>
+                    <h2>No document selected</h2>
+                    <p>Select a document or create a new one</p>
+                </div>
+                <div id="editorView" style="display:none;flex-direction:column;">
+                    <div class="editor-header">
+                        <input type="text" class="title-input" id="titleInput" placeholder="Untitled Document">
+                        <span class="save-status" id="saveStatus"><span id="saveIcon">✓</span><span
+                                id="saveText">Saved</span></span>
+                        <button class="btn btn-secondary btn-sm share-toggle-mobile" id="shareToggleMobile"><svg
+                                width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <circle cx="18" cy="5" r="3" />
+                                <circle cx="6" cy="12" r="3" />
+                                <circle cx="18" cy="19" r="3" />
+                                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+                                <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+                            </svg>Share</button>
+                    </div>
+                    <div class="editor-body"><textarea class="editor-textarea" id="contentTextarea"
+                            placeholder="Start writing..."></textarea></div>
+                    <div class="editor-footer"><span id="createdAt"></span><span id="modifiedAt"></span></div>
+                </div>
+            </div>
+            <div class="share-overlay" id="shareOverlay"></div>
+            <aside class="share-panel" id="sharePanel">
+                <div class="share-section">
+                    <span class="panel-title">Share Document</span>
+                    <div class="share-card">
+                        <div class="toggle-row">
+                            <div class="toggle-info"><span class="toggle-label">Password Protection</span><span
+                                    class="toggle-desc">Encrypt with a password</span></div>
+                            <label class="toggle-switch"><input type="checkbox" id="passwordProtect"><span
+                                    class="toggle-slider"></span></label>
+                        </div>
+                        <div class="password-input-group" id="passwordGroup">
+                            <div class="password-input-inner"><input type="password" class="input" id="sharePassword"
+                                    placeholder="Enter password"></div>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary btn-block" id="generateLink"><svg width="18" height="18"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+                            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+                        </svg>Generate Share Link</button>
+                    <div class="link-preview" id="linkPreview"></div>
+                    <div class="btn-group" id="linkActions" style="display:none;">
+                        <button class="btn btn-secondary" id="copyLink"><svg width="16" height="16" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="9" y="9" width="13" height="13" rx="2" />
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                            </svg>Copy</button>
+                        <button class="btn btn-secondary" id="openLink"><svg width="16" height="16" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                                <polyline points="15 3 21 3 21 9" />
+                                <line x1="10" y1="14" x2="21" y2="3" />
+                            </svg>Open</button>
+                    </div>
+                </div>
+                <div class="delete-section"><button class="btn btn-danger btn-block" id="deleteBtn"><svg width="16"
+                            height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="3 6 5 6 21 6" />
+                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                        </svg>Delete Document</button></div>
+            </aside>
+        </main>
+    </div>
+    <div class="modal-overlay" id="passwordModal">
+        <div class="modal">
+            <div class="modal-icon">🔐</div>
+            <h2>Password Required</h2>
+            <p>This document is encrypted. Enter the password to decrypt and view it.</p>
+            <input type="password" class="input" id="modalPassword" placeholder="Enter password">
+            <div class="modal-error" id="modalError">Incorrect password. Please try again.</div>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" id="modalCancel">Cancel</button>
+                <button class="btn btn-primary" id="modalDecrypt">Decrypt</button>
+            </div>
+        </div>
+    </div>
+    <div class="toast" id="toast"><span id="toastIcon">✓</span><span id="toastText"></span></div>
+    <script src="script.js"></script>
+</body>
+
+</html>
