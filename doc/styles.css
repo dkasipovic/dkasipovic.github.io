@@ -351,6 +351,11 @@ body {
     background: var(--bg-primary);
 }
 
+#editorView {
+    flex: 1;
+    min-height: 0;
+}
+
 .editor-header {
     padding: 20px 28px;
     border-bottom: 1px solid var(--border-subtle);
