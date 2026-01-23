@@ -1,21 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#0a0a0f">
-    <meta name="description" content="Generate customizable QR codes with logos, colors, and frames. Save presets and brand kits. Works offline.">
+    <meta name="description"
+        content="Generate customizable QR codes with logos, colors, and frames. Save presets and brand kits. Works offline.">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="QR Studio">
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="icon-192.png">
-    <title>QR Studio</title>
+    <title>QR - Kasipovic</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
     <div class="install-banner" id="installBanner">
         <p>📱 Install QR Studio for quick access</p>
@@ -27,40 +32,103 @@
 
     <header class="header">
         <div class="logo">
-            <svg viewBox="0 0 32 32" fill="none"><rect x="2" y="2" width="10" height="10" rx="2" fill="currentColor"/><rect x="20" y="2" width="10" height="10" rx="2" fill="currentColor"/><rect x="2" y="20" width="10" height="10" rx="2" fill="currentColor"/><rect x="14" y="14" width="4" height="4" rx="1" fill="currentColor"/><rect x="22" y="22" width="6" height="6" rx="1" fill="currentColor"/><rect x="14" y="22" width="4" height="4" rx="1" fill="currentColor"/><rect x="22" y="14" width="4" height="4" rx="1" fill="currentColor"/></svg>
+            <svg viewBox="0 0 32 32" fill="none">
+                <rect x="2" y="2" width="10" height="10" rx="2" fill="currentColor" />
+                <rect x="20" y="2" width="10" height="10" rx="2" fill="currentColor" />
+                <rect x="2" y="20" width="10" height="10" rx="2" fill="currentColor" />
+                <rect x="14" y="14" width="4" height="4" rx="1" fill="currentColor" />
+                <rect x="22" y="22" width="6" height="6" rx="1" fill="currentColor" />
+                <rect x="14" y="22" width="4" height="4" rx="1" fill="currentColor" />
+                <rect x="22" y="14" width="4" height="4" rx="1" fill="currentColor" />
+            </svg>
             QR Studio
         </div>
         <div class="header-actions">
             <div class="dropdown" id="presetsDropdown">
                 <button class="btn" id="presetsBtn">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
+                    </svg>
                     <span class="btn-text">Presets</span>
                 </button>
                 <div class="dropdown-menu">
-                    <button class="dropdown-item" id="savePresetBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>Save Current</button>
-                    <button class="dropdown-item" id="loadPresetBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 15v4c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>Load Preset</button>
+                    <button class="dropdown-item" id="savePresetBtn"><svg viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+                            <polyline points="17 21 17 13 7 13 7 21" />
+                            <polyline points="7 3 7 8 15 8" />
+                        </svg>Save Current</button>
+                    <button class="dropdown-item" id="loadPresetBtn"><svg viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M3 15v4c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2v-4M17 8l-5-5-5 5M12 3v12" />
+                        </svg>Load Preset</button>
                     <div class="dropdown-divider"></div>
-                    <button class="dropdown-item" id="exportPresetsBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Export All</button>
-                    <button class="dropdown-item" id="importPresetsBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Import</button>
+                    <button class="dropdown-item" id="exportPresetsBtn"><svg viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                            <polyline points="7 10 12 15 17 10" />
+                            <line x1="12" y1="15" x2="12" y2="3" />
+                        </svg>Export All</button>
+                    <button class="dropdown-item" id="importPresetsBtn"><svg viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                            <polyline points="17 8 12 3 7 8" />
+                            <line x1="12" y1="3" x2="12" y2="15" />
+                        </svg>Import</button>
                 </div>
             </div>
             <div class="dropdown" id="brandDropdown">
                 <button class="btn" id="brandBtn">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10" />
+                        <path d="M8 14s1.5 2 4 2 4-2 4-2" />
+                        <line x1="9" y1="9" x2="9.01" y2="9" />
+                        <line x1="15" y1="9" x2="15.01" y2="9" />
+                    </svg>
                     <span class="btn-text">Brand</span>
                 </button>
                 <div class="dropdown-menu">
-                    <button class="dropdown-item" id="saveBrandBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>Save Brand Kit</button>
-                    <button class="dropdown-item" id="applyBrandBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Apply Brand</button>
-                    <button class="dropdown-item" id="clearBrandBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Clear Brand</button>
+                    <button class="dropdown-item" id="saveBrandBtn"><svg viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+                            <polyline points="17 21 17 13 7 13 7 21" />
+                            <polyline points="7 3 7 8 15 8" />
+                        </svg>Save Brand Kit</button>
+                    <button class="dropdown-item" id="applyBrandBtn"><svg viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12" />
+                        </svg>Apply Brand</button>
+                    <button class="dropdown-item" id="clearBrandBtn"><svg viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18" />
+                            <line x1="6" y1="6" x2="18" y2="18" />
+                        </svg>Clear Brand</button>
                 </div>
             </div>
             <button class="btn btn-icon" id="themeToggle" title="Toggle theme">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="icon-sun"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="icon-moon hidden"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="icon-sun">
+                    <circle cx="12" cy="12" r="5" />
+                    <line x1="12" y1="1" x2="12" y2="3" />
+                    <line x1="12" y1="21" x2="12" y2="23" />
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                    <line x1="1" y1="12" x2="3" y2="12" />
+                    <line x1="21" y1="12" x2="23" y2="12" />
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+                </svg>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="icon-moon hidden">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+                </svg>
             </button>
             <button class="btn btn-icon" id="shareBtn" title="Share link">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="18" cy="5" r="3" />
+                    <circle cx="6" cy="12" r="3" />
+                    <circle cx="18" cy="19" r="3" />
+                    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+                    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+                </svg>
             </button>
         </div>
     </header>
@@ -80,124 +148,328 @@
 
             <div class="section open" id="contentSection">
                 <div class="section-header" onclick="toggleSection(this)">
-                    <div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>Content</div>
-                    <svg class="section-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                    <div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                            <polyline points="14 2 14 8 20 8" />
+                            <line x1="16" y1="13" x2="8" y2="13" />
+                            <line x1="16" y1="17" x2="8" y2="17" />
+                            <polyline points="10 9 9 9 8 9" />
+                        </svg>Content</div>
+                    <svg class="section-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 12 15 18 9" />
+                    </svg>
                 </div>
                 <div class="section-content">
-                    <div class="form-content" id="form-url"><div class="field"><label class="field-label">Website URL</label><input type="url" id="url-input" placeholder="https://example.com" value="https://example.com"></div></div>
-                    <div class="form-content hidden" id="form-text"><div class="field"><label class="field-label">Text Content</label><textarea id="text-input" placeholder="Enter your text here..."></textarea></div></div>
+                    <div class="form-content" id="form-url">
+                        <div class="field"><label class="field-label">Website URL</label><input type="url"
+                                id="url-input" placeholder="https://example.com" value="https://example.com"></div>
+                    </div>
+                    <div class="form-content hidden" id="form-text">
+                        <div class="field"><label class="field-label">Text Content</label><textarea id="text-input"
+                                placeholder="Enter your text here..."></textarea></div>
+                    </div>
                     <div class="form-content hidden" id="form-vcard">
-                        <div class="field-row"><div class="field"><label class="field-label">First Name</label><input type="text" id="vcard-firstname" placeholder="John"></div><div class="field"><label class="field-label">Last Name</label><input type="text" id="vcard-lastname" placeholder="Doe"></div></div>
-                        <div class="field"><label class="field-label">Company</label><input type="text" id="vcard-company" placeholder="Acme Inc."></div>
-                        <div class="field"><label class="field-label">Job Title</label><input type="text" id="vcard-title" placeholder="Software Engineer"></div>
-                        <div class="field"><label class="field-label">Phone</label><input type="tel" id="vcard-phone" placeholder="+1 234 567 8900"></div>
-                        <div class="field"><label class="field-label">Email</label><input type="email" id="vcard-email" placeholder="john@example.com"></div>
-                        <div class="field"><label class="field-label">Website</label><input type="url" id="vcard-website" placeholder="https://example.com"></div>
-                        <div class="field"><label class="field-label">Address</label><textarea id="vcard-address" placeholder="123 Main St&#10;City, State 12345"></textarea></div>
+                        <div class="field-row">
+                            <div class="field"><label class="field-label">First Name</label><input type="text"
+                                    id="vcard-firstname" placeholder="John"></div>
+                            <div class="field"><label class="field-label">Last Name</label><input type="text"
+                                    id="vcard-lastname" placeholder="Doe"></div>
+                        </div>
+                        <div class="field"><label class="field-label">Company</label><input type="text"
+                                id="vcard-company" placeholder="Acme Inc."></div>
+                        <div class="field"><label class="field-label">Job Title</label><input type="text"
+                                id="vcard-title" placeholder="Software Engineer"></div>
+                        <div class="field"><label class="field-label">Phone</label><input type="tel" id="vcard-phone"
+                                placeholder="+1 234 567 8900"></div>
+                        <div class="field"><label class="field-label">Email</label><input type="email" id="vcard-email"
+                                placeholder="john@example.com"></div>
+                        <div class="field"><label class="field-label">Website</label><input type="url"
+                                id="vcard-website" placeholder="https://example.com"></div>
+                        <div class="field"><label class="field-label">Address</label><textarea id="vcard-address"
+                                placeholder="123 Main St&#10;City, State 12345"></textarea></div>
                     </div>
                     <div class="form-content hidden" id="form-wifi">
-                        <div class="field"><label class="field-label">Network Name (SSID)</label><input type="text" id="wifi-ssid" placeholder="MyNetwork"></div>
-                        <div class="field"><label class="field-label">Password</label><input type="text" id="wifi-password" placeholder="Enter password"></div>
-                        <div class="field"><label class="field-label">Security Type</label><select id="wifi-security"><option value="WPA">WPA/WPA2</option><option value="WEP">WEP</option><option value="nopass">None (Open)</option></select></div>
-                        <div class="field"><label class="checkbox-field"><input type="checkbox" id="wifi-hidden">Hidden Network</label></div>
+                        <div class="field"><label class="field-label">Network Name (SSID)</label><input type="text"
+                                id="wifi-ssid" placeholder="MyNetwork"></div>
+                        <div class="field"><label class="field-label">Password</label><input type="text"
+                                id="wifi-password" placeholder="Enter password"></div>
+                        <div class="field"><label class="field-label">Security Type</label><select id="wifi-security">
+                                <option value="WPA">WPA/WPA2</option>
+                                <option value="WEP">WEP</option>
+                                <option value="nopass">None (Open)</option>
+                            </select></div>
+                        <div class="field"><label class="checkbox-field"><input type="checkbox" id="wifi-hidden">Hidden
+                                Network</label></div>
                     </div>
                     <div class="form-content hidden" id="form-email">
-                        <div class="field"><label class="field-label">Email Address</label><input type="email" id="email-address" placeholder="contact@example.com"></div>
-                        <div class="field"><label class="field-label">Subject</label><input type="text" id="email-subject" placeholder="Hello!"></div>
-                        <div class="field"><label class="field-label">Message Body</label><textarea id="email-body" placeholder="Your message..."></textarea></div>
+                        <div class="field"><label class="field-label">Email Address</label><input type="email"
+                                id="email-address" placeholder="contact@example.com"></div>
+                        <div class="field"><label class="field-label">Subject</label><input type="text"
+                                id="email-subject" placeholder="Hello!"></div>
+                        <div class="field"><label class="field-label">Message Body</label><textarea id="email-body"
+                                placeholder="Your message..."></textarea></div>
                     </div>
                     <div class="form-content hidden" id="form-sms">
-                        <div class="field"><label class="field-label">Phone Number</label><input type="tel" id="sms-phone" placeholder="+1 234 567 8900"></div>
-                        <div class="field"><label class="field-label">Message</label><textarea id="sms-message" placeholder="Your message..."></textarea></div>
+                        <div class="field"><label class="field-label">Phone Number</label><input type="tel"
+                                id="sms-phone" placeholder="+1 234 567 8900"></div>
+                        <div class="field"><label class="field-label">Message</label><textarea id="sms-message"
+                                placeholder="Your message..."></textarea></div>
                     </div>
-                    <div class="form-content hidden" id="form-phone"><div class="field"><label class="field-label">Phone Number</label><input type="tel" id="phone-number" placeholder="+1 234 567 8900"></div></div>
+                    <div class="form-content hidden" id="form-phone">
+                        <div class="field"><label class="field-label">Phone Number</label><input type="tel"
+                                id="phone-number" placeholder="+1 234 567 8900"></div>
+                    </div>
                     <div class="form-content hidden" id="form-geo">
-                        <div class="field-row"><div class="field"><label class="field-label">Latitude</label><input type="text" id="geo-lat" placeholder="40.7128"></div><div class="field"><label class="field-label">Longitude</label><input type="text" id="geo-lng" placeholder="-74.0060"></div></div>
-                        <div class="field"><label class="field-label">Location Name (optional)</label><input type="text" id="geo-name" placeholder="New York City"></div>
+                        <div class="field-row">
+                            <div class="field"><label class="field-label">Latitude</label><input type="text"
+                                    id="geo-lat" placeholder="40.7128"></div>
+                            <div class="field"><label class="field-label">Longitude</label><input type="text"
+                                    id="geo-lng" placeholder="-74.0060"></div>
+                        </div>
+                        <div class="field"><label class="field-label">Location Name (optional)</label><input type="text"
+                                id="geo-name" placeholder="New York City"></div>
                     </div>
                 </div>
             </div>
 
             <div class="section open" id="stylingSection">
                 <div class="section-header" onclick="toggleSection(this)">
-                    <div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.555C21.965 6.012 17.461 2 12 2z"/></svg>Styling</div>
-                    <svg class="section-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                    <div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <circle cx="13.5" cy="6.5" r=".5" />
+                            <circle cx="17.5" cy="10.5" r=".5" />
+                            <circle cx="8.5" cy="7.5" r=".5" />
+                            <circle cx="6.5" cy="12.5" r=".5" />
+                            <path
+                                d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.555C21.965 6.012 17.461 2 12 2z" />
+                        </svg>Styling</div>
+                    <svg class="section-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 12 15 18 9" />
+                    </svg>
                 </div>
                 <div class="section-content">
-                    <div class="field"><label class="field-label">Foreground Color</label><div class="color-field"><div class="color-picker-wrapper"><input type="color" id="fgColor" value="#000000"></div><input type="text" class="color-hex" id="fgColorHex" value="#000000" maxlength="7"></div></div>
-                    <div class="field"><label class="field-label">Background Color</label><div class="color-field"><div class="color-picker-wrapper"><input type="color" id="bgColor" value="#ffffff"></div><input type="text" class="color-hex" id="bgColorHex" value="#ffffff" maxlength="7"></div><label class="checkbox-field" style="margin-top: 0.5rem;"><input type="checkbox" id="transparentBg">Transparent Background</label></div>
-                    <div class="field"><label class="field-label">Dot Style</label><div class="style-grid" id="dotStyleGrid"><button class="style-option active" data-style="square" title="Square"><svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" fill="currentColor"/></svg></button><button class="style-option" data-style="dots" title="Dots"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="6" fill="currentColor"/></svg></button><button class="style-option" data-style="rounded" title="Rounded"><svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="3" fill="currentColor"/></svg></button><button class="style-option" data-style="extra-rounded" title="Extra Rounded"><svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="5" fill="currentColor"/></svg></button><button class="style-option" data-style="classy" title="Classy"><svg viewBox="0 0 24 24"><path d="M6 12 L12 6 L18 12 L12 18 Z" fill="currentColor"/></svg></button></div></div>
-                    <div class="field"><label class="field-label">Corner Square Style</label><div class="style-grid" id="cornerSquareStyleGrid"><button class="style-option active" data-style="square" title="Square"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" fill="none" stroke="currentColor" stroke-width="3"/></svg></button><button class="style-option" data-style="dot" title="Dot"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="3"/></svg></button><button class="style-option" data-style="extra-rounded" title="Extra Rounded"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="5" fill="none" stroke="currentColor" stroke-width="3"/></svg></button></div></div>
-                    <div class="field"><label class="field-label">Corner Dot Style</label><div class="style-grid" id="cornerDotStyleGrid"><button class="style-option active" data-style="square" title="Square"><svg viewBox="0 0 24 24"><rect x="8" y="8" width="8" height="8" fill="currentColor"/></svg></button><button class="style-option" data-style="dot" title="Dot"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" fill="currentColor"/></svg></button></div></div>
+                    <div class="field"><label class="field-label">Foreground Color</label>
+                        <div class="color-field">
+                            <div class="color-picker-wrapper"><input type="color" id="fgColor" value="#000000"></div>
+                            <input type="text" class="color-hex" id="fgColorHex" value="#000000" maxlength="7">
+                        </div>
+                    </div>
+                    <div class="field"><label class="field-label">Background Color</label>
+                        <div class="color-field">
+                            <div class="color-picker-wrapper"><input type="color" id="bgColor" value="#ffffff"></div>
+                            <input type="text" class="color-hex" id="bgColorHex" value="#ffffff" maxlength="7">
+                        </div><label class="checkbox-field" style="margin-top: 0.5rem;"><input type="checkbox"
+                                id="transparentBg">Transparent Background</label>
+                    </div>
+                    <div class="field"><label class="field-label">Dot Style</label>
+                        <div class="style-grid" id="dotStyleGrid"><button class="style-option active"
+                                data-style="square" title="Square"><svg viewBox="0 0 24 24">
+                                    <rect x="6" y="6" width="12" height="12" fill="currentColor" />
+                                </svg></button><button class="style-option" data-style="dots" title="Dots"><svg
+                                    viewBox="0 0 24 24">
+                                    <circle cx="12" cy="12" r="6" fill="currentColor" />
+                                </svg></button><button class="style-option" data-style="rounded" title="Rounded"><svg
+                                    viewBox="0 0 24 24">
+                                    <rect x="6" y="6" width="12" height="12" rx="3" fill="currentColor" />
+                                </svg></button><button class="style-option" data-style="extra-rounded"
+                                title="Extra Rounded"><svg viewBox="0 0 24 24">
+                                    <rect x="6" y="6" width="12" height="12" rx="5" fill="currentColor" />
+                                </svg></button><button class="style-option" data-style="classy" title="Classy"><svg
+                                    viewBox="0 0 24 24">
+                                    <path d="M6 12 L12 6 L18 12 L12 18 Z" fill="currentColor" />
+                                </svg></button></div>
+                    </div>
+                    <div class="field"><label class="field-label">Corner Square Style</label>
+                        <div class="style-grid" id="cornerSquareStyleGrid"><button class="style-option active"
+                                data-style="square" title="Square"><svg viewBox="0 0 24 24">
+                                    <rect x="4" y="4" width="16" height="16" fill="none" stroke="currentColor"
+                                        stroke-width="3" />
+                                </svg></button><button class="style-option" data-style="dot" title="Dot"><svg
+                                    viewBox="0 0 24 24">
+                                    <circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="3" />
+                                </svg></button><button class="style-option" data-style="extra-rounded"
+                                title="Extra Rounded"><svg viewBox="0 0 24 24">
+                                    <rect x="4" y="4" width="16" height="16" rx="5" fill="none" stroke="currentColor"
+                                        stroke-width="3" />
+                                </svg></button></div>
+                    </div>
+                    <div class="field"><label class="field-label">Corner Dot Style</label>
+                        <div class="style-grid" id="cornerDotStyleGrid"><button class="style-option active"
+                                data-style="square" title="Square"><svg viewBox="0 0 24 24">
+                                    <rect x="8" y="8" width="8" height="8" fill="currentColor" />
+                                </svg></button><button class="style-option" data-style="dot" title="Dot"><svg
+                                    viewBox="0 0 24 24">
+                                    <circle cx="12" cy="12" r="4" fill="currentColor" />
+                                </svg></button></div>
+                    </div>
                 </div>
             </div>
 
             <div class="section" id="logoSection">
                 <div class="section-header" onclick="toggleSection(this)">
-                    <div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Logo</div>
-                    <svg class="section-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                    <div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                            <circle cx="8.5" cy="8.5" r="1.5" />
+                            <polyline points="21 15 16 10 5 21" />
+                        </svg>Logo</div>
+                    <svg class="section-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 12 15 18 9" />
+                    </svg>
                 </div>
                 <div class="section-content">
-                    <div class="logo-upload" id="logoUpload"><input type="file" id="logoInput" accept="image/*"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg><p>Click or drag to upload logo</p></div>
-                    <div class="field hidden" id="logoSizeField" style="margin-top: 1rem;"><label class="field-label">Logo Size</label><div class="range-field"><input type="range" id="logoSize" min="0.1" max="0.5" step="0.05" value="0.3"><span class="range-value" id="logoSizeValue">30%</span></div></div>
-                    <div class="field hidden" id="logoMarginField"><label class="field-label">Logo Margin</label><div class="range-field"><input type="range" id="logoMargin" min="0" max="20" step="1" value="5"><span class="range-value" id="logoMarginValue">5px</span></div></div>
+                    <div class="logo-upload" id="logoUpload"><input type="file" id="logoInput" accept="image/*"><svg
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                            <polyline points="17 8 12 3 7 8" />
+                            <line x1="12" y1="3" x2="12" y2="15" />
+                        </svg>
+                        <p>Click or drag to upload logo</p>
+                    </div>
+                    <div class="field hidden" id="logoSizeField" style="margin-top: 1rem;"><label
+                            class="field-label">Logo Size</label>
+                        <div class="range-field"><input type="range" id="logoSize" min="0.1" max="0.5" step="0.05"
+                                value="0.3"><span class="range-value" id="logoSizeValue">30%</span></div>
+                    </div>
+                    <div class="field hidden" id="logoMarginField"><label class="field-label">Logo Margin</label>
+                        <div class="range-field"><input type="range" id="logoMargin" min="0" max="20" step="1"
+                                value="5"><span class="range-value" id="logoMarginValue">5px</span></div>
+                    </div>
                 </div>
             </div>
 
             <div class="section" id="frameSection">
                 <div class="section-header" onclick="toggleSection(this)">
-                    <div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>Frame & Label</div>
-                    <svg class="section-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                    <div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <rect x="3" y="3" width="18" height="18" rx="2" />
+                            <path d="M3 9h18" />
+                            <path d="M9 21V9" />
+                        </svg>Frame & Label</div>
+                    <svg class="section-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 12 15 18 9" />
+                    </svg>
                 </div>
                 <div class="section-content">
-                    <div class="field"><label class="field-label">Label Text</label><input type="text" id="frameLabel" placeholder="SCAN ME" maxlength="30"></div>
-                    <div class="field"><label class="field-label">Label Color</label><div class="color-field"><div class="color-picker-wrapper"><input type="color" id="frameLabelColor" value="#000000"></div><input type="text" class="color-hex" id="frameLabelColorHex" value="#000000" maxlength="7"></div></div>
-                    <div class="field"><label class="field-label">Label Background</label><div class="color-field"><div class="color-picker-wrapper"><input type="color" id="frameLabelBg" value="#ffffff"></div><input type="text" class="color-hex" id="frameLabelBgHex" value="#ffffff" maxlength="7"></div></div>
+                    <div class="field"><label class="field-label">Label Text</label><input type="text" id="frameLabel"
+                            placeholder="SCAN ME" maxlength="30"></div>
+                    <div class="field"><label class="field-label">Label Color</label>
+                        <div class="color-field">
+                            <div class="color-picker-wrapper"><input type="color" id="frameLabelColor" value="#000000">
+                            </div><input type="text" class="color-hex" id="frameLabelColorHex" value="#000000"
+                                maxlength="7">
+                        </div>
+                    </div>
+                    <div class="field"><label class="field-label">Label Background</label>
+                        <div class="color-field">
+                            <div class="color-picker-wrapper"><input type="color" id="frameLabelBg" value="#ffffff">
+                            </div><input type="text" class="color-hex" id="frameLabelBgHex" value="#ffffff"
+                                maxlength="7">
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <div class="section" id="settingsSection">
                 <div class="section-header" onclick="toggleSection(this)">
-                    <div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Advanced Settings</div>
-                    <svg class="section-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                    <div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <circle cx="12" cy="12" r="3" />
+                            <path
+                                d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+                        </svg>Advanced Settings</div>
+                    <svg class="section-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 12 15 18 9" />
+                    </svg>
                 </div>
                 <div class="section-content">
-                    <div class="field"><label class="field-label">QR Code Size</label><div class="range-field"><input type="range" id="qrSize" min="100" max="1000" step="50" value="300"><span class="range-value" id="qrSizeValue">300px</span></div></div>
-                    <div class="field"><label class="field-label">Error Correction Level</label><select id="ecLevel"><option value="L">Low (7%) - More data</option><option value="M" selected>Medium (15%) - Balanced</option><option value="Q">Quartile (25%) - Recommended for logos</option><option value="H">High (30%) - Best for logos</option></select></div>
-                    <div class="field"><label class="field-label">Quiet Zone (Margin)</label><div class="range-field"><input type="range" id="quietZone" min="0" max="50" step="5" value="10"><span class="range-value" id="quietZoneValue">10px</span></div></div>
+                    <div class="field"><label class="field-label">QR Code Size</label>
+                        <div class="range-field"><input type="range" id="qrSize" min="100" max="1000" step="50"
+                                value="300"><span class="range-value" id="qrSizeValue">300px</span></div>
+                    </div>
+                    <div class="field"><label class="field-label">Error Correction Level</label><select id="ecLevel">
+                            <option value="L">Low (7%) - More data</option>
+                            <option value="M" selected>Medium (15%) - Balanced</option>
+                            <option value="Q">Quartile (25%) - Recommended for logos</option>
+                            <option value="H">High (30%) - Best for logos</option>
+                        </select></div>
+                    <div class="field"><label class="field-label">Quiet Zone (Margin)</label>
+                        <div class="range-field"><input type="range" id="quietZone" min="0" max="50" step="5"
+                                value="10"><span class="range-value" id="quietZoneValue">10px</span></div>
+                    </div>
                 </div>
             </div>
         </div>
 
         <div class="preview-panel">
             <div class="preview-container">
-                <div class="qr-wrapper" id="qrWrapper"><div id="qr-code"></div></div>
+                <div class="qr-wrapper" id="qrWrapper">
+                    <div id="qr-code"></div>
+                </div>
                 <div class="frame-label hidden" id="frameLabelPreview"></div>
             </div>
             <div class="status-bar">
-                <div class="status-item" id="contrastStatus"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg><span>Good contrast</span></div>
-                <div class="status-item capacity-bar"><span id="capacityLabel">Capacity: 0%</span><div class="capacity-bar-track"><div class="capacity-bar-fill" id="capacityFill" style="width: 0%"></div></div></div>
+                <div class="status-item" id="contrastStatus"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2">
+                        <polyline points="20 6 9 17 4 12" />
+                    </svg><span>Good contrast</span></div>
+                <div class="status-item capacity-bar"><span id="capacityLabel">Capacity: 0%</span>
+                    <div class="capacity-bar-track">
+                        <div class="capacity-bar-fill" id="capacityFill" style="width: 0%"></div>
+                    </div>
+                </div>
             </div>
             <div class="download-actions">
-                <button class="btn" id="copyBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>Copy</button>
-                <button class="btn btn-primary" id="downloadPngBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>PNG</button>
-                <button class="btn" id="downloadSvgBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>SVG</button>
+                <button class="btn" id="copyBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2">
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                    </svg>Copy</button>
+                <button class="btn btn-primary" id="downloadPngBtn"><svg viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                        <polyline points="7 10 12 15 17 10" />
+                        <line x1="12" y1="15" x2="12" y2="3" />
+                    </svg>PNG</button>
+                <button class="btn" id="downloadSvgBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                        <polyline points="7 10 12 15 17 10" />
+                        <line x1="12" y1="15" x2="12" y2="3" />
+                    </svg>SVG</button>
             </div>
         </div>
     </main>
 
     <div class="modal-overlay" id="savePresetModal">
         <div class="modal">
-            <div class="modal-header"><span class="modal-title">Save Preset</span><button class="modal-close" onclick="closeModal('savePresetModal')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
-            <div class="modal-body"><div class="field"><label class="field-label">Preset Name</label><input type="text" id="presetName" placeholder="My QR Preset"></div></div>
-            <div class="modal-footer"><button class="btn" onclick="closeModal('savePresetModal')">Cancel</button><button class="btn btn-primary" id="savePresetConfirm">Save</button></div>
+            <div class="modal-header"><span class="modal-title">Save Preset</span><button class="modal-close"
+                    onclick="closeModal('savePresetModal')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18" />
+                        <line x1="6" y1="6" x2="18" y2="18" />
+                    </svg></button></div>
+            <div class="modal-body">
+                <div class="field"><label class="field-label">Preset Name</label><input type="text" id="presetName"
+                        placeholder="My QR Preset"></div>
+            </div>
+            <div class="modal-footer"><button class="btn" onclick="closeModal('savePresetModal')">Cancel</button><button
+                    class="btn btn-primary" id="savePresetConfirm">Save</button></div>
         </div>
     </div>
 
     <div class="modal-overlay" id="loadPresetModal">
         <div class="modal">
-            <div class="modal-header"><span class="modal-title">Load Preset</span><button class="modal-close" onclick="closeModal('loadPresetModal')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
-            <div class="modal-body"><div class="preset-list" id="presetList"></div></div>
+            <div class="modal-header"><span class="modal-title">Load Preset</span><button class="modal-close"
+                    onclick="closeModal('loadPresetModal')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18" />
+                        <line x1="6" y1="6" x2="18" y2="18" />
+                    </svg></button></div>
+            <div class="modal-body">
+                <div class="preset-list" id="presetList"></div>
+            </div>
         </div>
     </div>
 
@@ -213,4 +485,5 @@
     </script>
     <script src="script.js"></script>
 </body>
+
 </html>
