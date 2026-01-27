@@ -417,3 +417,8 @@ function escapeHtml(text) {
     div.textContent = String(text);
     return div.innerHTML;
 }
+
+// Register service worker for offline support
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+}
