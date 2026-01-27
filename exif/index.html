@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EXIF Inspector</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <div class="logo-icon">📷</div>
+                <h1>EXIF Inspector</h1>
+            </div>
+        </header>
+
+        <div class="main-layout">
+            <!-- Left Panel: Image -->
+            <div class="panel">
+                <div class="panel-header">
+                    <span class="panel-title">Image</span>
+                </div>
+                <div class="panel-content">
+                    <div class="drop-zone" id="dropZone">
+                        <div class="drop-zone-icon">🖼️</div>
+                        <div class="drop-zone-text">Drop an image here</div>
+                        <div class="drop-zone-hint">or click to browse • Supports JPEG, TIFF, HEIC</div>
+                        <input type="file" id="fileInput" accept="image/*">
+                    </div>
+
+                    <div class="image-preview-container" id="imagePreviewContainer">
+                        <div class="image-wrapper">
+                            <img id="imagePreview" class="image-preview" alt="Preview">
+                        </div>
+                        <div class="image-actions">
+                            <button class="btn btn-secondary" id="loadNewBtn">Load New Image</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Panel: EXIF Data -->
+            <div class="panel exif-panel">
+                <div class="panel-header">
+                    <span class="panel-title">EXIF Data</span>
+                </div>
+                <div class="panel-content" id="exifContent">
+                    <div class="exif-empty" id="exifEmpty">
+                        <div class="exif-empty-icon">📋</div>
+                        <div>Load an image to view its metadata</div>
+                    </div>
+
+                    <div class="loading" id="loading">
+                        <div class="spinner"></div>
+                        <div>Extracting EXIF data...</div>
+                    </div>
+
+                    <div class="no-exif" id="noExif">
+                        <div class="no-exif-icon">⚠️</div>
+                        <div><strong>No EXIF data found</strong></div>
+                        <div style="font-size: 13px; color: var(--text-secondary); margin-top: 8px;">
+                            This image doesn't contain EXIF metadata, or it may have been stripped.
+                        </div>
+                    </div>
+
+                    <div id="exifData" style="display: none;">
+                        <div class="file-info" id="fileInfo">
+                            <div class="file-info-grid" id="fileInfoGrid"></div>
+                        </div>
+
+                        <div class="map-section" id="mapSection">
+                            <div class="section-header">
+                                <span class="section-icon">📍</span>
+                                <span class="section-title">Location</span>
+                            </div>
+                            <div style="padding-top: 12px;">
+                                <div class="map-container">
+                                    <div id="map"></div>
+                                </div>
+                                <div class="map-coords" id="mapCoords"></div>
+                            </div>
+                        </div>
+
+                        <div class="thumbnail-section" id="thumbnailSection">
+                            <div class="section-header">
+                                <span class="section-icon">🖼️</span>
+                                <span class="section-title">Embedded Thumbnail</span>
+                            </div>
+                            <div style="padding-top: 12px;">
+                                <div class="thumbnail-container">
+                                    <img id="thumbnailImage" class="thumbnail-image" alt="Thumbnail">
+                                    <div class="thumbnail-info" id="thumbnailInfo"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="exifSections"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/exif-js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
