@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kasipovic - IP Scanner</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>🔍 IP Scanner</h1>
+
+        <div class="config-panel">
+            <div class="config-row">
+                <div class="config-group">
+                    <label>Start IP</label>
+                    <input type="text" id="startIp" placeholder="192.168.1.1">
+                </div>
+                <div class="config-group">
+                    <label>End IP</label>
+                    <input type="text" id="endIp" placeholder="192.168.1.254">
+                </div>
+                <div class="config-group" style="flex: 0; min-width: auto; align-self: flex-end;">
+                    <button class="btn-detect" id="detectBtn" title="Auto-detect local IP">Detect</button>
+                </div>
+            </div>
+            <div class="config-row">
+                <div class="config-group ports">
+                    <label>Ports (comma-separated)</label>
+                    <input type="text" id="ports" value="80, 443">
+                </div>
+            </div>
+            <div class="config-row">
+                <div class="config-group">
+                    <label>Timeout (seconds)</label>
+                    <input type="number" id="timeout" value="5" min="1" max="30">
+                </div>
+                <div class="config-group">
+                    <label>Concurrent requests</label>
+                    <input type="number" id="concurrency" value="15" min="1" max="50">
+                </div>
+            </div>
+            <div class="button-row">
+                <button class="btn-start" id="startBtn">Start Scan</button>
+                <button class="btn-stop" id="stopBtn" disabled>Stop</button>
+            </div>
+        </div>
+
+        <div class="progress-section" id="progressSection">
+            <div class="progress-header">
+                <span class="progress-text" id="progressText">Scanning... 0 / 0</span>
+                <div class="progress-stats">
+                    <div class="stat">
+                        <div class="stat-dot alive"></div>
+                        <span id="aliveCount">0</span>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-dot dead"></div>
+                        <span id="deadCount">0</span>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-dot pending"></div>
+                        <span id="pendingCount">0</span>
+                    </div>
+                </div>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+        </div>
+
+        <div class="results-section" id="resultsSection">
+            <div class="table-toolbar">
+                <div class="legend">
+                    <div class="legend-item">
+                        <div class="legend-badge status-pending"></div>
+                        <span>Pending</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-badge status-scanning"></div>
+                        <span>Scanning</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-badge status-alive"></div>
+                        <span>Alive</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-badge status-dead"></div>
+                        <span>Dead</span>
+                    </div>
+                </div>
+                <div class="toolbar-actions">
+                    <button class="filter-btn active" data-filter="all" id="filterAll">All Hosts</button>
+                    <button class="filter-btn" data-filter="alive" id="filterAlive">Alive Only</button>
+                    <button class="export-btn" id="exportBtn" title="Export results to CSV">Export CSV</button>
+                </div>
+            </div>
+            <div class="table-wrapper">
+                <div class="empty-state" id="emptyState">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10" />
+                        <path d="M12 6v6l4 2" />
+                    </svg>
+                    <p>Configure IP range and ports, then click Start Scan</p>
+                </div>
+                <table id="resultsTable" style="display: none;">
+                    <thead id="tableHead"></thead>
+                    <tbody id="tableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script src="script.js"></script>
+    <script>
+        // Register service worker for offline support
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(registration => {
+                        console.log('ServiceWorker registered:', registration.scope);
+                    })
+                    .catch(error => {
+                        console.log('ServiceWorker registration failed:', error);
+                    });
+            });
+        }
+    </script>
+</body>
+
+</html>
