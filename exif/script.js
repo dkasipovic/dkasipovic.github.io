@@ -17,14 +17,40 @@ const thumbnailSection = document.getElementById('thumbnailSection');
 const thumbnailImage = document.getElementById('thumbnailImage');
 const thumbnailInfo = document.getElementById('thumbnailInfo');
 const exifSections = document.getElementById('exifSections');
+const exportBtn = document.getElementById('exportBtn');
+const exportModal = document.getElementById('exportModal');
+const exportTextarea = document.getElementById('exportTextarea');
+const copyBtn = document.getElementById('copyBtn');
+const closeModal = document.getElementById('closeModal');
+const closeModalBtn = document.getElementById('closeModalBtn');
 
 let map = null;
 let marker = null;
+let currentExifData = null;
+let currentFile = null;
 
 // Event Listeners
 dropZone.addEventListener('click', () => fileInput.click());
 fileInput.addEventListener('change', handleFileSelect);
 loadNewBtn.addEventListener('click', resetViewer);
+exportBtn.addEventListener('click', showExportModal);
+closeModal.addEventListener('click', hideExportModal);
+closeModalBtn.addEventListener('click', hideExportModal);
+copyBtn.addEventListener('click', copyToClipboard);
+
+// Close modal when clicking outside
+exportModal.addEventListener('click', (e) => {
+    if (e.target === exportModal) {
+        hideExportModal();
+    }
+});
+
+// Close modal with Escape key
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && exportModal.classList.contains('visible')) {
+        hideExportModal();
+    }
+});
 
 dropZone.addEventListener('dragover', (e) => {
     e.preventDefault();
@@ -59,6 +85,9 @@ function resetViewer() {
     noExif.classList.remove('visible');
     exifData.style.display = 'none';
     fileInput.value = '';
+    exportBtn.style.display = 'none';
+    currentExifData = null;
+    currentFile = null;
 
     if (map) {
         map.remove();
@@ -90,6 +119,9 @@ function processImage(file) {
         if (Object.keys(allTags).length === 0) {
             noExif.classList.add('visible');
             // Still show file info
+            currentExifData = {};
+            currentFile = file;
+            exportBtn.style.display = 'flex';
             showFileInfo(file, {});
             fileInfo.classList.add('visible');
             exifData.style.display = 'block';
@@ -129,6 +161,11 @@ function showFileInfo(file, tags) {
 function displayExifData(file, tags) {
     exifData.style.display = 'block';
     exifSections.innerHTML = '';
+    
+    // Store current data for export
+    currentExifData = tags;
+    currentFile = file;
+    exportBtn.style.display = 'flex';
 
     // File info
     showFileInfo(file, tags);
@@ -416,6 +453,137 @@ function escapeHtml(text) {
     const div = document.createElement('div');
     div.textContent = String(text);
     return div.innerHTML;
+}
+
+function expandObject(lines, obj, prefix = '') {
+    for (const [key, value] of Object.entries(obj)) {
+        const fullKey = prefix ? prefix + '.' + key : key;
+        
+        if (value === null || value === undefined) {
+            lines.push(fullKey + '\t' + String(value));
+        } else if (Array.isArray(value)) {
+            lines.push(fullKey + '\t' + value.join(', '));
+        } else if (typeof value === 'object') {
+            // Check if it's a plain object (not Date, etc.)
+            if (value.constructor === Object) {
+                // Expand the object recursively
+                expandObject(lines, value, fullKey);
+            } else {
+                // For other object types (Date, etc.), convert to string
+                lines.push(fullKey + '\t' + String(value));
+            }
+        } else {
+            lines.push(fullKey + '\t' + String(value));
+        }
+    }
+}
+
+function showExportModal() {
+    if (!currentFile) return;
+    
+    const lines = [];
+    
+    // Add file information
+    lines.push('File Name\t' + currentFile.name);
+    lines.push('File Size\t' + currentFile.size);
+    lines.push('File Type\t' + (currentFile.type || 'Unknown'));
+    lines.push('Last Modified\t' + new Date(currentFile.lastModified).toISOString());
+    lines.push(''); // Empty line separator
+    
+    // Process EXIF data
+    if (currentExifData) {
+        // First, check for GPS coordinates and convert to decimal degrees
+        const gpsLat = currentExifData.GPSLatitude;
+        const gpsLon = currentExifData.GPSLongitude;
+        const gpsLatRef = currentExifData.GPSLatitudeRef;
+        const gpsLonRef = currentExifData.GPSLongitudeRef;
+        
+        let gpsLatDecimal = null;
+        let gpsLonDecimal = null;
+        
+        if (gpsLat && gpsLon) {
+            gpsLatDecimal = convertDMSToDD(gpsLat, gpsLatRef);
+            gpsLonDecimal = convertDMSToDD(gpsLon, gpsLonRef);
+        }
+        
+        // Process all EXIF tags
+        for (const [key, value] of Object.entries(currentExifData)) {
+            if (key === 'thumbnail') continue;
+            
+            // Skip GPS tags that we'll replace with decimal format
+            if (key === 'GPSLatitude' || key === 'GPSLongitude' || 
+                key === 'GPSLatitudeRef' || key === 'GPSLongitudeRef') {
+                continue;
+            }
+            
+            if (key === 'MakerNote' && typeof value === 'object') {
+                // MakerNote is typically binary data, skip expansion
+                lines.push(key + '\t[Binary data]');
+            } else if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
+                // Check if it's a plain object that can be expanded
+                if (value.constructor === Object) {
+                    // Expand the object recursively
+                    expandObject(lines, value, key);
+                } else {
+                    // For other object types, convert to string
+                    lines.push(key + '\t' + String(value));
+                }
+            } else if (Array.isArray(value)) {
+                lines.push(key + '\t' + value.join(', '));
+            } else {
+                lines.push(key + '\t' + String(value));
+            }
+        }
+        
+        // Add GPS coordinates in decimal format (X,Y)
+        if (gpsLatDecimal !== null && gpsLonDecimal !== null) {
+            lines.push('GPSLatitude\t' + gpsLatDecimal.toFixed(6));
+            lines.push('GPSLongitude\t' + gpsLonDecimal.toFixed(6));
+            lines.push('GPS\t' + gpsLonDecimal.toFixed(6) + ',' + gpsLatDecimal.toFixed(6));
+        }
+    }
+    
+    // Format as tab-separated text
+    const txtString = lines.join('\n');
+    exportTextarea.value = txtString;
+    exportModal.classList.add('visible');
+    exportTextarea.focus();
+    exportTextarea.select();
+}
+
+function hideExportModal() {
+    exportModal.classList.remove('visible');
+}
+
+function copyToClipboard() {
+    exportTextarea.select();
+    exportTextarea.setSelectionRange(0, 99999); // For mobile devices
+    
+    try {
+        document.execCommand('copy');
+        const originalText = copyBtn.textContent;
+        copyBtn.textContent = 'Copied!';
+        copyBtn.style.background = 'var(--accent-dim)';
+        
+        setTimeout(() => {
+            copyBtn.textContent = originalText;
+            copyBtn.style.background = '';
+        }, 2000);
+    } catch (err) {
+        // Fallback for modern browsers
+        navigator.clipboard.writeText(exportTextarea.value).then(() => {
+            const originalText = copyBtn.textContent;
+            copyBtn.textContent = 'Copied!';
+            copyBtn.style.background = 'var(--accent-dim)';
+            
+            setTimeout(() => {
+                copyBtn.textContent = originalText;
+                copyBtn.style.background = '';
+            }, 2000);
+        }).catch(() => {
+            alert('Failed to copy. Please select and copy manually.');
+        });
+    }
 }
 
 // Register service worker for offline support

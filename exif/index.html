@@ -52,6 +52,10 @@
             <div class="panel exif-panel">
                 <div class="panel-header">
                     <span class="panel-title">EXIF Data</span>
+                    <button class="btn-export" id="exportBtn" title="Export EXIF Data" style="display: none;">
+                        <span>📋</span>
+                        <span>Export</span>
+                    </button>
                 </div>
                 <div class="panel-content" id="exifContent">
                     <div class="exif-empty" id="exifEmpty">
@@ -106,6 +110,23 @@
                         <div id="exifSections"></div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Export Modal -->
+    <div class="modal-overlay" id="exportModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Export EXIF Data</h2>
+                <button class="modal-close" id="closeModal">×</button>
+            </div>
+            <div class="modal-body">
+                <textarea id="exportTextarea" readonly></textarea>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="copyBtn">Copy to Clipboard</button>
+                <button class="btn btn-secondary" id="closeModalBtn">Close</button>
             </div>
         </div>
     </div>
