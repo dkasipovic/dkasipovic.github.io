@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a2e"/>
+      <stop offset="100%" style="stop-color:#16213e"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00d9ff"/>
+      <stop offset="100%" style="stop-color:#0077b6"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="512" height="512" rx="96" fill="url(#bg)"/>
+  
+  <!-- Network grid dots -->
+  <g fill="#2a3f5f">
+    <circle cx="128" cy="128" r="16"/>
+    <circle cx="256" cy="128" r="16"/>
+    <circle cx="384" cy="128" r="16"/>
+    <circle cx="128" cy="256" r="16"/>
+    <circle cx="384" cy="256" r="16"/>
+    <circle cx="128" cy="384" r="16"/>
+    <circle cx="256" cy="384" r="16"/>
+    <circle cx="384" cy="384" r="16"/>
+  </g>
+  
+  <!-- Center scanning circle -->
+  <circle cx="256" cy="256" r="80" fill="none" stroke="url(#accent)" stroke-width="12"/>
+  <circle cx="256" cy="256" r="48" fill="none" stroke="url(#accent)" stroke-width="8" opacity="0.6"/>
+  <circle cx="256" cy="256" r="16" fill="url(#accent)"/>
+  
+  <!-- Scan lines -->
+  <g stroke="url(#accent)" stroke-width="6" stroke-linecap="round" opacity="0.8">
+    <line x1="256" y1="168" x2="256" y2="128"/>
+    <line x1="256" y1="344" x2="256" y2="384"/>
+    <line x1="168" y1="256" x2="128" y2="256"/>
+    <line x1="344" y1="256" x2="384" y2="256"/>
+  </g>
+  
+  <!-- Alive indicators (green dots) -->
+  <circle cx="384" cy="128" r="24" fill="#51cf66"/>
+  <circle cx="128" cy="384" r="24" fill="#51cf66"/>
+  
+  <!-- Magnifying glass handle hint -->
+  <line x1="320" y1="320" x2="380" y2="380" stroke="url(#accent)" stroke-width="16" stroke-linecap="round"/>
+</svg>
