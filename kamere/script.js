@@ -24,4 +24,4 @@ function reloadAllImages() {
 reloadAllImages();
 
 // Reload every second (1000 milliseconds)
-setInterval(reloadAllImages, 1000);
+setInterval(reloadAllImages, 30 * 1000);
