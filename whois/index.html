@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0a0a0a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="WHOIS">
+<meta name="description" content="Fast domain WHOIS/RDAP lookup tool">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>WHOIS Lookup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="app">
+  <header class="header">
+    <div class="logo"><span class="logo-dot"></span>whois</div>
+    <div class="tagline">domain lookup via RDAP</div>
+  </header>
+
+  <div class="search-wrap">
+    <form class="search-box" id="searchForm" autocomplete="off">
+      <input
+        type="text"
+        class="search-input"
+        id="domainInput"
+        placeholder="example.com"
+        autocapitalize="none"
+        autocorrect="off"
+        spellcheck="false"
+        enterkeyhint="search"
+      >
+      <button type="submit" class="search-btn" id="searchBtn" aria-label="Search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+      </button>
+    </form>
+  </div>
+
+  <div class="source-row">
+    <button class="source-chip active" data-source="rdap">RDAP</button>
+    <button class="source-chip" data-source="whodat">WHO-DAT</button>
+  </div>
+
+  <div class="error-msg" id="errorMsg"><p id="errorText"></p></div>
+  <div class="loader" id="loader">
+    <div class="loader-bar"></div>
+    <div class="loader-text">querying<span id="loaderDomain"></span></div>
+  </div>
+
+  <div class="results" id="results"></div>
+
+  <div class="history-section" id="historySection" style="display:none">
+    <div class="history-title">Recent lookups</div>
+    <div class="history-list" id="historyList"></div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
