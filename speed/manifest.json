@@ -2,7 +2,7 @@
   "name": "Speedometer - Kasipovic",
   "short_name": "Speed",
   "description": "GPS Speedometer with compass and speed history",
-  "start_url": "./speedometer.html",
+  "start_url": "./index.html",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#0a0a0f",
