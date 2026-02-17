@@ -756,19 +756,29 @@ function copyCoords() {
 }
 
 // ============ WAKE LOCK ============
+const NOSLEEP_MP4 = 'data:video/mp4;base64,AAAAHGZ0eXBpc29tAAACAGlzb21pc28ybXA0MQAAACVtZGF0AAAACWdCwArZBzwEgAAAAARozjiAAAAABGWIgEAAAAJlbW9vdgAAAG5tdmhkAAAAAAAAAAAAAAAAAAAD6AAAA+gAAQAAAAABAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAB73RyYWsAAABkdGtoZAAAAAMAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAQAAAAAACAAAAAgAAAAABg21kaWEAAAAgbWRoZAAAAAAAAAAAAAAAAAAAA+gAAAPoVcQAAAAAAC1oZGxyAAAAAAAAAAB2aWRlAAAAAAAAAAAAAAAAVmlkZW9IYW5kbGVyAAAAAS5taW5mAAAAFHZtaGQAAAABAAAAAAAAAAAAAAAkZGluZgAAABxkcmVmAAAAAAAAAAEAAAAMdXJsIAAAAAEAAADuc3RibAAAAIZzdHNkAAAAAAAAAAEAAAB2YXZjMQAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAACAAIASAAAAEgAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABj//wAAACBhdmNDAULACv/hAAlnQsAK2Qc8BIABAARozjiAAAAAGHN0dHMAAAAAAAAAAQAAAAEAAAPoAAAAHHN0c2MAAAAAAAAAAQAAAAEAAAABAAAAAQAAABhzdHN6AAAAAAAAAAAAAAABAAAAHQAAABRzdGNvAAAAAAAAAAEAAAAk';
+
+const isIOSStandalone = (/iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1))
+  && (window.navigator.standalone === true || window.matchMedia('(display-mode: standalone)').matches);
+
 async function requestWakeLock() {
+  // Wake Lock API doesn't work in iOS standalone/PWA mode - use video fallback
+  if (isIOSStandalone) {
+    enableNoSleepVideo();
+    return;
+  }
   if ('wakeLock' in navigator) {
     try {
-      if (state.wakeLock) return; // already held
+      if (state.wakeLock) return;
       state.wakeLock = await navigator.wakeLock.request('screen');
       state.wakeLock.addEventListener('release', () => {
         state.wakeLock = null;
       });
     } catch (e) {
-      // Request failed (e.g. page not visible, low battery)
+      // Wake lock failed, try video fallback
+      enableNoSleepVideo();
     }
   } else {
-    // Fallback: play a tiny muted video to prevent screen sleep
     enableNoSleepVideo();
   }
 }
@@ -776,16 +786,12 @@ async function requestWakeLock() {
 function enableNoSleepVideo() {
   if (state.noSleepVideo) return;
   try {
-    const canvas = document.createElement('canvas');
-    canvas.width = 2;
-    canvas.height = 2;
-    if (!canvas.captureStream) return;
-    const stream = canvas.captureStream(0);
     const video = document.createElement('video');
-    video.srcObject = stream;
+    video.src = NOSLEEP_MP4;
     video.muted = true;
     video.loop = true;
     video.setAttribute('playsinline', '');
+    video.setAttribute('webkit-playsinline', '');
     video.style.cssText = 'position:fixed;width:1px;height:1px;opacity:0.01;pointer-events:none;z-index:-1';
     document.body.appendChild(video);
     video.play().catch(() => {});
