@@ -407,7 +407,9 @@ const state = {
   scaleMax: 10,       // current gauge max
   history: [],        // {t, speed}
   gpsActive: false,
-  watchId: null
+  watchId: null,
+  wakeLock: null,
+  noSleepVideo: null
 };
 
 const SCALE_THRESHOLDS = [10, 50, 100, 200, 400, 800, 1600];
@@ -753,6 +755,46 @@ function copyCoords() {
   });
 }
 
+// ============ WAKE LOCK ============
+async function requestWakeLock() {
+  if ('wakeLock' in navigator) {
+    try {
+      if (state.wakeLock) return; // already held
+      state.wakeLock = await navigator.wakeLock.request('screen');
+      state.wakeLock.addEventListener('release', () => {
+        state.wakeLock = null;
+      });
+    } catch (e) {
+      // Request failed (e.g. page not visible, low battery)
+    }
+  } else {
+    // Fallback: play a tiny muted video to prevent screen sleep
+    enableNoSleepVideo();
+  }
+}
+
+function enableNoSleepVideo() {
+  if (state.noSleepVideo) return;
+  try {
+    const canvas = document.createElement('canvas');
+    canvas.width = 2;
+    canvas.height = 2;
+    if (!canvas.captureStream) return;
+    const stream = canvas.captureStream(0);
+    const video = document.createElement('video');
+    video.srcObject = stream;
+    video.muted = true;
+    video.loop = true;
+    video.setAttribute('playsinline', '');
+    video.style.cssText = 'position:fixed;width:1px;height:1px;opacity:0.01;pointer-events:none;z-index:-1';
+    document.body.appendChild(video);
+    video.play().catch(() => {});
+    state.noSleepVideo = video;
+  } catch (e) {
+    // Fallback not available
+  }
+}
+
 // ============ INIT ============
 function init() {
   buildTicks();
@@ -770,15 +812,13 @@ function init() {
     }, 150);
   });
 
-  // Keep screen awake if possible
-  if ('wakeLock' in navigator) {
-    navigator.wakeLock.request('screen').catch(() => {});
-    document.addEventListener('visibilitychange', () => {
-      if (document.visibilityState === 'visible') {
-        navigator.wakeLock.request('screen').catch(() => {});
-      }
-    });
-  }
+  // Keep screen awake
+  requestWakeLock();
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') {
+      requestWakeLock();
+    }
+  });
 }
 
 init();
