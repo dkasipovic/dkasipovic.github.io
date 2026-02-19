@@ -528,8 +528,18 @@ function updateCompass(heading) {
 
 // ============ SCALE ============
 function checkScale(speed) {
+  // Use the max speed visible in the graph (same window as drawGraph) so the
+  // scale never drops below what is needed to display historical data on screen.
+  const pointSpacing = 3;
+  const graphWidth = $graphCanvas.parentElement
+    ? $graphCanvas.parentElement.getBoundingClientRect().width
+    : 0;
+  const maxPoints = graphWidth > 0 ? Math.floor(graphWidth / pointSpacing) : state.history.length;
+  const visible = state.history.slice(-maxPoints);
+  const maxInHistory = visible.reduce((m, p) => Math.max(m, p.speed), speed);
+
   for (const t of SCALE_THRESHOLDS) {
-    if (t >= speed) {
+    if (t >= maxInHistory) {
       if (t !== state.scaleMax) {
         state.scaleMax = t;
         buildTicks();
@@ -540,7 +550,7 @@ function checkScale(speed) {
     }
   }
   // Beyond all thresholds
-  const next = Math.ceil(speed / 100) * 100;
+  const next = Math.ceil(maxInHistory / 100) * 100;
   if (next !== state.scaleMax) {
     state.scaleMax = next;
     buildTicks();
