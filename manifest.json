@@ -1,6 +1,6 @@
 {
-  "name": "Kasipovic Tools",
-  "short_name": "Tools",
+  "name": "Kasipovic",
+  "short_name": "Kasipovic",
   "description": "Collection of privacy-first, offline-capable web tools",
   "start_url": "./index.html",
   "display": "standalone",
