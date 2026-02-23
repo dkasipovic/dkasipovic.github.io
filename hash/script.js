@@ -66,6 +66,7 @@ function resetView() {
     results.classList.remove('visible');
     fileInput.value = '';
     progressFill.style.width = '0%';
+    progressFill.classList.remove('indeterminate');
 }
 
 function formatFileSize(bytes) {
@@ -97,8 +98,7 @@ async function processFile(file) {
     crc32Value.textContent = '';
 
     try {
-        // Read file in chunks with progress
-        const CHUNK_SIZE = 2 * 1024 * 1024; // 2 MB
+        // Read file in chunks with progress (0-100%)
         const totalSize = file.size;
         const reader = file.stream().getReader();
         const chunks = [];
@@ -109,7 +109,7 @@ async function processFile(file) {
             if (done) break;
             chunks.push(value);
             loaded += value.length;
-            const pct = Math.round((loaded / totalSize) * 70); // reading = 0-70%
+            const pct = Math.round((loaded / totalSize) * 100);
             progressFill.style.width = pct + '%';
             progressText.textContent = 'Reading file\u2026 ' + formatFileSize(loaded) + ' / ' + formatFileSize(totalSize);
         }
@@ -123,17 +123,18 @@ async function processFile(file) {
         }
         const buffer = data.buffer;
 
+        // Switch to indeterminate animation for hash calculation
+        progressFill.classList.add('indeterminate');
         progressText.textContent = 'Calculating hashes\u2026';
-        progressFill.style.width = '70%';
 
         // Calculate all hashes
         const [md5, sha1, sha256, sha384, sha512, crc32] = await Promise.all([
-            computeMD5(data).then(r => { progressFill.style.width = '75%'; return r; }),
-            computeSHA1(buffer).then(r => { progressFill.style.width = '80%'; return r; }),
-            computeSHA256(buffer).then(r => { progressFill.style.width = '85%'; return r; }),
-            computeSHA384(buffer).then(r => { progressFill.style.width = '88%'; return r; }),
-            computeSHA512(buffer).then(r => { progressFill.style.width = '92%'; return r; }),
-            Promise.resolve(computeCRC32(data)).then(r => { progressFill.style.width = '95%'; return r; }),
+            computeMD5(data),
+            computeSHA1(buffer),
+            computeSHA256(buffer),
+            computeSHA384(buffer),
+            computeSHA512(buffer),
+            Promise.resolve(computeCRC32(data)),
         ]);
 
         // Store results
@@ -152,6 +153,8 @@ async function processFile(file) {
         sha512Value.textContent = sha512;
         crc32Value.textContent = crc32;
 
+        // Stop indeterminate animation and show complete
+        progressFill.classList.remove('indeterminate');
         progressFill.style.width = '100%';
         progressText.textContent = 'Done';
 
@@ -161,6 +164,7 @@ async function processFile(file) {
         }, 400);
 
     } catch (err) {
+        progressFill.classList.remove('indeterminate');
         progressText.textContent = 'Error: ' + err.message;
         progressFill.style.width = '0%';
     }
