@@ -341,7 +341,22 @@ body {
 
 /* ── Responsive ── */
 @media (max-width: 768px) {
+    .app {
+        flex-direction: column;
+    }
+
     .sidebar {
+        width: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 100;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .nav-items {
         display: none;
     }
 
@@ -349,13 +364,14 @@ body {
         display: flex;
     }
 
-    .content {
-        padding: 24px 20px;
-        padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px));
+    .panel-header {
+        display: none;
     }
 
-    .panel-header h1 {
-        font-size: 24px;
+    .content {
+        padding: 24px 20px;
+        padding-top: calc(24px + 85px);
+        padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px));
     }
 
     .tools-grid {
@@ -382,6 +398,7 @@ body {
 @media (max-width: 480px) {
     .content {
         padding: 20px 16px;
+        padding-top: calc(20px + 85px);
         padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px));
     }
 
