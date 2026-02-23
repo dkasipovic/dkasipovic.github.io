@@ -12,6 +12,8 @@ const results = document.getElementById('results');
 const md5Value = document.getElementById('md5Value');
 const sha1Value = document.getElementById('sha1Value');
 const sha256Value = document.getElementById('sha256Value');
+const sha384Value = document.getElementById('sha384Value');
+const sha512Value = document.getElementById('sha512Value');
 const crc32Value = document.getElementById('crc32Value');
 
 // Hash results storage for copy buttons
@@ -90,6 +92,8 @@ async function processFile(file) {
     md5Value.textContent = '';
     sha1Value.textContent = '';
     sha256Value.textContent = '';
+    sha384Value.textContent = '';
+    sha512Value.textContent = '';
     crc32Value.textContent = '';
 
     try {
@@ -123,10 +127,12 @@ async function processFile(file) {
         progressFill.style.width = '70%';
 
         // Calculate all hashes
-        const [md5, sha1, sha256, crc32] = await Promise.all([
-            computeMD5(data).then(r => { progressFill.style.width = '80%'; return r; }),
-            computeSHA1(buffer).then(r => { progressFill.style.width = '85%'; return r; }),
-            computeSHA256(buffer).then(r => { progressFill.style.width = '90%'; return r; }),
+        const [md5, sha1, sha256, sha384, sha512, crc32] = await Promise.all([
+            computeMD5(data).then(r => { progressFill.style.width = '75%'; return r; }),
+            computeSHA1(buffer).then(r => { progressFill.style.width = '80%'; return r; }),
+            computeSHA256(buffer).then(r => { progressFill.style.width = '85%'; return r; }),
+            computeSHA384(buffer).then(r => { progressFill.style.width = '88%'; return r; }),
+            computeSHA512(buffer).then(r => { progressFill.style.width = '92%'; return r; }),
             Promise.resolve(computeCRC32(data)).then(r => { progressFill.style.width = '95%'; return r; }),
         ]);
 
@@ -134,12 +140,16 @@ async function processFile(file) {
         hashResults.md5 = md5;
         hashResults.sha1 = sha1;
         hashResults.sha256 = sha256;
+        hashResults.sha384 = sha384;
+        hashResults.sha512 = sha512;
         hashResults.crc32 = crc32;
 
         // Display results
         md5Value.textContent = md5;
         sha1Value.textContent = sha1;
         sha256Value.textContent = sha256;
+        sha384Value.textContent = sha384;
+        sha512Value.textContent = sha512;
         crc32Value.textContent = crc32;
 
         progressFill.style.width = '100%';
@@ -165,6 +175,18 @@ async function computeSHA256(buffer) {
 // --- SHA-1 via Web Crypto API ---
 async function computeSHA1(buffer) {
     const hash = await crypto.subtle.digest('SHA-1', buffer);
+    return bufferToHex(hash);
+}
+
+// --- SHA-384 via Web Crypto API ---
+async function computeSHA384(buffer) {
+    const hash = await crypto.subtle.digest('SHA-384', buffer);
+    return bufferToHex(hash);
+}
+
+// --- SHA-512 via Web Crypto API ---
+async function computeSHA512(buffer) {
+    const hash = await crypto.subtle.digest('SHA-512', buffer);
     return bufferToHex(hash);
 }
 
