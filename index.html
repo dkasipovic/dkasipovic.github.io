@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#8b5cf6">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Tools">
+    <meta name="description" content="Collection of privacy-first, offline-capable web tools">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <link rel="icon" type="image/svg+xml" href="icon.svg">
+    <link rel="manifest" href="manifest.json">
+    <title>Tools - Kasipovic</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="app">
+        <nav class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <div class="logo-icon">K</div>
+                    <span class="logo-text">Kasipovic</span>
+                </div>
+            </div>
+            <div class="nav-items">
+                <button class="nav-item active" data-tab="tools">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="7" height="7" rx="1"/>
+                        <rect x="14" y="3" width="7" height="7" rx="1"/>
+                        <rect x="3" y="14" width="7" height="7" rx="1"/>
+                        <rect x="14" y="14" width="7" height="7" rx="1"/>
+                    </svg>
+                    <span>Tools</span>
+                </button>
+                <button class="nav-item" data-tab="updates">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"/>
+                        <polyline points="12 6 12 12 16 14"/>
+                    </svg>
+                    <span>Updates</span>
+                </button>
+            </div>
+        </nav>
+
+        <main class="content">
+            <div class="tab-panel active" id="tools-panel">
+                <div class="panel-header">
+                    <h1>Tools</h1>
+                    <p class="panel-subtitle">Privacy-first, offline-capable web tools</p>
+                </div>
+                <div class="tools-grid" id="toolsGrid"></div>
+            </div>
+
+            <div class="tab-panel" id="updates-panel">
+                <div class="panel-header">
+                    <h1>Updates</h1>
+                    <p class="panel-subtitle">Recent changes and additions</p>
+                </div>
+                <div class="updates-list" id="updatesList"></div>
+            </div>
+        </main>
+
+        <nav class="bottom-nav" id="bottomNav">
+            <button class="bottom-nav-item active" data-tab="tools">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="7" height="7" rx="1"/>
+                    <rect x="14" y="3" width="7" height="7" rx="1"/>
+                    <rect x="3" y="14" width="7" height="7" rx="1"/>
+                    <rect x="14" y="14" width="7" height="7" rx="1"/>
+                </svg>
+                <span>Tools</span>
+            </button>
+            <button class="bottom-nav-item" data-tab="updates">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"/>
+                    <polyline points="12 6 12 12 16 14"/>
+                </svg>
+                <span>Updates</span>
+            </button>
+        </nav>
+    </div>
+
+    <script>
+        const TOOLS = [
+            {
+                name: 'Hash Calculator',
+                path: '/hash/',
+                icon: '#',
+                description: 'Calculate MD5, SHA-1, SHA-256, SHA-384, SHA-512, and CRC-32 file hashes'
+            },
+            {
+                name: 'QR Studio',
+                path: '/qr/',
+                icon: '⬡',
+                description: 'Generate and customize QR codes for URLs, vCards, WiFi, and more'
+            },
+            {
+                name: 'IP Scanner',
+                path: '/ip/',
+                icon: '⊚',
+                description: 'Scan local network for live hosts and open ports'
+            },
+            {
+                name: 'EXIF Inspector',
+                path: '/exif/',
+                icon: '◉',
+                description: 'Extract and view metadata from images, fully client-side'
+            },
+            {
+                name: 'Speed Test',
+                path: '/speed/',
+                icon: '↕',
+                description: 'Quick internet speed measurement'
+            },
+            {
+                name: 'SpeedTest Pro',
+                path: '/speedtest/',
+                icon: '⚡',
+                description: 'Comprehensive speed test with download, upload, latency, and history'
+            },
+            {
+                name: 'Image Tool',
+                path: '/image/',
+                icon: '◧',
+                description: 'Client-side image processing and icon generation'
+            },
+            {
+                name: 'DocEdit',
+                path: '/doc/',
+                icon: '✎',
+                description: 'Privacy-focused document editor with encrypted sharing'
+            },
+            {
+                name: 'WHOIS Lookup',
+                path: '/whois/',
+                icon: '@',
+                description: 'Look up domain registration and ownership information'
+            },
+            {
+                name: 'Kamere',
+                path: '/kamere/',
+                icon: '◎',
+                description: 'Camera and media capture tool'
+            }
+        ];
+
+        function renderTools() {
+            const grid = document.getElementById('toolsGrid');
+            grid.innerHTML = TOOLS.map(tool => `
+                <a href="${tool.path}" class="tool-card">
+                    <div class="tool-icon">${tool.icon}</div>
+                    <div class="tool-info">
+                        <h3 class="tool-name">${tool.name}</h3>
+                        <p class="tool-desc">${tool.description}</p>
+                    </div>
+                    <svg class="tool-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="9 18 15 12 9 6"/>
+                    </svg>
+                </a>
+            `).join('');
+        }
+
+        async function renderUpdates() {
+            const list = document.getElementById('updatesList');
+            try {
+                const res = await fetch('/updates.json');
+                const updates = await res.json();
+
+                if (!updates.length) {
+                    list.innerHTML = '<div class="empty-state">No updates yet.</div>';
+                    return;
+                }
+
+                let currentDate = '';
+                list.innerHTML = updates.map(entry => {
+                    const d = new Date(entry.date);
+                    const dateStr = d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+                    const timeStr = d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+                    let header = '';
+                    if (dateStr !== currentDate) {
+                        currentDate = dateStr;
+                        header = `<div class="update-date-header">${dateStr}</div>`;
+                    }
+                    return `${header}
+                        <div class="update-entry">
+                            <div class="update-time">${timeStr}</div>
+                            <div class="update-body">
+                                <span class="update-tool">${entry.tool}</span>
+                                <p class="update-desc">${entry.description}</p>
+                            </div>
+                        </div>`;
+                }).join('');
+            } catch {
+                list.innerHTML = '<div class="empty-state">Could not load updates.</div>';
+            }
+        }
+
+        function initTabs() {
+            const allButtons = document.querySelectorAll('[data-tab]');
+            const panels = document.querySelectorAll('.tab-panel');
+
+            allButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const tab = btn.dataset.tab;
+                    allButtons.forEach(b => b.classList.remove('active'));
+                    document.querySelectorAll(`[data-tab="${tab}"]`).forEach(b => b.classList.add('active'));
+                    panels.forEach(p => p.classList.remove('active'));
+                    document.getElementById(`${tab}-panel`).classList.add('active');
+                });
+            });
+        }
+
+        // Register service worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js');
+        }
+
+        renderTools();
+        renderUpdates();
+        initTabs();
+    </script>
+</body>
+
+</html>
