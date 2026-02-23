@@ -393,6 +393,15 @@ body {
         width: 70px;
         font-size: 12px;
     }
+
+    .content {
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+
+    .content::-webkit-scrollbar {
+        display: none;
+    }
 }
 
 @media (max-width: 480px) {
