@@ -1,0 +1,30 @@
+{
+  "name": "Hash Calculator",
+  "short_name": "Hash",
+  "description": "Calculate MD5, SHA-1, SHA-256, and CRC-32 file hashes — fully client-side",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0a0a0b",
+  "theme_color": "#8b5cf6",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": [
+        "any",
+        "maskable"
+      ]
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": [
+        "any",
+        "maskable"
+      ]
+    }
+  ]
+}
