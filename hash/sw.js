@@ -6,6 +6,7 @@ const PRECACHE_ASSETS = [
   './index.html',
   './styles.css',
   './script.js',
+  './worker.js',
 ];
 
 const BEST_EFFORT_EXTERNAL_ASSETS = [
