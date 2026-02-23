@@ -84,7 +84,7 @@ async function processFile(file) {
     progressContainer.classList.add('visible');
     results.classList.remove('visible');
     progressFill.style.width = '0%';
-    progressText.textContent = 'Reading file...';
+    progressText.textContent = 'Reading file\u2026';
 
     // Clear previous results
     md5Value.textContent = '';
@@ -93,18 +93,41 @@ async function processFile(file) {
     crc32Value.textContent = '';
 
     try {
-        const buffer = await file.arrayBuffer();
-        const data = new Uint8Array(buffer);
+        // Read file in chunks with progress
+        const CHUNK_SIZE = 2 * 1024 * 1024; // 2 MB
+        const totalSize = file.size;
+        const reader = file.stream().getReader();
+        const chunks = [];
+        let loaded = 0;
 
-        progressText.textContent = 'Calculating hashes...';
-        progressFill.style.width = '20%';
+        while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            chunks.push(value);
+            loaded += value.length;
+            const pct = Math.round((loaded / totalSize) * 70); // reading = 0-70%
+            progressFill.style.width = pct + '%';
+            progressText.textContent = 'Reading file\u2026 ' + formatFileSize(loaded) + ' / ' + formatFileSize(totalSize);
+        }
+
+        // Combine chunks into a single buffer
+        const data = new Uint8Array(totalSize);
+        let offset = 0;
+        for (const chunk of chunks) {
+            data.set(chunk, offset);
+            offset += chunk.length;
+        }
+        const buffer = data.buffer;
+
+        progressText.textContent = 'Calculating hashes\u2026';
+        progressFill.style.width = '70%';
 
         // Calculate all hashes
         const [md5, sha1, sha256, crc32] = await Promise.all([
-            computeMD5(data).then(r => { progressFill.style.width = '40%'; return r; }),
-            computeSHA1(buffer).then(r => { progressFill.style.width = '55%'; return r; }),
-            computeSHA256(buffer).then(r => { progressFill.style.width = '70%'; return r; }),
-            Promise.resolve(computeCRC32(data)).then(r => { progressFill.style.width = '85%'; return r; }),
+            computeMD5(data).then(r => { progressFill.style.width = '80%'; return r; }),
+            computeSHA1(buffer).then(r => { progressFill.style.width = '85%'; return r; }),
+            computeSHA256(buffer).then(r => { progressFill.style.width = '90%'; return r; }),
+            Promise.resolve(computeCRC32(data)).then(r => { progressFill.style.width = '95%'; return r; }),
         ]);
 
         // Store results
