@@ -1,5 +1,10 @@
 [
   {
+    "date": "2026-02-25T18:00:00Z",
+    "tool": "SpeedTest",
+    "description": "Fixed header overlap when opened from index — back button now shows in both mobile titlebar and desktop sidebar"
+  },
+  {
     "date": "2026-02-25T17:00:00Z",
     "tool": "SpeedTest",
     "description": "Redesigned navigation to match the main index — sidebar on desktop, bottom bar on mobile, dark mode only"

@@ -10,10 +10,32 @@ let mapInitialized = false;
 
 // ===== INITIALIZATION =====
 document.addEventListener('DOMContentLoaded', async () => {
+  initAppContext();
   initNavigation();
   await detectDeviceInfo();
   renderHistory();
 });
+
+// ===== APP CONTEXT =====
+// When opened from the main index (#app hash), inject a back button into the
+// desktop sidebar header so the user can navigate back.
+function initAppContext() {
+  if (window.location.hash !== '#app') return;
+
+  const header = document.querySelector('.sidebar-header .logo');
+  if (!header) return;
+
+  const backBtn = document.createElement('a');
+  backBtn.href = '/';
+  backBtn.className = 'app-back-btn';
+  backBtn.setAttribute('aria-label', 'Back to Tools');
+  backBtn.innerHTML =
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+      '<polyline points="15 18 9 12 15 6"/>' +
+    '</svg>';
+
+  header.insertBefore(backBtn, header.firstChild);
+}
 
 // ===== NAVIGATION =====
 function initNavigation() {

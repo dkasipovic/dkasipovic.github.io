@@ -63,6 +63,13 @@ body {
   gap: 12px;
 }
 
+/* Back button inside sidebar logo row (injected via JS when #app) */
+.logo .app-back-btn {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+}
+
 .logo-icon {
   width: 36px;
   height: 36px;
