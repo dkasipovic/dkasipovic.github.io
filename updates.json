@@ -1,5 +1,10 @@
 [
   {
+    "date": "2026-02-25T15:00:00Z",
+    "tool": "Speedometer",
+    "description": "Fixed initialization error caused by duplicated wake lock code preventing the GPS tracker from loading"
+  },
+  {
     "date": "2026-02-25T14:00:00Z",
     "tool": "Tools Index",
     "description": "Removed external font dependencies across all tools and introduced shared design system with consistent styling"
