@@ -1,10 +1,12 @@
-const CACHE_NAME = 'whois-v1';
+const CACHE_NAME = 'whois-v2';
 const ASSETS = [
   './',
   './index.html',
   './manifest.json',
   './icon-192.png',
-  './icon-512.png'
+  './icon-512.png',
+  '/shared/styles.css',
+  '/shared/app.js'
 ];
 
 self.addEventListener('install', e => {

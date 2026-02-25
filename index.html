@@ -13,9 +13,6 @@
     <link rel="icon" type="image/svg+xml" href="icon.svg">
     <link rel="manifest" href="manifest.json">
     <title>Kasipovic</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 
@@ -147,7 +144,7 @@
         function renderTools() {
             const grid = document.getElementById('toolsGrid');
             grid.innerHTML = TOOLS.map(tool => `
-                <a href="${tool.path}" class="tool-card">
+                <a href="${tool.path}#app" class="tool-card">
                     <div class="tool-icon">${tool.icon}</div>
                     <div class="tool-info">
                         <h3 class="tool-name">${tool.name}</h3>

@@ -1,5 +1,5 @@
-const PRECACHE_NAME = 'hash-calculator-precache-v1';
-const RUNTIME_NAME = 'hash-calculator-runtime-v1';
+const PRECACHE_NAME = 'hash-calculator-precache-v2';
+const RUNTIME_NAME = 'hash-calculator-runtime-v2';
 
 const PRECACHE_ASSETS = [
   './',
@@ -7,11 +7,11 @@ const PRECACHE_ASSETS = [
   './styles.css',
   './script.js',
   './worker.js',
+  '/shared/styles.css',
+  '/shared/app.js',
 ];
 
-const BEST_EFFORT_EXTERNAL_ASSETS = [
-  'https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap',
-];
+const BEST_EFFORT_EXTERNAL_ASSETS = [];
 
 self.addEventListener('install', (event) => {
   event.waitUntil((async () => {
