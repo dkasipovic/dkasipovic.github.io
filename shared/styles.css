@@ -37,41 +37,35 @@ body {
     line-height: 1.5;
 }
 
-/* ── App Back Header (shown when #app hash is present) ── */
-.app-back-header {
-    display: none;
+/* ── App Titlebar (always shown on all tool pages) ── */
+.app-titlebar {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
+    height: 56px;
     z-index: 9999;
     background: var(--bg-secondary);
     border-bottom: 1px solid var(--border);
-    padding: 0 16px;
-    height: 48px;
-    align-items: center;
-    gap: 12px;
-}
-
-.app-back-header.visible {
+    padding: 0 20px;
     display: flex;
+    align-items: center;
+    gap: 14px;
 }
 
 .app-back-btn {
     display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 6px 12px;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
     background: transparent;
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
     color: var(--text-secondary);
-    font-family: inherit;
-    font-size: 13px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s ease;
     text-decoration: none;
+    transition: all 0.2s ease;
 }
 
 .app-back-btn:hover {
@@ -81,21 +75,20 @@ body {
 }
 
 .app-back-btn svg {
-    width: 16px;
-    height: 16px;
-    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
 }
 
-.app-back-title {
-    font-size: 14px;
-    font-weight: 600;
+.app-titlebar-title {
+    font-size: 17px;
+    font-weight: 700;
     color: var(--text-primary);
-    letter-spacing: -0.2px;
+    letter-spacing: -0.3px;
 }
 
-/* When back header is visible, add top padding to body */
-body.has-app-header {
-    padding-top: 48px;
+/* Push tool content below the fixed titlebar */
+body.has-app-bar {
+    padding-top: 56px;
 }
 
 /* ── Scrollbar ── */
