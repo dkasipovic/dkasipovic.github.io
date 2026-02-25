@@ -7,6 +7,15 @@
   --gauge-track: var(--bg-tertiary);
 }
 
+/* Hide the shared app titlebar — sidebar handles branding */
+.app-titlebar {
+  display: none;
+}
+
+body.has-app-bar {
+  padding-top: 0;
+}
+
 /* ── App Shell ── */
 body {
   overflow: hidden;
