@@ -1,4 +1,4 @@
-const PRECACHE_NAME = 'docedit-precache-v1';
+const PRECACHE_NAME = 'docedit-precache-v2';
 const RUNTIME_NAME = 'docedit-runtime-v1';
 
 const PRECACHE_ASSETS = [
@@ -6,30 +6,14 @@ const PRECACHE_ASSETS = [
   './index.html',
   './styles.css',
   './script.js',
-];
-
-// Best-effort external assets (fonts). App should still work if these fail.
-const BEST_EFFORT_EXTERNAL_ASSETS = [
-  'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap',
+  '/shared/styles.css',
+  '/shared/app.js',
 ];
 
 self.addEventListener('install', (event) => {
   event.waitUntil((async () => {
     const precache = await caches.open(PRECACHE_NAME);
     await precache.addAll(PRECACHE_ASSETS);
-
-    const runtime = await caches.open(RUNTIME_NAME);
-    await Promise.allSettled(
-      BEST_EFFORT_EXTERNAL_ASSETS.map(async (url) => {
-        try {
-          const request = new Request(url, { mode: 'no-cors' });
-          const response = await fetch(request);
-          await runtime.put(request, response);
-        } catch {
-          // ignore
-        }
-      })
-    );
 
     await self.skipWaiting();
   })());
@@ -84,7 +68,7 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Cross-origin (fonts): cache fallback
+  // Cross-origin: cache fallback
   event.respondWith((async () => {
     const cached = await caches.match(event.request);
     try {

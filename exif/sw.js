@@ -1,5 +1,5 @@
-const PRECACHE_NAME = 'exif-inspector-precache-v2';
-const RUNTIME_NAME = 'exif-inspector-runtime-v2';
+const PRECACHE_NAME = 'exif-inspector-precache-v4';
+const RUNTIME_NAME = 'exif-inspector-runtime-v4';
 
 // App shell (must succeed for offline to work)
 const PRECACHE_ASSETS = [
@@ -7,6 +7,8 @@ const PRECACHE_ASSETS = [
   './index.html',
   './styles.css',
   './script.js',
+  '/shared/styles.css',
+  '/shared/app.js',
 ];
 
 // Best-effort third-party assets (do NOT block install if they fail)
@@ -14,7 +16,6 @@ const BEST_EFFORT_EXTERNAL_ASSETS = [
   'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css',
   'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js',
   'https://cdn.jsdelivr.net/npm/exif-js',
-  'https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap',
 ];
 
 self.addEventListener('install', (event) => {

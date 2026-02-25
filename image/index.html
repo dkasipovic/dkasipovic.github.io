@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#1a1a2e">
+    <meta name="theme-color" content="#0a0a0b">
     <meta name="description"
         content="A powerful image editor with layers, cropping, adjustments, and more. Works offline.">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -14,6 +14,7 @@
     <link rel="apple-touch-icon" href="icon-192.png">
     <link rel="icon" type="image/svg+xml" href="icon.svg">
     <title>Image - Kasipovic</title>
+    <link rel="stylesheet" href="/shared/styles.css">
     <link rel="stylesheet" href="styles.css">
 </head>
 
@@ -430,6 +431,7 @@
     <input type="file" id="fileInput" class="hidden-input" accept="image/*">
     <input type="file" id="layerInput" class="hidden-input" accept="image/*">
 
+    <script src="/shared/app.js"></script>
     <script src="script.js"></script>
     <script>
         // Register service worker for offline support

@@ -9,29 +9,18 @@
 <title>Speedometer - Kasipovic</title>
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-192.png">
+<link rel="stylesheet" href="/shared/styles.css">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Outfit:wght@300;400;600&display=swap');
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
   :root {
-    --bg: #0a0a0f;
-    --surface: #12121a;
-    --border: #1e1e2a;
-    --text: #e8e8f0;
-    --text-dim: #6a6a80;
-    --accent: #00e5a0;
-    --accent-glow: rgba(0, 229, 160, 0.15);
-    --warning: #ffaa00;
-    --danger: #ff4466;
+    --bg: var(--bg-primary);
   }
 
   html, body {
     height: 100%;
     overflow: hidden;
     background: var(--bg);
-    color: var(--text);
-    font-family: 'Outfit', sans-serif;
+    color: var(--text-primary);
+    font-family: inherit;
     -webkit-tap-highlight-color: transparent;
     user-select: none;
   }
@@ -55,10 +44,10 @@
   }
 
   .compass-bearing {
-    font-family: 'JetBrains Mono', monospace;
+    font-family: ui-monospace, 'SF Mono', 'Cascadia Code', 'Segoe UI Mono', Menlo, Monaco, Consolas, monospace;
     font-size: 14px;
     font-weight: 400;
-    color: var(--text-dim);
+    color: var(--text-muted);
     letter-spacing: 2px;
     text-transform: uppercase;
   }
@@ -138,13 +127,13 @@
   }
 
   .speedo-tick.major {
-    stroke: var(--text-dim);
+    stroke: var(--text-muted);
     stroke-width: 2;
   }
 
   .speedo-label {
-    fill: var(--text-dim);
-    font-family: 'JetBrains Mono', monospace;
+    fill: var(--text-muted);
+    font-family: ui-monospace, 'SF Mono', 'Cascadia Code', 'Segoe UI Mono', Menlo, Monaco, Consolas, monospace;
     font-size: 9px;
     text-anchor: middle;
   }
@@ -156,28 +145,28 @@
   }
 
   .speed-value {
-    font-family: 'JetBrains Mono', monospace;
+    font-family: ui-monospace, 'SF Mono', 'Cascadia Code', 'Segoe UI Mono', Menlo, Monaco, Consolas, monospace;
     font-size: 64px;
     font-weight: 700;
     line-height: 1;
-    color: var(--text);
+    color: var(--text-primary);
     letter-spacing: -2px;
   }
 
   .speed-unit {
-    font-family: 'Outfit', sans-serif;
+    font-family: inherit;
     font-size: 14px;
     font-weight: 300;
-    color: var(--text-dim);
+    color: var(--text-muted);
     letter-spacing: 3px;
     text-transform: uppercase;
     margin-top: 4px;
   }
 
   .speed-max-label {
-    font-family: 'JetBrains Mono', monospace;
+    font-family: ui-monospace, 'SF Mono', 'Cascadia Code', 'Segoe UI Mono', Menlo, Monaco, Consolas, monospace;
     font-size: 11px;
-    color: var(--text-dim);
+    color: var(--text-muted);
     margin-top: 8px;
     opacity: 0.6;
   }
@@ -201,16 +190,16 @@
 
   .graph-title {
     font-size: 11px;
-    color: var(--text-dim);
+    color: var(--text-muted);
     letter-spacing: 1px;
     text-transform: uppercase;
     font-weight: 400;
   }
 
   .graph-scale {
-    font-family: 'JetBrains Mono', monospace;
+    font-family: ui-monospace, 'SF Mono', 'Cascadia Code', 'Segoe UI Mono', Menlo, Monaco, Consolas, monospace;
     font-size: 10px;
-    color: var(--text-dim);
+    color: var(--text-muted);
     opacity: 0.5;
   }
 
@@ -240,17 +229,17 @@
   }
 
   .coords-text {
-    font-family: 'JetBrains Mono', monospace;
+    font-family: ui-monospace, 'SF Mono', 'Cascadia Code', 'Segoe UI Mono', Menlo, Monaco, Consolas, monospace;
     font-size: 11px;
-    color: var(--text-dim);
+    color: var(--text-muted);
     letter-spacing: 0.5px;
   }
 
   .coords-copy {
-    background: var(--surface);
+    background: var(--bg-secondary);
     border: 1px solid var(--border);
-    color: var(--text-dim);
-    font-family: 'Outfit', sans-serif;
+    color: var(--text-muted);
+    font-family: inherit;
     font-size: 10px;
     padding: 3px 10px;
     border-radius: 4px;
@@ -309,13 +298,13 @@
 
   .status-text {
     font-size: 14px;
-    color: var(--text-dim);
+    color: var(--text-muted);
     text-align: center;
     line-height: 1.5;
   }
 
   .status-error {
-    color: var(--danger);
+    color: var(--error);
   }
 </style>
 </head>
@@ -334,7 +323,7 @@
         <line x1="5" y1="32" x2="10" y2="32" stroke="#2a2a3a" stroke-width="1"/>
         <line x1="54" y1="32" x2="59" y2="32" stroke="#2a2a3a" stroke-width="1"/>
         <!-- Arrow -->
-        <polygon points="32,8 28,26 32,23 36,26" fill="#00e5a0" opacity="0.9"/>
+        <polygon points="32,8 28,26 32,23 36,26" fill="#8b5cf6" opacity="0.9"/>
         <polygon points="32,56 28,38 32,41 36,38" fill="#3a3a4a" opacity="0.5"/>
       </svg>
     </div>
@@ -346,9 +335,9 @@
       <svg class="speedo-svg" viewBox="0 0 300 300" id="speedoSvg">
         <defs>
           <linearGradient id="arcGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stop-color="#00e5a0"/>
-            <stop offset="60%" stop-color="#00c8ff"/>
-            <stop offset="100%" stop-color="#ff4466"/>
+            <stop offset="0%" stop-color="#8b5cf6"/>
+            <stop offset="60%" stop-color="#3b82f6"/>
+            <stop offset="100%" stop-color="#ef4444"/>
           </linearGradient>
         </defs>
         <!-- Ticks and labels rendered by JS -->
@@ -387,7 +376,7 @@
 <!-- Status overlay -->
 <div class="status-overlay" id="statusOverlay">
   <div class="status-icon">
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00e5a0" stroke-width="2">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2">
       <circle cx="12" cy="12" r="3"/>
       <path d="M12 2v2m0 16v2M2 12h2m16 0h2m-3.3-6.7-1.4 1.4M6.7 17.3l-1.4 1.4m0-13.4 1.4 1.4m10.6 10.6 1.4 1.4"/>
     </svg>
@@ -395,6 +384,7 @@
   <div class="status-text" id="statusText">Acquiring GPS signal…</div>
 </div>
 
+<script src="/shared/app.js"></script>
 <script>
 // ============ STATE ============
 const state = {
@@ -602,8 +592,8 @@ function drawGraph() {
 
   // Draw fill
   const grad = ctx.createLinearGradient(0, 0, 0, h);
-  grad.addColorStop(0, 'rgba(0,229,160,0.25)');
-  grad.addColorStop(1, 'rgba(0,229,160,0.0)');
+  grad.addColorStop(0, 'rgba(139,92,246,0.25)');
+  grad.addColorStop(1, 'rgba(139,92,246,0.0)');
 
   ctx.beginPath();
   const startX = w - (visible.length - 1) * pointSpacing;
@@ -628,7 +618,7 @@ function drawGraph() {
     if (i === 0) ctx.moveTo(x, y);
     else ctx.lineTo(x, y);
   }
-  ctx.strokeStyle = '#00e5a0';
+  ctx.strokeStyle = '#8b5cf6';
   ctx.lineWidth = 1.5;
   ctx.lineJoin = 'round';
   ctx.stroke();
@@ -640,12 +630,12 @@ function drawGraph() {
     const ly = h - (last.speed / max) * h;
     ctx.beginPath();
     ctx.arc(lx, ly, 3, 0, Math.PI * 2);
-    ctx.fillStyle = '#00e5a0';
+    ctx.fillStyle = '#8b5cf6';
     ctx.fill();
     // Glow
     ctx.beginPath();
     ctx.arc(lx, ly, 6, 0, Math.PI * 2);
-    ctx.fillStyle = 'rgba(0,229,160,0.3)';
+    ctx.fillStyle = 'rgba(139,92,246,0.3)';
     ctx.fill();
   }
 }

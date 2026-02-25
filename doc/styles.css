@@ -48,14 +48,8 @@
     --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.4);
 }
 
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
 body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-family: inherit;
     background: var(--bg-primary);
     color: var(--text-primary);
     height: 100vh;
@@ -411,7 +405,7 @@ body {
     border: 2px solid var(--border-color);
     border-radius: var(--radius-lg);
     padding: 24px;
-    font-family: 'SF Mono', 'Monaco', 'Menlo', monospace;
+    font-family: ui-monospace, 'SF Mono', 'Cascadia Code', 'Segoe UI Mono', Menlo, Monaco, Consolas, monospace;
     font-size: 0.9375rem;
     line-height: 1.75;
     resize: none;
@@ -581,7 +575,7 @@ body {
     border-radius: var(--radius);
     padding: 14px;
     font-size: 0.75rem;
-    font-family: monospace;
+    font-family: ui-monospace, 'SF Mono', 'Cascadia Code', 'Segoe UI Mono', Menlo, Monaco, Consolas, monospace;
     word-break: break-all;
     color: var(--text-secondary);
     max-height: 100px;

@@ -1,21 +1,15 @@
-*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
 :root {
-  --bg: #0a0a0a;
-  --surface: #141414;
-  --surface2: #1c1c1c;
-  --border: #252525;
-  --border-focus: #3a3a3a;
-  --text: #e8e8e8;
-  --text-dim: #808080;
-  --text-muted: #555;
+  --bg: var(--bg-primary);
+  --surface: var(--bg-secondary);
+  --surface2: var(--bg-tertiary);
+  --border-focus: var(--border-light);
+  --text: var(--text-primary);
+  --text-dim: var(--text-secondary);
   --accent: #22c55e;
   --accent-dim: #166534;
   --accent-glow: rgba(34, 197, 94, 0.08);
-  --error: #ef4444;
-  --warning: #f59e0b;
-  --mono: 'JetBrains Mono', monospace;
-  --sans: 'DM Sans', system-ui, sans-serif;
+  --mono: ui-monospace, 'SF Mono', 'Cascadia Code', 'Segoe UI Mono', Menlo, Monaco, Consolas, monospace;
+  --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
   --radius: 12px;
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);

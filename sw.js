@@ -1,5 +1,5 @@
-const PRECACHE_NAME = 'tools-index-precache-v1';
-const RUNTIME_NAME = 'tools-index-runtime-v1';
+const PRECACHE_NAME = 'tools-index-precache-v5';
+const RUNTIME_NAME = 'tools-index-runtime-v5';
 
 const PRECACHE_ASSETS = [
   './',
@@ -10,11 +10,11 @@ const PRECACHE_ASSETS = [
   './icon.svg',
   './icon-192.png',
   './icon-512.png',
+  './shared/styles.css',
+  './shared/app.js',
 ];
 
-const BEST_EFFORT_EXTERNAL_ASSETS = [
-  'https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;600&display=swap',
-];
+const BEST_EFFORT_EXTERNAL_ASSETS = [];
 
 self.addEventListener('install', (event) => {
   event.waitUntil((async () => {
