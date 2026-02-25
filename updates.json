@@ -1,5 +1,10 @@
 [
   {
+    "date": "2026-02-25T17:00:00Z",
+    "tool": "SpeedTest",
+    "description": "Redesigned navigation to match the main index — sidebar on desktop, bottom bar on mobile, dark mode only"
+  },
+  {
     "date": "2026-02-25T16:00:00Z",
     "tool": "All Tools",
     "description": "Unified app titlebar across all tools — shows title always, back button only when opened from the tools index"
