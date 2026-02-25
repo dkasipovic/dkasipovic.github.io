@@ -7,13 +7,28 @@
   --gauge-track: var(--bg-tertiary);
 }
 
-/* Hide the shared app titlebar — sidebar handles branding */
+/* Desktop: sidebar handles branding, hide the shared app titlebar */
 .app-titlebar {
   display: none;
 }
 
 body.has-app-bar {
   padding-top: 0;
+}
+
+/* Mobile: restore shared app titlebar, hide sidebar entirely */
+@media (max-width: 768px) {
+  .app-titlebar {
+    display: flex;
+  }
+
+  body.has-app-bar {
+    padding-top: 56px;
+  }
+
+  .sidebar {
+    display: none;
+  }
 }
 
 /* ── App Shell ── */
@@ -732,21 +747,6 @@ body {
     flex-direction: column;
   }
 
-  .sidebar {
-    width: 100%;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 100;
-    border-right: none;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .nav-items {
-    display: none;
-  }
-
   .bottom-nav {
     display: flex;
   }
@@ -757,7 +757,7 @@ body {
 
   .content {
     padding: 24px 20px;
-    padding-top: calc(24px + 85px);
+    padding-top: 24px;
     padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px));
   }
 
@@ -792,7 +792,6 @@ body {
 @media (max-width: 480px) {
   .content {
     padding: 20px 16px;
-    padding-top: calc(20px + 85px);
     padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px));
   }
 }
