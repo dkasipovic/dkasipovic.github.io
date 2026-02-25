@@ -16,20 +16,6 @@ body.has-app-bar {
   padding-top: 0;
 }
 
-/* Mobile: restore shared app titlebar, hide sidebar entirely */
-@media (max-width: 768px) {
-  .app-titlebar {
-    display: flex;
-  }
-
-  body.has-app-bar {
-    padding-top: 56px;
-  }
-
-  .sidebar {
-    display: none;
-  }
-}
 
 /* ── App Shell ── */
 body {
@@ -750,6 +736,18 @@ body {
 }
 
 @media (max-width: 768px) {
+  .app-titlebar {
+    display: flex;
+  }
+
+  body.has-app-bar {
+    padding-top: 56px;
+  }
+
+  .sidebar {
+    display: none;
+  }
+
   .app {
     flex-direction: column;
   }
