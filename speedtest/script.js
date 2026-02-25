@@ -10,44 +10,30 @@ let mapInitialized = false;
 
 // ===== INITIALIZATION =====
 document.addEventListener('DOMContentLoaded', async () => {
-  initTheme();
   initNavigation();
   await detectDeviceInfo();
   renderHistory();
 });
 
-// ===== THEME =====
-function initTheme() {
-  const saved = localStorage.getItem('speedtest-theme') || 'dark';
-  document.documentElement.setAttribute('data-theme', saved);
-  updateThemeButton(saved);
-}
-
-function toggleTheme() {
-  const current = document.documentElement.getAttribute('data-theme');
-  const next = current === 'dark' ? 'light' : 'dark';
-  document.documentElement.setAttribute('data-theme', next);
-  localStorage.setItem('speedtest-theme', next);
-  updateThemeButton(next);
-}
-
-function updateThemeButton(theme) {
-  const btn = document.querySelector('.theme-toggle');
-  btn.textContent = theme === 'dark' ? '☀️ Light' : '🌙 Dark';
-}
-
 // ===== NAVIGATION =====
 function initNavigation() {
-  document.querySelectorAll('.nav-btn').forEach(btn => {
+  const allButtons = document.querySelectorAll('[data-tab]');
+  const panels = document.querySelectorAll('.tab-content');
+
+  allButtons.forEach(btn => {
     btn.addEventListener('click', () => {
       const tab = btn.dataset.tab;
-      
-      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      
-      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+
+      // Remove active from ALL buttons
+      allButtons.forEach(b => b.classList.remove('active'));
+      // Add active to all buttons matching this tab (sidebar + bottom nav)
+      document.querySelectorAll(`[data-tab="${tab}"]`).forEach(b => b.classList.add('active'));
+
+      // Hide all panels, show selected
+      panels.forEach(p => p.classList.remove('active'));
       document.getElementById(`tab-${tab}`).classList.add('active');
-      
+
+      // Lazy-load map/charts when needed
       if (tab === 'map') {
         setTimeout(() => initMap(), 100);
       } else if (tab === 'charts') {
@@ -831,9 +817,8 @@ function initChart() {
     chart.destroy();
   }
   
-  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-  const gridColor = isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)';
-  const textColor = isDark ? '#94a3b8' : '#64748b';
+  const gridColor = 'rgba(255,255,255,0.1)';
+  const textColor = '#94a3b8';
   
   chart = new Chart(ctx, {
     type: 'line',

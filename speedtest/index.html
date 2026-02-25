@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#3b82f6">
+  <meta name="theme-color" content="#8b5cf6">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="SpeedTest">
@@ -23,217 +23,311 @@
 </head>
 
 <body>
-  <!-- Header -->
-  <header class="header">
-    <div class="header-actions">
-      <button class="theme-toggle" onclick="toggleTheme()">🌙 Dark</button>
-    </div>
-  </header>
+  <div class="app">
+    <!-- Sidebar (Desktop) -->
+    <nav class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo">
+          <div class="logo-icon">S</div>
+          <span class="logo-text">SpeedTest</span>
+        </div>
+      </div>
+      <div class="nav-items">
+        <button class="nav-item active" data-tab="test">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12 6 12 12 16.5 12"/>
+          </svg>
+          <span>Speed Test</span>
+        </button>
+        <button class="nav-item" data-tab="history">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="16" y1="13" x2="8" y2="13"/>
+            <line x1="16" y1="17" x2="8" y2="17"/>
+          </svg>
+          <span>History</span>
+        </button>
+        <button class="nav-item" data-tab="map">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/>
+            <line x1="8" y1="2" x2="8" y2="18"/>
+            <line x1="16" y1="6" x2="16" y2="22"/>
+          </svg>
+          <span>Map</span>
+        </button>
+        <button class="nav-item" data-tab="charts">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="20" x2="18" y2="10"/>
+            <line x1="12" y1="20" x2="12" y2="4"/>
+            <line x1="6" y1="20" x2="6" y2="14"/>
+          </svg>
+          <span>Charts</span>
+        </button>
+      </div>
+    </nav>
 
-  <!-- Navigation -->
-  <nav class="nav">
-    <button class="nav-btn active" data-tab="test">🚀 Speed Test</button>
-    <button class="nav-btn" data-tab="history">📋 History</button>
-    <button class="nav-btn" data-tab="map">🗺️ Map</button>
-    <button class="nav-btn" data-tab="charts">📊 Charts</button>
-  </nav>
+    <!-- Main Content -->
+    <main class="content">
+      <!-- Speed Test Tab -->
+      <div id="tab-test" class="tab-content active">
+        <div class="panel-header">
+          <h1>Speed Test</h1>
+          <p class="panel-subtitle">Test your internet connection speed</p>
+        </div>
+        <div class="test-container">
+          <div class="test-main">
+            <!-- Gauge -->
+            <div class="gauge-container">
+              <svg class="gauge-svg" viewBox="0 0 200 200">
+                <circle class="gauge-bg" cx="100" cy="100" r="90" />
+                <circle class="gauge-fill" id="gauge-fill" cx="100" cy="100" r="90" />
+              </svg>
+              <div class="gauge-center">
+                <div class="gauge-value" id="gauge-value">0</div>
+                <div class="gauge-unit">Mbps</div>
+                <div class="gauge-label" id="gauge-label">Ready</div>
+              </div>
+            </div>
 
-  <!-- Main Content -->
-  <main class="main">
-    <!-- Speed Test Tab -->
-    <div id="tab-test" class="tab-content active">
-      <div class="test-container">
-        <div class="test-main">
-          <!-- Gauge -->
-          <div class="gauge-container">
-            <svg class="gauge-svg" viewBox="0 0 200 200">
-              <circle class="gauge-bg" cx="100" cy="100" r="90" />
-              <circle class="gauge-fill" id="gauge-fill" cx="100" cy="100" r="90" />
-            </svg>
-            <div class="gauge-center">
-              <div class="gauge-value" id="gauge-value">0</div>
-              <div class="gauge-unit">Mbps</div>
-              <div class="gauge-label" id="gauge-label">Ready</div>
+            <!-- Test Status -->
+            <div class="test-status">
+              <div class="status-item">
+                <div class="status-icon" id="status-latency">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>
+                </div>
+                <div class="status-label">Latency</div>
+                <div class="status-value" id="value-latency">--</div>
+              </div>
+              <div class="status-item">
+                <div class="status-icon" id="status-download">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/></svg>
+                </div>
+                <div class="status-label">Download</div>
+                <div class="status-value" id="value-download">--</div>
+              </div>
+              <div class="status-item">
+                <div class="status-icon" id="status-upload">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 14 12 9 7 14"/><line x1="12" y1="9" x2="12" y2="21"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/></svg>
+                </div>
+                <div class="status-label">Upload</div>
+                <div class="status-value" id="value-upload">--</div>
+              </div>
+              <div class="status-item">
+                <div class="status-icon" id="status-jitter">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+                </div>
+                <div class="status-label">Jitter</div>
+                <div class="status-value" id="value-jitter">--</div>
+              </div>
+            </div>
+
+            <!-- Start Button -->
+            <button class="start-btn" id="start-btn" onclick="toggleTest()">Start Test</button>
+
+            <!-- Results Grid (shown after test) -->
+            <div class="results-grid" id="results-grid" style="display: none;">
+              <div class="result-card">
+                <div class="result-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/></svg>
+                </div>
+                <div class="result-value" id="result-download">0</div>
+                <div class="result-unit">Mbps</div>
+                <div class="result-label">Download</div>
+              </div>
+              <div class="result-card">
+                <div class="result-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 14 12 9 7 14"/><line x1="12" y1="9" x2="12" y2="21"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/></svg>
+                </div>
+                <div class="result-value" id="result-upload">0</div>
+                <div class="result-unit">Mbps</div>
+                <div class="result-label">Upload</div>
+              </div>
+              <div class="result-card">
+                <div class="result-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>
+                </div>
+                <div class="result-value" id="result-latency">0</div>
+                <div class="result-unit">ms</div>
+                <div class="result-label">Latency</div>
+              </div>
+              <div class="result-card">
+                <div class="result-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+                </div>
+                <div class="result-value" id="result-jitter">0</div>
+                <div class="result-unit">ms</div>
+                <div class="result-label">Jitter</div>
+              </div>
             </div>
           </div>
 
-          <!-- Test Status -->
-          <div class="test-status">
-            <div class="status-item">
-              <div class="status-icon" id="status-latency">📶</div>
-              <div class="status-label">Latency</div>
-              <div class="status-value" id="value-latency">--</div>
-            </div>
-            <div class="status-item">
-              <div class="status-icon" id="status-download">⬇️</div>
-              <div class="status-label">Download</div>
-              <div class="status-value" id="value-download">--</div>
-            </div>
-            <div class="status-item">
-              <div class="status-icon" id="status-upload">⬆️</div>
-              <div class="status-label">Upload</div>
-              <div class="status-value" id="value-upload">--</div>
-            </div>
-            <div class="status-item">
-              <div class="status-icon" id="status-jitter">📊</div>
-              <div class="status-label">Jitter</div>
-              <div class="status-value" id="value-jitter">--</div>
-            </div>
-          </div>
+          <!-- Device Info Panel -->
+          <aside class="device-panel">
+            <h3 class="panel-title">Device & Network Info</h3>
 
-          <!-- Start Button -->
-          <button class="start-btn" id="start-btn" onclick="toggleTest()">Start Test</button>
+            <div class="info-section">
+              <div class="info-section-title">Device</div>
+              <div class="info-row">
+                <span class="info-label">Type</span>
+                <span class="info-value" id="info-device-type">Detecting...</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">Brand</span>
+                <span class="info-value" id="info-device-brand">Detecting...</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">Model</span>
+                <span class="info-value" id="info-device-model">Detecting...</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">OS</span>
+                <span class="info-value" id="info-os">Detecting...</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">Browser</span>
+                <span class="info-value" id="info-browser">Detecting...</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">Screen</span>
+                <span class="info-value" id="info-screen">Detecting...</span>
+              </div>
+            </div>
 
-          <!-- Results Grid (shown after test) -->
-          <div class="results-grid" id="results-grid" style="display: none;">
-            <div class="result-card">
-              <div class="result-icon">⬇️</div>
-              <div class="result-value" id="result-download">0</div>
-              <div class="result-unit">Mbps</div>
-              <div class="result-label">Download</div>
+            <div class="info-section">
+              <div class="info-section-title">Network</div>
+              <div class="info-row">
+                <span class="info-label">External IP</span>
+                <span class="info-value loading" id="info-external-ip">Fetching...</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">Internal IP</span>
+                <span class="info-value loading" id="info-internal-ip">Detecting...</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">Connection</span>
+                <span class="info-value" id="info-connection">Detecting...</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">Effective Type</span>
+                <span class="info-value" id="info-effective-type">Detecting...</span>
+              </div>
             </div>
-            <div class="result-card">
-              <div class="result-icon">⬆️</div>
-              <div class="result-value" id="result-upload">0</div>
-              <div class="result-unit">Mbps</div>
-              <div class="result-label">Upload</div>
+
+            <div class="info-section">
+              <div class="info-section-title">Location</div>
+              <div class="info-row">
+                <span class="info-label">Latitude</span>
+                <span class="info-value loading" id="info-lat">Requesting...</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">Longitude</span>
+                <span class="info-value loading" id="info-lng">Requesting...</span>
+              </div>
             </div>
-            <div class="result-card">
-              <div class="result-icon">📶</div>
-              <div class="result-value" id="result-latency">0</div>
-              <div class="result-unit">ms</div>
-              <div class="result-label">Latency</div>
-            </div>
-            <div class="result-card">
-              <div class="result-icon">📊</div>
-              <div class="result-value" id="result-jitter">0</div>
-              <div class="result-unit">ms</div>
-              <div class="result-label">Jitter</div>
-            </div>
+          </aside>
+        </div>
+      </div>
+
+      <!-- History Tab -->
+      <div id="tab-history" class="tab-content">
+        <div class="panel-header">
+          <h1>History</h1>
+          <p class="panel-subtitle">Your previous test results</p>
+        </div>
+        <div class="history-header">
+          <div class="history-actions">
+            <button class="btn" onclick="exportHistory()">Export</button>
+            <button class="btn" onclick="importHistory()">Import</button>
+            <button class="btn danger" onclick="clearHistory()">Clear All</button>
           </div>
         </div>
 
-        <!-- Device Info Panel -->
-        <aside class="device-panel">
-          <h3 class="panel-title">📱 Device & Network Info</h3>
-
-          <div class="info-section">
-            <div class="info-section-title">Device</div>
-            <div class="info-row">
-              <span class="info-label">Type</span>
-              <span class="info-value" id="info-device-type">Detecting...</span>
+        <div class="history-table-container">
+          <table class="history-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Date</th>
+                <th>Download</th>
+                <th>Upload</th>
+                <th>Latency</th>
+                <th>Device</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="history-tbody">
+            </tbody>
+          </table>
+          <div class="empty-state" id="history-empty">
+            <div class="empty-state-icon">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
             </div>
-            <div class="info-row">
-              <span class="info-label">Brand</span>
-              <span class="info-value" id="info-device-brand">Detecting...</span>
-            </div>
-            <div class="info-row">
-              <span class="info-label">Model</span>
-              <span class="info-value" id="info-device-model">Detecting...</span>
-            </div>
-            <div class="info-row">
-              <span class="info-label">OS</span>
-              <span class="info-value" id="info-os">Detecting...</span>
-            </div>
-            <div class="info-row">
-              <span class="info-label">Browser</span>
-              <span class="info-value" id="info-browser">Detecting...</span>
-            </div>
-            <div class="info-row">
-              <span class="info-label">Screen</span>
-              <span class="info-value" id="info-screen">Detecting...</span>
-            </div>
+            <p>No test history yet. Run a speed test to get started!</p>
           </div>
-
-          <div class="info-section">
-            <div class="info-section-title">Network</div>
-            <div class="info-row">
-              <span class="info-label">External IP</span>
-              <span class="info-value loading" id="info-external-ip">Fetching...</span>
-            </div>
-            <div class="info-row">
-              <span class="info-label">Internal IP</span>
-              <span class="info-value loading" id="info-internal-ip">Detecting...</span>
-            </div>
-            <div class="info-row">
-              <span class="info-label">Connection</span>
-              <span class="info-value" id="info-connection">Detecting...</span>
-            </div>
-            <div class="info-row">
-              <span class="info-label">Effective Type</span>
-              <span class="info-value" id="info-effective-type">Detecting...</span>
-            </div>
-          </div>
-
-          <div class="info-section">
-            <div class="info-section-title">Location</div>
-            <div class="info-row">
-              <span class="info-label">Latitude</span>
-              <span class="info-value loading" id="info-lat">Requesting...</span>
-            </div>
-            <div class="info-row">
-              <span class="info-label">Longitude</span>
-              <span class="info-value loading" id="info-lng">Requesting...</span>
-            </div>
-          </div>
-        </aside>
-      </div>
-    </div>
-
-    <!-- History Tab -->
-    <div id="tab-history" class="tab-content">
-      <div class="history-header">
-        <h2 class="history-title">Test History</h2>
-        <div class="history-actions">
-          <button class="btn" onclick="exportHistory()">📥 Export</button>
-          <button class="btn" onclick="importHistory()">📤 Import</button>
-          <button class="btn danger" onclick="clearHistory()">🗑️ Clear All</button>
         </div>
       </div>
 
-      <div class="history-table-container">
-        <table class="history-table">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Date</th>
-              <th>Download</th>
-              <th>Upload</th>
-              <th>Latency</th>
-              <th>Device</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody id="history-tbody">
-          </tbody>
-        </table>
-        <div class="empty-state" id="history-empty">
-          <div class="empty-state-icon">📋</div>
-          <p>No test history yet. Run a speed test to get started!</p>
+      <!-- Map Tab -->
+      <div id="tab-map" class="tab-content">
+        <div class="panel-header">
+          <h1>Map</h1>
+          <p class="panel-subtitle">Test locations on the map</p>
+        </div>
+        <div class="map-container">
+          <div id="history-map"></div>
         </div>
       </div>
-    </div>
 
-    <!-- Map Tab -->
-    <div id="tab-map" class="tab-content">
-      <div class="history-header">
-        <h2 class="history-title">Test Locations</h2>
+      <!-- Charts Tab -->
+      <div id="tab-charts" class="tab-content">
+        <div class="panel-header">
+          <h1>Charts</h1>
+          <p class="panel-subtitle">Speed trends over time</p>
+        </div>
+        <div class="chart-container">
+          <canvas id="speed-chart" class="chart-canvas"></canvas>
+        </div>
       </div>
-      <div class="map-container">
-        <div id="history-map"></div>
-      </div>
-    </div>
+    </main>
 
-    <!-- Charts Tab -->
-    <div id="tab-charts" class="tab-content">
-      <div class="history-header">
-        <h2 class="history-title">Speed Trends</h2>
-      </div>
-      <div class="chart-container">
-        <canvas id="speed-chart" class="chart-canvas"></canvas>
-      </div>
-    </div>
-  </main>
+    <!-- Bottom Navigation (Mobile) -->
+    <nav class="bottom-nav">
+      <button class="bottom-nav-item active" data-tab="test">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <polyline points="12 6 12 12 16.5 12"/>
+        </svg>
+        <span>Test</span>
+      </button>
+      <button class="bottom-nav-item" data-tab="history">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="16" y1="13" x2="8" y2="13"/>
+          <line x1="16" y1="17" x2="8" y2="17"/>
+        </svg>
+        <span>History</span>
+      </button>
+      <button class="bottom-nav-item" data-tab="map">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/>
+          <line x1="8" y1="2" x2="8" y2="18"/>
+          <line x1="16" y1="6" x2="16" y2="22"/>
+        </svg>
+        <span>Map</span>
+      </button>
+      <button class="bottom-nav-item" data-tab="charts">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="20" x2="18" y2="10"/>
+          <line x1="12" y1="20" x2="12" y2="4"/>
+          <line x1="6" y1="20" x2="6" y2="14"/>
+        </svg>
+        <span>Charts</span>
+      </button>
+    </nav>
+  </div>
 
   <!-- Save Modal -->
   <div class="modal-overlay" id="save-modal">
