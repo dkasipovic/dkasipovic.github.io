@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Inertial Route Tracker</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0a0a0f">
+<link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiSW5lcnRpYWwgUm91dGUiLCJzaG9ydF9uYW1lIjoiSVJvdXRlIiwiZGlzcGxheSI6InN0YW5kYWxvbmUiLCJiYWNrZ3JvdW5kX2NvbG9yIjoiIzBhMGEwZiIsInRoZW1lX2NvbG9yIjoiIzBhMGEwZiIsInN0YXJ0X3VybCI6Ii4ifQ==">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&family=Outfit:wght@300;400;600;700&display=swap');
+
+  :root {
+    --bg: #0a0a0f;
+    --surface: #12121a;
+    --border: #1e1e2e;
+    --text: #e0e0e8;
+    --dim: #6a6a80;
+    --accent: #00e5a0;
+    --accent-dim: rgba(0, 229, 160, 0.15);
+    --warn: #ff6b4a;
+    --warn-dim: rgba(255, 107, 74, 0.15);
+    --blue: #4a9eff;
+    --blue-dim: rgba(74, 158, 255, 0.15);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Outfit', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100dvh;
+    overflow-x: hidden;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  .header {
+    padding: 16px 20px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .header h1 {
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+
+  .header h1 span { color: var(--accent); }
+
+  .badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+  }
+
+  .badge-warn { background: var(--warn-dim); color: var(--warn); }
+  .badge-ok { background: var(--accent-dim); color: var(--accent); }
+
+  .canvas-wrap {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1;
+    max-height: 55dvh;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+  }
+
+  canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  .canvas-overlay {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    display: flex;
+    gap: 6px;
+  }
+
+  .legend-item {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+
+  .zoom-controls {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .zoom-btn {
+    width: 36px;
+    height: 36px;
+    border: 1px solid var(--border);
+    background: rgba(10,10,15,0.85);
+    backdrop-filter: blur(8px);
+    color: var(--text);
+    font-size: 18px;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .zoom-btn:active { background: var(--border); }
+
+  .mode-tabs {
+    display: flex;
+    padding: 12px 20px;
+    gap: 8px;
+  }
+
+  .tab {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    border-radius: 8px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 13px;
+    font-weight: 400;
+  }
+
+  .tab.active {
+    border-color: var(--accent);
+    background: var(--accent-dim);
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  .tab small {
+    display: block;
+    font-size: 10px;
+    margin-top: 2px;
+    opacity: 0.6;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    margin: 0 20px;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .stat {
+    background: var(--surface);
+    padding: 12px 10px;
+    text-align: center;
+  }
+
+  .stat-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--dim);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 4px;
+  }
+
+  .stat-value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--accent);
+  }
+
+  .stat-value.warn { color: var(--warn); }
+
+  .stat-unit {
+    font-size: 10px;
+    color: var(--dim);
+    font-weight: 400;
+  }
+
+  .controls {
+    padding: 16px 20px;
+    display: flex;
+    gap: 10px;
+  }
+
+  .btn {
+    flex: 1;
+    padding: 14px;
+    border: none;
+    border-radius: 10px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    letter-spacing: -0.01em;
+  }
+
+  .btn:active { transform: scale(0.97); }
+
+  .btn-start {
+    background: var(--accent);
+    color: #0a0a0f;
+  }
+
+  .btn-stop {
+    background: var(--warn);
+    color: #fff;
+  }
+
+  .btn-reset {
+    background: var(--surface);
+    color: var(--dim);
+    border: 1px solid var(--border);
+    flex: 0.4;
+  }
+
+  .info-panel {
+    margin: 12px 20px;
+    padding: 14px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 12px;
+    color: var(--dim);
+    line-height: 1.6;
+  }
+
+  .info-panel strong { color: var(--text); font-weight: 500; }
+  .info-panel .accent { color: var(--accent); }
+  .info-panel .warn-text { color: var(--warn); }
+
+  .sensor-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    margin: 12px 20px;
+    border-radius: 8px;
+    overflow: hidden;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .sensor-cell {
+    background: var(--surface);
+    padding: 8px 6px;
+    text-align: center;
+    font-size: 11px;
+  }
+
+  .sensor-cell .label {
+    font-size: 8px;
+    color: var(--dim);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .sensor-cell .val {
+    font-size: 13px;
+    font-weight: 500;
+    margin-top: 2px;
+  }
+
+  .permission-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.9);
+    backdrop-filter: blur(12px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    padding: 24px;
+  }
+
+  .permission-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px 24px;
+    text-align: center;
+    max-width: 340px;
+  }
+
+  .permission-card h2 {
+    font-size: 20px;
+    margin-bottom: 12px;
+    font-weight: 600;
+  }
+
+  .permission-card p {
+    font-size: 13px;
+    color: var(--dim);
+    line-height: 1.6;
+    margin-bottom: 24px;
+  }
+
+  .permission-card .btn {
+    width: 100%;
+  }
+
+  .hidden { display: none !important; }
+
+  @media (min-width: 500px) {
+    .canvas-wrap { max-height: 60dvh; }
+  }
+</style>
+</head>
+<body>
+
+<div class="permission-overlay" id="permOverlay">
+  <div class="permission-card">
+    <h2>Sensor Access Required</h2>
+    <p>This app uses your phone's <strong>accelerometer</strong> and <strong>gyroscope</strong> to track movement via inertial dead reckoning. iOS requires explicit permission for motion sensors.</p>
+    <button class="btn btn-start" onclick="requestPermission()">Enable Sensors</button>
+  </div>
+</div>
+
+<div class="header">
+  <h1>Inertial <span>Route</span></h1>
+  <span class="badge badge-warn" id="statusBadge">IDLE</span>
+</div>
+
+<div class="canvas-wrap">
+  <canvas id="mapCanvas"></canvas>
+  <div class="canvas-overlay">
+    <div class="legend-item">
+      <div class="legend-dot" style="background: var(--accent)"></div>
+      HEADING
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot" style="background: var(--blue)"></div>
+      ACCEL
+    </div>
+  </div>
+  <div class="zoom-controls">
+    <button class="zoom-btn" onclick="adjustZoom(1.5)">+</button>
+    <button class="zoom-btn" onclick="adjustZoom(0.667)">−</button>
+  </div>
+</div>
+
+<div class="mode-tabs">
+  <div class="tab active" data-mode="heading" onclick="setMode('heading')">
+    Heading + Speed
+    <small>GYRO BASED</small>
+  </div>
+  <div class="tab" data-mode="accel" onclick="setMode('accel')">
+    Dead Reckoning
+    <small>ACCEL INTEGRAL</small>
+  </div>
+  <div class="tab" data-mode="both" onclick="setMode('both')">
+    Both
+    <small>COMPARE</small>
+  </div>
+</div>
+
+<div class="stats">
+  <div class="stat">
+    <div class="stat-label">Heading</div>
+    <div class="stat-value" id="headingVal">—<span class="stat-unit">°</span></div>
+  </div>
+  <div class="stat">
+    <div class="stat-label">Est. Speed</div>
+    <div class="stat-value" id="speedVal">—<span class="stat-unit"> m/s</span></div>
+  </div>
+  <div class="stat">
+    <div class="stat-label">Drift</div>
+    <div class="stat-value warn" id="driftVal">—<span class="stat-unit"> m</span></div>
+  </div>
+</div>
+
+<div class="sensor-grid" id="sensorGrid">
+  <div class="sensor-cell"><div class="label">Acc X</div><div class="val" id="ax">0.00</div></div>
+  <div class="sensor-cell"><div class="label">Acc Y</div><div class="val" id="ay">0.00</div></div>
+  <div class="sensor-cell"><div class="label">Acc Z</div><div class="val" id="az">0.00</div></div>
+  <div class="sensor-cell"><div class="label">Alpha</div><div class="val" id="ra">0.0</div></div>
+  <div class="sensor-cell"><div class="label">Beta</div><div class="val" id="rb">0.0</div></div>
+  <div class="sensor-cell"><div class="label">Gamma</div><div class="val" id="rg">0.0</div></div>
+</div>
+
+<div class="controls">
+  <button class="btn btn-reset" onclick="resetTrack()">Reset</button>
+  <button class="btn btn-start" id="mainBtn" onclick="toggleTracking()">Start Tracking</button>
+</div>
+
+<div class="info-panel">
+  <strong>How it works:</strong><br>
+  <span class="accent">Heading mode</span> — uses gyro compass heading + assumes ~8 m/s (≈30 km/h). Shows the <em>shape</em> of your route (turns) but not exact distances.<br>
+  <span class="warn-text">Dead reckoning</span> — double-integrates accelerometer. Drifts wildly after seconds — shown for educational purposes. Pinch/zoom the map to see both.
+</div>
+
+<script>
+// ── STATE ──
+let tracking = false;
+let mode = 'heading';
+let zoom = 1;
+const ASSUMED_SPEED = 8; // m/s (~30km/h)
+
+// Heading-based path
+let headingPath = [{ x: 0, y: 0 }];
+let currentHeading = 0; // degrees
+
+// Dead reckoning path
+let drPath = [{ x: 0, y: 0 }];
+let velX = 0, velY = 0;
+
+// Raw sensor data for display
+let sensorData = { ax: 0, ay: 0, az: 0, alpha: 0, beta: 0, gamma: 0 };
+
+// Timing
+let lastTimestamp = null;
+let totalDrift = 0;
+
+// Canvas
+const canvas = document.getElementById('mapCanvas');
+const ctx = canvas.getContext('2d');
+
+// ── PERMISSION ──
+async function requestPermission() {
+  try {
+    if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
+      const perm = await DeviceMotionEvent.requestPermission();
+      if (perm !== 'granted') {
+        alert('Permission denied. Cannot access sensors.');
+        return;
+      }
+    }
+    document.getElementById('permOverlay').classList.add('hidden');
+    initSensors();
+  } catch (e) {
+    // Not iOS or no permission needed
+    document.getElementById('permOverlay').classList.add('hidden');
+    initSensors();
+  }
+}
+
+// Auto-hide overlay on desktop/Android
+if (typeof DeviceMotionEvent === 'undefined' || typeof DeviceMotionEvent.requestPermission !== 'function') {
+  document.getElementById('permOverlay').classList.add('hidden');
+  // Still try to init on load
+  window.addEventListener('load', initSensors);
+}
+
+function initSensors() {
+  window.addEventListener('devicemotion', onMotion, true);
+  window.addEventListener('deviceorientation', onOrientation, true);
+  // Also try absolute orientation
+  window.addEventListener('deviceorientationabsolute', onOrientationAbsolute, true);
+}
+
+let hasAbsoluteOrientation = false;
+
+function onOrientationAbsolute(e) {
+  hasAbsoluteOrientation = true;
+  if (e.alpha !== null) {
+    // webkitCompassHeading is better on iOS, alpha on Android
+    currentHeading = e.webkitCompassHeading ?? (360 - e.alpha);
+    sensorData.alpha = e.alpha;
+    sensorData.beta = e.beta;
+    sensorData.gamma = e.gamma;
+  }
+}
+
+function onOrientation(e) {
+  if (hasAbsoluteOrientation) return; // prefer absolute
+  if (e.webkitCompassHeading !== undefined && e.webkitCompassHeading !== null) {
+    currentHeading = e.webkitCompassHeading;
+  } else if (e.alpha !== null) {
+    currentHeading = (360 - e.alpha) % 360;
+  }
+  sensorData.alpha = e.alpha ?? 0;
+  sensorData.beta = e.beta ?? 0;
+  sensorData.gamma = e.gamma ?? 0;
+}
+
+function onMotion(e) {
+  const acc = e.accelerationIncludingGravity;
+  const accNoG = e.acceleration;
+
+  if (accNoG) {
+    sensorData.ax = accNoG.x ?? 0;
+    sensorData.ay = accNoG.y ?? 0;
+    sensorData.az = accNoG.z ?? 0;
+  } else if (acc) {
+    // Fallback: includes gravity, less useful
+    sensorData.ax = acc.x ?? 0;
+    sensorData.ay = acc.y ?? 0;
+    sensorData.az = acc.z ?? 0;
+  }
+
+  if (!tracking) {
+    lastTimestamp = null;
+    return;
+  }
+
+  const now = performance.now();
+  if (lastTimestamp === null) {
+    lastTimestamp = now;
+    return;
+  }
+
+  const dt = (now - lastTimestamp) / 1000; // seconds
+  lastTimestamp = now;
+
+  if (dt > 0.5) return; // skip large gaps
+
+  // ── HEADING-BASED PATH ──
+  const headRad = (currentHeading * Math.PI) / 180;
+  // Assume constant speed, move in heading direction
+  // heading 0 = North = up on map = -Y in canvas coords
+  const hDx = Math.sin(headRad) * ASSUMED_SPEED * dt;
+  const hDy = -Math.cos(headRad) * ASSUMED_SPEED * dt;
+  const lastH = headingPath[headingPath.length - 1];
+  headingPath.push({ x: lastH.x + hDx, y: lastH.y + hDy });
+
+  // ── DEAD RECKONING (accelerometer double-integration) ──
+  // We use acceleration without gravity (device frame)
+  // Simplified: assume phone is roughly flat, X=lateral, Y=forward
+  // In reality you'd rotate by orientation — this is intentionally naive
+  const aX = sensorData.ax;
+  const aY = sensorData.ay;
+
+  // Simple low-pass / threshold filter to reduce noise
+  const threshold = 0.3;
+  const filtAx = Math.abs(aX) > threshold ? aX : 0;
+  const filtAy = Math.abs(aY) > threshold ? aY : 0;
+
+  // Rotate acceleration into world frame using heading
+  const worldAx = filtAx * Math.cos(headRad) - filtAy * Math.sin(headRad);
+  const worldAy = filtAx * Math.sin(headRad) + filtAy * Math.cos(headRad);
+
+  velX += worldAx * dt;
+  velY += worldAy * dt;
+
+  // Velocity decay to fight drift (hacky but helps visualization)
+  velX *= 0.998;
+  velY *= 0.998;
+
+  const lastDR = drPath[drPath.length - 1];
+  const newDrX = lastDR.x + velX * dt;
+  const newDrY = lastDR.y - velY * dt; // flip Y
+  drPath.push({ x: newDrX, y: newDrY });
+
+  // Calculate drift (distance between heading and DR endpoints)
+  const dx = newDrX - (lastH.x + hDx);
+  const dy = newDrY - (lastH.y + hDy);
+  totalDrift = Math.sqrt(dx * dx + dy * dy);
+}
+
+// ── UI ──
+function toggleTracking() {
+  tracking = !tracking;
+  const btn = document.getElementById('mainBtn');
+  const badge = document.getElementById('statusBadge');
+
+  if (tracking) {
+    btn.textContent = 'Stop';
+    btn.className = 'btn btn-stop';
+    badge.textContent = 'TRACKING';
+    badge.className = 'badge badge-ok';
+    lastTimestamp = null;
+  } else {
+    btn.textContent = 'Start Tracking';
+    btn.className = 'btn btn-start';
+    badge.textContent = 'PAUSED';
+    badge.className = 'badge badge-warn';
+  }
+}
+
+function resetTrack() {
+  tracking = false;
+  headingPath = [{ x: 0, y: 0 }];
+  drPath = [{ x: 0, y: 0 }];
+  velX = 0;
+  velY = 0;
+  totalDrift = 0;
+  lastTimestamp = null;
+
+  const btn = document.getElementById('mainBtn');
+  btn.textContent = 'Start Tracking';
+  btn.className = 'btn btn-start';
+
+  const badge = document.getElementById('statusBadge');
+  badge.textContent = 'IDLE';
+  badge.className = 'badge badge-warn';
+}
+
+function setMode(m) {
+  mode = m;
+  document.querySelectorAll('.tab').forEach(t => {
+    t.classList.toggle('active', t.dataset.mode === m);
+  });
+}
+
+function adjustZoom(factor) {
+  zoom = Math.max(0.05, Math.min(50, zoom * factor));
+}
+
+// ── RENDER ──
+function resizeCanvas() {
+  const rect = canvas.parentElement.getBoundingClientRect();
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = rect.width * dpr;
+  canvas.height = rect.height * dpr;
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+
+function drawPath(path, color, lineWidth) {
+  if (path.length < 2) return;
+  ctx.strokeStyle = color;
+  ctx.lineWidth = lineWidth;
+  ctx.lineJoin = 'round';
+  ctx.lineCap = 'round';
+  ctx.beginPath();
+
+  const w = canvas.width / (window.devicePixelRatio || 1);
+  const h = canvas.height / (window.devicePixelRatio || 1);
+  const cx = w / 2;
+  const cy = h / 2;
+
+  // Auto-center on latest point of the heading path
+  const latest = headingPath[headingPath.length - 1];
+  const offsetX = -latest.x * zoom;
+  const offsetY = -latest.y * zoom;
+
+  for (let i = 0; i < path.length; i++) {
+    const sx = cx + (path[i].x * zoom) + offsetX;
+    const sy = cy + (path[i].y * zoom) + offsetY;
+    if (i === 0) ctx.moveTo(sx, sy);
+    else ctx.lineTo(sx, sy);
+  }
+  ctx.stroke();
+
+  // Draw current position dot
+  const last = path[path.length - 1];
+  const lx = cx + (last.x * zoom) + offsetX;
+  const ly = cy + (last.y * zoom) + offsetY;
+  ctx.fillStyle = color;
+  ctx.beginPath();
+  ctx.arc(lx, ly, 5, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Glow
+  ctx.shadowColor = color;
+  ctx.shadowBlur = 12;
+  ctx.beginPath();
+  ctx.arc(lx, ly, 3, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.shadowBlur = 0;
+}
+
+function drawGrid() {
+  const w = canvas.width / (window.devicePixelRatio || 1);
+  const h = canvas.height / (window.devicePixelRatio || 1);
+
+  // Grid
+  ctx.strokeStyle = 'rgba(255,255,255,0.03)';
+  ctx.lineWidth = 1;
+  const gridSize = Math.max(20, 50 * zoom);
+  const latest = headingPath[headingPath.length - 1];
+  const ox = (w / 2 - latest.x * zoom) % gridSize;
+  const oy = (h / 2 - latest.y * zoom) % gridSize;
+
+  for (let x = ox; x < w; x += gridSize) {
+    ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+  }
+  for (let y = oy; y < h; y += gridSize) {
+    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+  }
+
+  // Center crosshair
+  ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+  ctx.setLineDash([4, 4]);
+  ctx.beginPath(); ctx.moveTo(w / 2, 0); ctx.lineTo(w / 2, h); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(0, h / 2); ctx.lineTo(w, h / 2); ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Start marker
+  const cx = w / 2;
+  const cy = h / 2;
+  const sx = cx + (0 * zoom) + (-latest.x * zoom);
+  const sy = cy + (0 * zoom) + (-latest.y * zoom);
+  ctx.fillStyle = 'rgba(255,255,255,0.3)';
+  ctx.beginPath();
+  ctx.arc(sx, sy, 4, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.fillStyle = 'rgba(255,255,255,0.15)';
+  ctx.font = '10px JetBrains Mono';
+  ctx.fillText('START', sx + 8, sy + 4);
+}
+
+function render() {
+  const w = canvas.width / (window.devicePixelRatio || 1);
+  const h = canvas.height / (window.devicePixelRatio || 1);
+
+  ctx.clearRect(0, 0, w, h);
+  ctx.fillStyle = var_bg;
+  ctx.fillRect(0, 0, w, h);
+
+  drawGrid();
+
+  if (mode === 'heading' || mode === 'both') {
+    drawPath(headingPath, '#00e5a0', 2.5);
+  }
+  if (mode === 'accel' || mode === 'both') {
+    drawPath(drPath, '#4a9eff', 2);
+  }
+
+  // Scale indicator
+  const scaleMeters = 50;
+  const scalePx = scaleMeters * zoom;
+  if (scalePx > 10 && scalePx < w * 0.8) {
+    const sx = 16;
+    const sy = h - 16;
+    ctx.strokeStyle = 'rgba(255,255,255,0.25)';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(sx, sy); ctx.lineTo(sx + scalePx, sy);
+    ctx.moveTo(sx, sy - 4); ctx.lineTo(sx, sy + 4);
+    ctx.moveTo(sx + scalePx, sy - 4); ctx.lineTo(sx + scalePx, sy + 4);
+    ctx.stroke();
+    ctx.fillStyle = 'rgba(255,255,255,0.3)';
+    ctx.font = '10px JetBrains Mono';
+    ctx.fillText(`${scaleMeters}m`, sx + scalePx / 2 - 10, sy - 8);
+  }
+
+  // Update stats display
+  document.getElementById('headingVal').innerHTML = currentHeading.toFixed(0) + '<span class="stat-unit">°</span>';
+  const speed = tracking ? ASSUMED_SPEED.toFixed(1) : '—';
+  document.getElementById('speedVal').innerHTML = speed + '<span class="stat-unit"> m/s</span>';
+  document.getElementById('driftVal').innerHTML = totalDrift.toFixed(1) + '<span class="stat-unit"> m</span>';
+
+  // Sensor readouts
+  document.getElementById('ax').textContent = sensorData.ax.toFixed(2);
+  document.getElementById('ay').textContent = sensorData.ay.toFixed(2);
+  document.getElementById('az').textContent = sensorData.az.toFixed(2);
+  document.getElementById('ra').textContent = sensorData.alpha.toFixed(1);
+  document.getElementById('rb').textContent = sensorData.beta.toFixed(1);
+  document.getElementById('rg').textContent = sensorData.gamma.toFixed(1);
+
+  requestAnimationFrame(render);
+}
+
+const var_bg = '#0a0a0f';
+
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+render();
+
+// Limit path length to avoid memory issues on long trips
+setInterval(() => {
+  const MAX = 20000;
+  if (headingPath.length > MAX) headingPath = headingPath.slice(-MAX);
+  if (drPath.length > MAX) drPath = drPath.slice(-MAX);
+}, 5000);
+</script>
+</body>
+</html>
