@@ -33,7 +33,8 @@ self.addEventListener('fetch', (event) => {
 
   // Always network-first for API calls (rates and geocoding must be fresh)
   if (
-    url.hostname === 'api.frankfurter.app' ||
+    url.hostname === 'cdn.jsdelivr.net' ||
+    url.hostname === 'api.fawazahmed0.com' ||
     url.hostname === 'nominatim.openstreetmap.org'
   ) {
     event.respondWith(

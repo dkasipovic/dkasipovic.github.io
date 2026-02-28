@@ -1,98 +1,238 @@
 'use strict';
 
-// ── Constants ──────────────────────────────────────────────────────────────
-const API_BASE = 'https://api.frankfurter.app';
-const GEO_API  = 'https://nominatim.openstreetmap.org/reverse';
-const LS_KEY   = 'currency-prefs';
+// ── API ────────────────────────────────────────────────────────────────────
+// fawazahmed0 currency API: free, no key, ~170 fiat currencies, CDN-hosted.
+// Currency codes are lowercase in all API responses.
+const CDN     = 'https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api';
+const GEO_API = 'https://nominatim.openstreetmap.org/reverse';
+const LS_KEY  = 'currency-prefs';
 
-// Hardcoded country-code → ISO 4217 currency mapping for GPS detection.
-// Only countries whose currencies are supported by Frankfurter are included.
+// Country code (uppercase) → currency code (lowercase)
 const COUNTRY_CURRENCY = {
-  AT: 'EUR', AU: 'AUD', BA: 'BAM', BE: 'EUR', BG: 'BGN', BR: 'BRL',
-  CA: 'CAD', CH: 'CHF', CN: 'CNY', CY: 'EUR', CZ: 'CZK', DE: 'EUR',
-  DK: 'DKK', EE: 'EUR', ES: 'EUR', FI: 'EUR', FR: 'EUR', GB: 'GBP',
-  GR: 'EUR', HK: 'HKD', HR: 'EUR', HU: 'HUF', ID: 'IDR', IE: 'EUR',
-  IL: 'ILS', IN: 'INR', IS: 'ISK', IT: 'EUR', JP: 'JPY', KR: 'KRW',
-  LT: 'EUR', LU: 'EUR', LV: 'EUR', MT: 'EUR', MX: 'MXN', MY: 'MYR',
-  NL: 'EUR', NO: 'NOK', NZ: 'NZD', PH: 'PHP', PL: 'PLN', PT: 'EUR',
-  RO: 'RON', RS: 'RSD', SA: 'SAR', SE: 'SEK', SG: 'SGD', SI: 'EUR',
-  SK: 'EUR', TH: 'THB', TR: 'TRY', TZ: 'TZS', UA: 'UAH', US: 'USD',
-  ZA: 'ZAR', AE: 'AED', RU: 'RUB',
+  AT:'eur', AU:'aud', AE:'aed', BA:'bam', BE:'eur', BG:'bgn', BR:'brl',
+  CA:'cad', CH:'chf', CN:'cny', CY:'eur', CZ:'czk', DE:'eur', DK:'dkk',
+  EE:'eur', ES:'eur', FI:'eur', FR:'eur', GB:'gbp', GR:'eur', HK:'hkd',
+  HR:'eur', HU:'huf', ID:'idr', IE:'eur', IL:'ils', IN:'inr', IS:'isk',
+  IT:'eur', JP:'jpy', KR:'krw', LT:'eur', LU:'eur', LV:'eur', MT:'eur',
+  MX:'mxn', MY:'myr', NL:'eur', NO:'nok', NZ:'nzd', PH:'php', PL:'pln',
+  PT:'eur', RO:'ron', RS:'rsd', RU:'rub', SA:'sar', SE:'sek', SG:'sgd',
+  SI:'eur', SK:'eur', TH:'thb', TR:'try', UA:'uah', US:'usd', ZA:'zar',
 };
 
 // ── State ─────────────────────────────────────────────────────────────────
-let debounceTimer  = null;
-let lastRate       = null;
-let lastUpdated    = null;
-let activePeriod   = 30;       // days; matches default .period-btn.active
-let historyLoaded  = false;    // lazy-load flag
+const pickers = {};         // from, to, histFrom, histTo
+let allCurrencies   = {};   // { usd: 'US Dollar', ... } (lowercase keys)
+let debounceTimer   = null;
+let lastUpdated     = null;
+let activePeriod    = 30;
+let historyFetched  = false;
 
 // ── Init ──────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', async () => {
   initNavigation();
-  await loadCurrencies();
+  await loadCurrencies();       // creates pickers + populates options
   const hasPrefs = loadPreferences();
   if (!hasPrefs) detectLocationCurrency();
-  await fetchConversion();
+  fetchConversion();
   bindConvertEvents();
   bindHistoryEvents();
 });
 
 // ── Navigation ────────────────────────────────────────────────────────────
-// Single handler for both sidebar buttons and bottom-nav buttons via [data-tab].
 function initNavigation() {
   document.querySelectorAll('[data-tab]').forEach((btn) => {
     btn.addEventListener('click', () => {
       const tab = btn.dataset.tab;
-
       document.querySelectorAll('[data-tab]').forEach((b) => b.classList.remove('active'));
       document.querySelectorAll(`[data-tab="${tab}"]`).forEach((b) => b.classList.add('active'));
-
       document.querySelectorAll('.tab-content').forEach((p) => p.classList.remove('active'));
       document.getElementById(`tab-${tab}`).classList.add('active');
-
-      if (tab === 'history' && !historyLoaded) {
-        historyLoaded = true;
-        fetchHistory();
-      }
+      if (tab === 'history' && !historyFetched) fetchHistory();
     });
   });
 }
 
-// ── Currency List ─────────────────────────────────────────────────────────
+// ── Custom Searchable Picker ───────────────────────────────────────────────
+// Returns { getValue, setValue, setOptions }
+// getValue() → uppercase code ('USD'), setValue/setOptions use lowercase codes.
+function createPicker(hostId, onChange) {
+  const host = document.getElementById(hostId);
+  let currentCode = '';   // lowercase
+  let allOptions  = [];   // [{ code: 'usd', name: 'US Dollar' }, ...]
+
+  // Build DOM
+  const wrap   = document.createElement('div');
+  wrap.className = 'cpicker';
+
+  const btn = document.createElement('button');
+  btn.className = 'cpicker-btn';
+  btn.type = 'button';
+  btn.setAttribute('aria-haspopup', 'listbox');
+  btn.setAttribute('aria-expanded', 'false');
+  btn.innerHTML =
+    `<span class="cpicker-label">—</span>` +
+    `<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>`;
+
+  const drop = document.createElement('div');
+  drop.className = 'cpicker-dropdown';
+  drop.hidden = true;
+
+  const search = document.createElement('input');
+  search.className = 'cpicker-search';
+  search.type = 'text';
+  search.placeholder = 'Search currency…';
+  search.autocomplete = 'off';
+  search.spellcheck = false;
+
+  const list = document.createElement('ul');
+  list.className = 'cpicker-list';
+  list.setAttribute('role', 'listbox');
+
+  drop.append(search, list);
+  wrap.append(btn, drop);
+  host.append(wrap);
+
+  // ── Internal helpers ──
+  function open() {
+    drop.hidden = false;
+    wrap.classList.add('open');
+    btn.setAttribute('aria-expanded', 'true');
+    search.value = '';
+    renderList('');
+    search.focus();
+    requestAnimationFrame(() => {
+      list.querySelector('[aria-selected="true"]')?.scrollIntoView({ block: 'nearest' });
+    });
+  }
+
+  function close() {
+    drop.hidden = true;
+    wrap.classList.remove('open');
+    btn.setAttribute('aria-expanded', 'false');
+  }
+
+  function select(code) {
+    currentCode = code;
+    btn.querySelector('.cpicker-label').textContent = code.toUpperCase();
+    close();
+    onChange(code.toUpperCase());
+  }
+
+  function renderList(query) {
+    const q = query.toLowerCase().trim();
+    const filtered = q
+      ? allOptions.filter((o) => o.code.startsWith(q) || o.code.includes(q) || o.name.toLowerCase().includes(q))
+      : allOptions;
+
+    if (!filtered.length) {
+      list.innerHTML = `<li class="cpicker-empty">No results for "${query}"</li>`;
+      return;
+    }
+
+    list.innerHTML = filtered
+      .map((o) => {
+        const sel = o.code === currentCode ? ' aria-selected="true"' : '';
+        return `<li data-code="${o.code}" role="option" tabindex="-1"${sel}>` +
+          `<span class="cpicker-code">${o.code.toUpperCase()}</span>` +
+          `<span class="cpicker-name">${o.name}</span>` +
+          `</li>`;
+      })
+      .join('');
+  }
+
+  // ── Events ──
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    drop.hidden ? open() : close();
+  });
+
+  search.addEventListener('input', () => renderList(search.value));
+
+  search.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') { close(); btn.focus(); }
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      list.querySelector('li[data-code]')?.focus();
+    }
+  });
+
+  list.addEventListener('keydown', (e) => {
+    const items = [...list.querySelectorAll('li[data-code]')];
+    const idx = items.indexOf(document.activeElement);
+    if (e.key === 'ArrowDown') { e.preventDefault(); items[idx + 1]?.focus(); }
+    if (e.key === 'ArrowUp')   { e.preventDefault(); idx <= 0 ? search.focus() : items[idx - 1]?.focus(); }
+    if (e.key === 'Enter')     { items[idx]?.click(); }
+    if (e.key === 'Escape')    { close(); btn.focus(); }
+  });
+
+  list.addEventListener('click', (e) => {
+    const li = e.target.closest('li[data-code]');
+    if (li) select(li.dataset.code);
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!wrap.contains(e.target)) close();
+  });
+
+  // ── Public API ──
+  return {
+    getValue() { return currentCode.toUpperCase(); },
+    setValue(code) {
+      const lc = code.toLowerCase();
+      if (allOptions.some((o) => o.code === lc)) {
+        currentCode = lc;
+        btn.querySelector('.cpicker-label').textContent = lc.toUpperCase();
+      }
+    },
+    setOptions(currencies) {
+      // currencies: { usd: 'US Dollar', ... }
+      allOptions = Object.entries(currencies)
+        .map(([code, name]) => ({ code, name: name || code.toUpperCase() }))
+        .sort((a, b) => a.code.localeCompare(b.code));
+      // Re-apply current selection after options change
+      if (currentCode && !allOptions.some((o) => o.code === currentCode)) {
+        currentCode = allOptions[0]?.code || '';
+      }
+    },
+  };
+}
+
+// ── Load Currency List ────────────────────────────────────────────────────
 async function loadCurrencies() {
   try {
-    const res = await fetch(`${API_BASE}/currencies`);
+    const res = await fetch(`${CDN}@latest/v1/currencies.json`);
     if (!res.ok) throw new Error();
-    const currencies = await res.json();
-    ['from-currency', 'to-currency', 'history-from', 'history-to'].forEach((id) =>
-      populateSelect(id, currencies)
-    );
+    allCurrencies = await res.json();
+
+    // Create all four pickers
+    pickers.from    = createPicker('from-currency', () => { savePreferences(); scheduleConversion(); });
+    pickers.to      = createPicker('to-currency',   () => { savePreferences(); scheduleConversion(); });
+    pickers.histFrom = createPicker('history-from', () => { savePreferences(); fetchHistory(); });
+    pickers.histTo   = createPicker('history-to',   () => { savePreferences(); fetchHistory(); });
+
+    for (const p of Object.values(pickers)) {
+      p.setOptions(allCurrencies);
+    }
   } catch {
     showConvertError(true);
   }
 }
 
-function populateSelect(id, currencies) {
-  const sel = document.getElementById(id);
-  sel.innerHTML = Object.entries(currencies)
-    .sort(([a], [b]) => a.localeCompare(b))
-    .map(([code, name]) => `<option value="${code}">${code} — ${name}</option>`)
-    .join('');
-}
-
-// ── localStorage Preferences ──────────────────────────────────────────────
-// Returns true if saved prefs existed (skips GPS detection), false on first visit.
+// ── Preferences ───────────────────────────────────────────────────────────
+// Returns true if saved prefs existed (suppress GPS detection), false on first visit.
 function loadPreferences() {
   try {
     const saved = JSON.parse(localStorage.getItem(LS_KEY) || 'null');
-    if (!saved) return false;
-    setSelect('from-currency',  saved.from    || 'USD');
-    setSelect('to-currency',    saved.to      || 'EUR');
-    setSelect('history-from',   saved.histFrom || 'USD');
-    setSelect('history-to',     saved.histTo   || 'EUR');
-    return true;
+    pickers.from.setValue(saved?.from     || 'usd');
+    pickers.to.setValue(saved?.to         || 'eur');
+    pickers.histFrom.setValue(saved?.histFrom || 'usd');
+    pickers.histTo.setValue(saved?.histTo     || 'eur');
+    return !!saved;
   } catch {
+    pickers.from.setValue('usd');
+    pickers.to.setValue('eur');
+    pickers.histFrom.setValue('usd');
+    pickers.histTo.setValue('eur');
     return false;
   }
 }
@@ -100,25 +240,16 @@ function loadPreferences() {
 function savePreferences() {
   try {
     localStorage.setItem(LS_KEY, JSON.stringify({
-      from:     getSelect('from-currency'),
-      to:       getSelect('to-currency'),
-      histFrom: getSelect('history-from'),
-      histTo:   getSelect('history-to'),
+      from:     pickers.from.getValue(),
+      to:       pickers.to.getValue(),
+      histFrom: pickers.histFrom.getValue(),
+      histTo:   pickers.histTo.getValue(),
     }));
-  } catch { /* quota exceeded — ignore */ }
+  } catch { /* quota exceeded */ }
 }
 
-function setSelect(id, value) {
-  const sel = document.getElementById(id);
-  if (sel && [...sel.options].some((o) => o.value === value)) sel.value = value;
-}
-
-function getSelect(id) {
-  return document.getElementById(id).value;
-}
-
-// ── GPS-based Currency Detection ──────────────────────────────────────────
-// Only runs on first visit (no saved prefs). Silent on denial or error.
+// ── GPS Detection ─────────────────────────────────────────────────────────
+// Only runs on first visit. Silent on any error or denial.
 function detectLocationCurrency() {
   if (!navigator.geolocation) return;
 
@@ -128,19 +259,20 @@ function detectLocationCurrency() {
     async (pos) => {
       try {
         const { latitude, longitude } = pos.coords;
-        const url = `${GEO_API}?lat=${latitude}&lon=${longitude}&format=json`;
-        const res = await fetch(url, { headers: { 'Accept-Language': 'en' } });
+        const res = await fetch(
+          `${GEO_API}?lat=${latitude}&lon=${longitude}&format=json`,
+          { headers: { 'Accept-Language': 'en' } }
+        );
         const data = await res.json();
+        const cc = data.address?.country_code?.toUpperCase();
+        const currency = COUNTRY_CURRENCY[cc]; // lowercase, e.g. 'usd'
 
-        const countryCode = data.address?.country_code?.toUpperCase();
-        const currency = COUNTRY_CURRENCY[countryCode];
-
-        if (currency && currency !== getSelect('from-currency')) {
-          setSelect('from-currency', currency);
-          setSelect('history-from',  currency);
+        if (currency && currency !== pickers.from.getValue().toLowerCase()) {
+          pickers.from.setValue(currency);
+          pickers.histFrom.setValue(currency);
           savePreferences();
           fetchConversion();
-          showLocationStatus(`Set to ${currency} based on your location`, 3000);
+          showLocationStatus(`Set to ${currency.toUpperCase()} based on your location`, 3500);
         } else {
           hideLocationStatus();
         }
@@ -148,7 +280,7 @@ function detectLocationCurrency() {
         hideLocationStatus();
       }
     },
-    () => hideLocationStatus(),   // denied or timed out → silent fallback
+    () => hideLocationStatus(),
     { timeout: 8000, maximumAge: 0 }
   );
 }
@@ -167,35 +299,24 @@ function hideLocationStatus() {
 // ── Convert Tab ───────────────────────────────────────────────────────────
 function bindConvertEvents() {
   document.getElementById('amount-input').addEventListener('input', scheduleConversion);
-  document.getElementById('from-currency').addEventListener('change', () => {
-    savePreferences();
-    scheduleConversion();
-  });
-  document.getElementById('to-currency').addEventListener('change', () => {
-    savePreferences();
-    scheduleConversion();
-  });
   document.getElementById('swap-btn').addEventListener('click', swapCurrencies);
 }
 
-// Debounce: 300ms after last keystroke before firing the API call.
 function scheduleConversion() {
   clearTimeout(debounceTimer);
   debounceTimer = setTimeout(fetchConversion, 300);
 }
 
 async function fetchConversion() {
-  const from   = getSelect('from-currency');
-  const to     = getSelect('to-currency');
-  const amount = parseFloat(document.getElementById('amount-input').value);
-
+  const from = pickers.from?.getValue().toLowerCase();
+  const to   = pickers.to?.getValue().toLowerCase();
   if (!from || !to) return;
 
-  // Same-currency shortcut — no network call needed.
+  const amount = parseFloat(document.getElementById('amount-input').value);
+
   if (from === to) {
-    document.getElementById('result-value').textContent =
-      isNaN(amount) ? '—' : formatAmount(amount);
-    setRateInfo(`<span class="rate-highlight">1 ${from} = 1 ${to}</span>`);
+    document.getElementById('result-value').textContent = isNaN(amount) ? '—' : formatAmount(amount);
+    setRateInfo(`<span class="rate-highlight">1 ${from.toUpperCase()} = 1 ${to.toUpperCase()}</span>`);
     return;
   }
 
@@ -203,21 +324,21 @@ async function fetchConversion() {
   setRateInfoLoading(true);
 
   try {
-    // GET /latest?from=USD&to=EUR
-    // Response: { amount:1, base:"USD", date:"…", rates:{ EUR:0.91234 } }
-    const res = await fetch(`${API_BASE}/latest?from=${from}&to=${to}`);
+    // GET @latest/v1/currencies/{base}.json
+    // Response: { date: '...', {base}: { eur: 0.912, gbp: 0.785, ... } }
+    const res = await fetch(`${CDN}@latest/v1/currencies/${from}.json`);
     if (!res.ok) throw new Error();
-
     const data = await res.json();
-    lastRate    = data.rates[to];
-    lastUpdated = new Date();
+    const rate = data[from]?.[to];
+    if (rate == null) throw new Error('No rate');
 
-    const converted = isNaN(amount) ? null : amount * lastRate;
+    lastUpdated = new Date();
+    const converted = isNaN(amount) ? null : amount * rate;
     document.getElementById('result-value').textContent =
       converted !== null ? formatAmount(converted) : '—';
 
     setRateInfo(
-      `<span class="rate-highlight">1 ${from} = ${formatAmount(lastRate)} ${to}</span>` +
+      `<span class="rate-highlight">1 ${from.toUpperCase()} = ${formatAmount(rate)} ${to.toUpperCase()}</span>` +
       ` · Updated ${formatRelativeTime(lastUpdated)}`
     );
   } catch {
@@ -228,11 +349,10 @@ async function fetchConversion() {
 }
 
 function swapCurrencies() {
-  const from = document.getElementById('from-currency');
-  const to   = document.getElementById('to-currency');
-  const temp = from.value;
-  from.value = to.value;
-  to.value   = temp;
+  const fromVal = pickers.from.getValue().toLowerCase();
+  const toVal   = pickers.to.getValue().toLowerCase();
+  pickers.from.setValue(toVal);
+  pickers.to.setValue(fromVal);
   savePreferences();
   fetchConversion();
 }
@@ -252,12 +372,8 @@ function setRateInfo(html) {
 
 function setRateInfoLoading(on) {
   const el = document.getElementById('rate-info');
-  if (on) {
-    el.textContent = 'Loading…';
-    el.classList.add('loading');
-  } else {
-    el.classList.remove('loading');
-  }
+  if (on) { el.textContent = 'Loading…'; el.classList.add('loading'); }
+  else { el.classList.remove('loading'); }
 }
 
 function showConvertError(show) {
@@ -275,14 +391,6 @@ function formatRelativeTime(date) {
 
 // ── History Tab ───────────────────────────────────────────────────────────
 function bindHistoryEvents() {
-  document.getElementById('history-from').addEventListener('change', () => {
-    savePreferences();
-    fetchHistory();
-  });
-  document.getElementById('history-to').addEventListener('change', () => {
-    savePreferences();
-    fetchHistory();
-  });
   document.querySelectorAll('.period-btn').forEach((btn) => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('.period-btn').forEach((b) => b.classList.remove('active'));
@@ -291,56 +399,94 @@ function bindHistoryEvents() {
       fetchHistory();
     });
   });
+  // Note: history picker onChange handlers call fetchHistory() directly.
+}
+
+// Build a set of sampled dates spanning the period.
+// period ≤7: every day; ≤30: every 3 days; ≤90: every 7 days; else: every 14 days.
+function getSampleDates(period) {
+  const step  = period <= 7 ? 1 : period <= 30 ? 3 : period <= 90 ? 7 : 14;
+  const today = new Date();
+  const dates = [];
+  for (let i = period; i >= 0; i -= step) {
+    const d = new Date(today);
+    d.setDate(d.getDate() - i);
+    dates.push(d.toISOString().slice(0, 10));
+  }
+  const todayStr = today.toISOString().slice(0, 10);
+  if (!dates.includes(todayStr)) dates.push(todayStr);
+  return [...new Set(dates)].sort();
 }
 
 async function fetchHistory() {
-  const from = getSelect('history-from');
-  const to   = getSelect('history-to');
+  const from = pickers.histFrom?.getValue().toLowerCase();
+  const to   = pickers.histTo?.getValue().toLowerCase();
+  if (!from || !to) return;
+
+  const errEl = document.getElementById('history-error');
+
+  if (from === to) {
+    showHistoryLoading(false);
+    showHistoryContent(false);
+    errEl.textContent = 'Select different currencies to compare.';
+    errEl.style.display = 'block';
+    return;
+  }
 
   showHistoryLoading(true);
   showHistoryContent(false);
-  showHistoryError(false);
+  errEl.style.display = 'none';
 
-  const fmt = (d) => d.toISOString().slice(0, 10);
-  const endDate   = new Date();
-  const startDate = new Date();
-  startDate.setDate(startDate.getDate() - activePeriod);
+  const todayStr = new Date().toISOString().slice(0, 10);
+  const dates    = getSampleDates(activePeriod);
 
   try {
-    // GET /2026-01-29..2026-02-28?from=USD&to=EUR
-    // Response: { amount:1, base:"USD", rates:{ "2026-01-29":{ EUR:0.912 }, … } }
-    const url = `${API_BASE}/${fmt(startDate)}..${fmt(endDate)}?from=${from}&to=${to}`;
-    const res = await fetch(url);
-    if (!res.ok) throw new Error();
+    // Fetch all sampled dates in parallel via fawazahmed0 CDN.
+    // @latest is used for today; @YYYY-MM-DD for historical dates.
+    const results = await Promise.all(
+      dates.map(async (date) => {
+        try {
+          const tag = date === todayStr ? 'latest' : date;
+          const res = await fetch(`${CDN}@${tag}/v1/currencies/${from}.json`);
+          if (!res.ok) return null;
+          const data = await res.json();
+          const rate = data[from]?.[to];
+          return rate != null ? { date, rate } : null;
+        } catch { return null; }
+      })
+    );
 
-    const data  = await res.json();
-    const dates = Object.keys(data.rates).sort();
-    const rates = dates.map((d) => data.rates[d][to]);
+    const valid = results.filter(Boolean);
+    if (!valid.length) throw new Error('No data');
 
-    renderChart({ dates, rates, from, to });
-    renderHistoryTable({ dates, rates });
+    const datesArr = valid.map((r) => r.date);
+    const ratesArr = valid.map((r) => r.rate);
 
+    renderChart({ dates: datesArr, rates: ratesArr, from: from.toUpperCase(), to: to.toUpperCase() });
+    renderHistoryTable({ dates: datesArr, rates: ratesArr });
+
+    historyFetched = true;
     showHistoryLoading(false);
     showHistoryContent(true);
   } catch {
     showHistoryLoading(false);
-    showHistoryError(true);
+    errEl.textContent = 'Unable to fetch historical data. Check your connection.';
+    errEl.style.display = 'block';
   }
 }
 
 // ── SVG Chart ─────────────────────────────────────────────────────────────
-// Pure SVG, no library. viewBox 0 0 600 200.
 function renderChart({ dates, rates, from, to }) {
   const svg = document.getElementById('rate-chart');
   const W = 600, H = 200;
-  const PAD = { top: 16, right: 16, bottom: 24, left: 58 };
-  const iW  = W - PAD.left - PAD.right;
-  const iH  = H - PAD.top  - PAD.bottom;
+  const PAD = { top: 14, right: 16, bottom: 22, left: 58 };
+  const iW = W - PAD.left - PAD.right;
+  const iH = H - PAD.top  - PAD.bottom;
 
   const n       = dates.length;
   const minRate = Math.min(...rates);
   const maxRate = Math.max(...rates);
-  const range   = maxRate - minRate || 1;
+  const range   = maxRate - minRate || minRate * 0.01 || 1;
 
   const xOf = (i) => PAD.left + (i / Math.max(n - 1, 1)) * iW;
   const yOf = (r) => PAD.top  + (1 - (r - minRate) / range) * iH;
@@ -354,19 +500,18 @@ function renderChart({ dates, rates, from, to }) {
   ].join(' ');
 
   const yLabels = [
-    { v: maxRate,               y: PAD.top },
+    { v: maxRate,                 y: PAD.top },
     { v: (minRate + maxRate) / 2, y: PAD.top + iH / 2 },
-    { v: minRate,               y: PAD.top + iH },
+    { v: minRate,                 y: PAD.top + iH },
   ];
 
   svg.innerHTML = `
     <defs>
       <linearGradient id="cg" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%"   stop-color="#8b5cf6" stop-opacity="0.28"/>
+        <stop offset="0%"   stop-color="#8b5cf6" stop-opacity="0.25"/>
         <stop offset="100%" stop-color="#8b5cf6" stop-opacity="0.02"/>
       </linearGradient>
     </defs>
-
     ${yLabels.map((l) => `
       <line x1="${PAD.left}" y1="${l.y.toFixed(1)}"
             x2="${(PAD.left + iW).toFixed(1)}" y2="${l.y.toFixed(1)}"
@@ -375,12 +520,9 @@ function renderChart({ dates, rates, from, to }) {
             text-anchor="end" fill="#606068" font-size="10"
             font-family="ui-monospace,monospace">${l.v.toFixed(4)}</text>
     `).join('')}
-
     <path d="${fillD}" fill="url(#cg)"/>
-
     <polyline points="${pts}" fill="none" stroke="#8b5cf6"
               stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
-
     <text x="${PAD.left}" y="${H - 4}" text-anchor="start"
           fill="#606068" font-size="10">${fmtDateShort(dates[0])}</text>
     <text x="${(PAD.left + iW).toFixed(1)}" y="${H - 4}" text-anchor="end"
@@ -393,34 +535,27 @@ function renderChart({ dates, rates, from, to }) {
 }
 
 function fmtDateShort(dateStr) {
-  // Append T00:00:00 to parse as local time, not UTC (avoids off-by-one-day bugs)
-  return new Date(dateStr + 'T00:00:00').toLocaleDateString('en-US', {
-    month: 'short', day: 'numeric',
-  });
+  return new Date(dateStr + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 }
 
 // ── History Table ─────────────────────────────────────────────────────────
-// Most recent 20 rows, newest first, with color-coded change column.
 function renderHistoryTable({ dates, rates }) {
-  const rows = dates
-    .map((d, i) => ({ date: d, rate: rates[i] }))
-    .reverse()
-    .slice(0, 20);
+  const rows = dates.map((d, i) => ({ date: d, rate: rates[i] })).reverse().slice(0, 20);
 
   document.getElementById('history-tbody').innerHTML = rows
     .map(({ date, rate }, idx) => {
       const prev   = idx < rows.length - 1 ? rows[idx + 1].rate : null;
       const change = prev !== null ? rate - prev : null;
-      const sign   = change !== null ? (change >= 0 ? '+' : '') : '';
       const cls    = change === null ? 'change-neutral'
                    : change > 0     ? 'change-positive'
                    : change < 0     ? 'change-negative'
                    :                  'change-neutral';
+      const changeStr = change !== null ? (change >= 0 ? '+' : '') + change.toFixed(4) : '—';
 
       return `<tr>
         <td class="date-cell">${fmtDateDisplay(date)}</td>
         <td class="rate-cell">${rate.toFixed(4)}</td>
-        <td class="${cls}">${change !== null ? sign + change.toFixed(4) : '—'}</td>
+        <td class="${cls}">${changeStr}</td>
       </tr>`;
     })
     .join('');
@@ -440,8 +575,4 @@ function showHistoryLoading(show) {
 function showHistoryContent(show) {
   document.getElementById('chart-container').style.display         = show ? 'block' : 'none';
   document.getElementById('history-table-container').style.display = show ? 'block' : 'none';
-}
-
-function showHistoryError(show) {
-  document.getElementById('history-error').style.display = show ? 'block' : 'none';
 }
