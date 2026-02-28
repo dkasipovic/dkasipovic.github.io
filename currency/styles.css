@@ -266,11 +266,9 @@ body { overflow: hidden; }
   text-align: center;
 }
 
-/* History tab pickers are smaller */
+/* History tab pickers: same font/padding as convert, fill available space */
 .history-pair .cpicker-btn {
-  min-width: 64px;
-  font-size: 13px;
-  padding: 7px 8px 7px 10px;
+  min-width: 0;
 }
 
 /* ── Amount / Result ── */
@@ -403,9 +401,28 @@ body { overflow: hidden; }
   display: flex;
   align-items: center;
   gap: 8px;
+  flex: 1;
+  min-width: 0;
 }
 
-.history-arrow { color: var(--text-muted); font-size: 16px; }
+/* Pickers inside history-pair expand to fill available space */
+.history-pair .currency-picker-host {
+  flex: 1;
+  min-width: 0;
+  flex-shrink: 1;
+}
+
+.history-pair .cpicker {
+  flex: 1;
+  min-width: 0;
+}
+
+.history-pair .cpicker-btn {
+  width: 100%;
+  justify-content: center;
+}
+
+.history-arrow { color: var(--text-muted); font-size: 16px; flex-shrink: 0; }
 
 .period-buttons {
   display: flex;
