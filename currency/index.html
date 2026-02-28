@@ -50,14 +50,14 @@
       <div id="tab-convert" class="tab-content active">
         <div class="panel-header">
           <h1>Convert</h1>
-          <p class="panel-subtitle">Live exchange rates from Frankfurter</p>
+          <p class="panel-subtitle">Live exchange rates · 170+ currencies</p>
         </div>
 
         <div class="converter-card">
 
-          <!-- From row -->
+          <!-- From row: [picker][amount input] -->
           <div class="currency-row">
-            <select class="currency-select" id="from-currency" aria-label="From currency"></select>
+            <div class="currency-picker-host" id="from-currency"></div>
             <input
               type="number"
               class="amount-input"
@@ -67,6 +67,7 @@
               step="any"
               placeholder="Amount"
               aria-label="Amount to convert"
+              inputmode="decimal"
             >
           </div>
 
@@ -81,15 +82,14 @@
             </button>
           </div>
 
-          <!-- To row -->
+          <!-- To row: [picker][result display] -->
           <div class="currency-row">
-            <select class="currency-select" id="to-currency" aria-label="To currency"></select>
+            <div class="currency-picker-host" id="to-currency"></div>
             <div class="result-display">
               <span class="result-value" id="result-value">—</span>
             </div>
           </div>
 
-          <!-- Rate info + location status -->
           <div class="rate-info" id="rate-info">Loading rates…</div>
           <div class="location-status" id="location-status" style="display:none"></div>
           <div class="convert-error" id="convert-error" style="display:none">
@@ -108,9 +108,9 @@
 
         <div class="history-controls">
           <div class="history-pair">
-            <select class="currency-select small" id="history-from" aria-label="History from currency"></select>
+            <div class="currency-picker-host" id="history-from"></div>
             <span class="history-arrow">→</span>
-            <select class="currency-select small" id="history-to" aria-label="History to currency"></select>
+            <div class="currency-picker-host" id="history-to"></div>
           </div>
           <div class="period-buttons">
             <button class="period-btn" data-period="7">1W</button>
