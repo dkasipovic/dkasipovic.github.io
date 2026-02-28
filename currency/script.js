@@ -204,11 +204,33 @@ async function loadCurrencies() {
     if (!res.ok) throw new Error();
     allCurrencies = await res.json();
 
-    // Create all four pickers
-    pickers.from    = createPicker('from-currency', () => { savePreferences(); scheduleConversion(); });
-    pickers.to      = createPicker('to-currency',   () => { savePreferences(); scheduleConversion(); });
-    pickers.histFrom = createPicker('history-from', () => { savePreferences(); fetchHistory(); });
-    pickers.histTo   = createPicker('history-to',   () => { savePreferences(); fetchHistory(); });
+    // Create all four pickers.
+    // Converter ↔ history are kept in sync: changing either side mirrors the
+    // pair to the other side. setValue() does NOT trigger onChange, so no loops.
+    pickers.from = createPicker('from-currency', () => {
+      pickers.histFrom.setValue(pickers.from.getValue().toLowerCase());
+      savePreferences();
+      scheduleConversion();
+      if (historyFetched) fetchHistory();
+    });
+    pickers.to = createPicker('to-currency', () => {
+      pickers.histTo.setValue(pickers.to.getValue().toLowerCase());
+      savePreferences();
+      scheduleConversion();
+      if (historyFetched) fetchHistory();
+    });
+    pickers.histFrom = createPicker('history-from', () => {
+      pickers.from.setValue(pickers.histFrom.getValue().toLowerCase());
+      savePreferences();
+      scheduleConversion();
+      fetchHistory();
+    });
+    pickers.histTo = createPicker('history-to', () => {
+      pickers.to.setValue(pickers.histTo.getValue().toLowerCase());
+      savePreferences();
+      scheduleConversion();
+      fetchHistory();
+    });
 
     for (const p of Object.values(pickers)) {
       p.setOptions(allCurrencies);
