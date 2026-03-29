@@ -1,17 +1,13 @@
-const PRECACHE_NAME = 'tools-index-precache-v12';
-const RUNTIME_NAME = 'tools-index-runtime-v12';
+const PRECACHE_NAME = 'vuk-precache-v1';
+const RUNTIME_NAME = 'vuk-runtime-v1';
 
 const PRECACHE_ASSETS = [
   './',
   './index.html',
   './styles.css',
-  './updates.json',
-  './manifest.json',
-  './icon.svg',
-  './icon-192.png',
-  './icon-512.png',
-  './shared/styles.css',
-  './shared/app.js',
+  './script.js',
+  '/shared/styles.css',
+  '/shared/app.js',
 ];
 
 const BEST_EFFORT_EXTERNAL_ASSETS = [];
