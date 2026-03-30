@@ -1,11 +1,12 @@
-const PRECACHE_NAME = 'vuk-precache-v1';
-const RUNTIME_NAME = 'vuk-runtime-v1';
+const PRECACHE_NAME = 'vuk-precache-v2';
+const RUNTIME_NAME = 'vuk-runtime-v2';
 
 const PRECACHE_ASSETS = [
   './',
   './index.html',
   './styles.css',
   './script.js',
+  './sentences.json',
   '/shared/styles.css',
   '/shared/app.js',
 ];
