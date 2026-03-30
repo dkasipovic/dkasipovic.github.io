@@ -1,5 +1,5 @@
-const PRECACHE_NAME = 'vuk-precache-v2';
-const RUNTIME_NAME = 'vuk-runtime-v2';
+const PRECACHE_NAME = 'vuk-precache-v3';
+const RUNTIME_NAME = 'vuk-runtime-v3';
 
 const PRECACHE_ASSETS = [
   './',
@@ -7,6 +7,7 @@ const PRECACHE_ASSETS = [
   './styles.css',
   './script.js',
   './sentences.json',
+  './corbel.woff2',
   '/shared/styles.css',
   '/shared/app.js',
 ];
