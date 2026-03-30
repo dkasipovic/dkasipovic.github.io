@@ -1,5 +1,5 @@
-const PRECACHE_NAME = 'vuk-precache-v4';
-const RUNTIME_NAME = 'vuk-runtime-v4';
+const PRECACHE_NAME = 'vuk-precache-v5';
+const RUNTIME_NAME = 'vuk-runtime-v5';
 
 const PRECACHE_ASSETS = [
   './',

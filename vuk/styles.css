@@ -17,6 +17,40 @@
     gap: 20px;
 }
 
+/* Score Bar */
+.score-bar {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    gap: 28px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 10px 20px;
+}
+
+.score-bar.visible {
+    display: flex;
+}
+
+.score-stat {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.score-icon {
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+.score-icon-correct {
+    color: #22c55e;
+}
+
 /* Sentence Card */
 .sentence-card {
     background: var(--bg-secondary);
@@ -44,6 +78,19 @@
     transform: scale(0.99);
 }
 
+.sentence-card.no-click {
+    cursor: default;
+}
+
+.sentence-card.no-click:hover {
+    border-color: var(--border);
+    background: var(--bg-secondary);
+}
+
+.sentence-card.no-click:active {
+    transform: none;
+}
+
 .sentence-text {
     font-family: Arial, sans-serif;
     font-size: 32px;
@@ -58,6 +105,57 @@
     font-size: 12px;
     color: var(--text-muted);
     letter-spacing: 0.5px;
+    min-height: 16px;
+}
+
+/* Score Buttons */
+.score-buttons {
+    display: none;
+    gap: 16px;
+}
+
+.score-buttons.visible {
+    display: flex;
+}
+
+.btn-score {
+    flex: 1;
+    height: 80px;
+    font-size: 40px;
+    font-weight: 700;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    line-height: 1;
+}
+
+.btn-correct {
+    background: #22c55e;
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(34, 197, 94, 0.3);
+}
+
+.btn-correct:hover {
+    background: #16a34a;
+    box-shadow: 0 4px 20px rgba(34, 197, 94, 0.45);
+}
+
+.btn-wrong {
+    background: #ef4444;
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(239, 68, 68, 0.3);
+}
+
+.btn-wrong:hover {
+    background: #dc2626;
+    box-shadow: 0 4px 20px rgba(239, 68, 68, 0.45);
+}
+
+.btn-score:active {
+    transform: scale(0.94);
 }
 
 /* Controls */
@@ -190,6 +288,64 @@
     border: 3px solid var(--bg-primary);
 }
 
+/* Toggle Switch */
+.toggle-btn {
+    width: 48px;
+    height: 28px;
+    border-radius: 14px;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border);
+    position: relative;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+    flex-shrink: 0;
+}
+
+.toggle-btn[aria-checked="true"] {
+    background: var(--accent);
+    border-color: var(--accent);
+}
+
+.toggle-knob {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #fff;
+    transition: transform 0.2s ease;
+    pointer-events: none;
+}
+
+.toggle-btn[aria-checked="true"] .toggle-knob {
+    transform: translateX(20px);
+}
+
+/* Reset Button */
+.btn-reset {
+    width: 100%;
+    height: 44px;
+    background: transparent;
+    border: 1px solid #ef4444;
+    border-radius: 10px;
+    color: #ef4444;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.15s ease;
+    letter-spacing: 0.3px;
+}
+
+.btn-reset:hover {
+    background: rgba(239, 68, 68, 0.1);
+}
+
+.btn-reset:active {
+    transform: scale(0.98);
+}
+
 /* Responsive */
 @media (max-width: 600px) {
     .container {
@@ -204,36 +360,94 @@
     .sentence-text {
         font-size: 26px;
     }
+
+    .btn-score {
+        height: 72px;
+        font-size: 36px;
+    }
 }
 
-/* Landscape on small screens */
-@media (max-height: 500px) and (orientation: landscape) {
-    .container {
-        padding: 12px;
+/* TV / Landscape mode */
+@media (orientation: landscape) and (min-aspect-ratio: 4/3) {
+    body.has-app-bar .container {
+        padding: 12px 20px;
+        max-width: 100%;
         min-height: calc(100vh - 56px);
-    }
-
-    .sentence-card {
-        padding: 24px 20px 16px;
-        min-height: auto;
-        gap: 12px;
-    }
-
-    .sentence-text {
-        font-size: 24px;
+        align-items: stretch;
     }
 
     .main-layout {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        grid-template-rows: auto 1fr auto auto;
         gap: 12px;
+        height: calc(100vh - 56px - 24px);
+    }
+
+    /* score bar spans full width at top */
+    .score-bar {
+        grid-column: 1 / -1;
+        grid-row: 1;
+    }
+
+    /* sentence card fills left area */
+    .sentence-card {
+        grid-column: 1;
+        grid-row: 2;
+        min-height: unset;
+        padding: 20px 28px;
+        cursor: default;
+    }
+
+    .sentence-card:hover {
+        border-color: var(--border-light);
+        background: var(--bg-tertiary);
+    }
+
+    .sentence-card.no-click:hover {
+        border-color: var(--border);
+        background: var(--bg-secondary);
+    }
+
+    .sentence-text {
+        font-size: clamp(28px, 5.5vw, 68px);
+    }
+
+    .sentence-hint {
+        display: none;
+    }
+
+    /* score buttons stack vertically on the right */
+    .score-buttons {
+        grid-column: 2;
+        grid-row: 2;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .btn-score {
+        width: 88px;
+        flex: 1;
+        height: unset;
+        min-height: 72px;
+        font-size: 44px;
+        border-radius: 16px;
+    }
+
+    /* controls row spans bottom */
+    .controls {
+        grid-column: 1 / -1;
+        grid-row: 3;
+    }
+
+    /* settings panel spans bottom */
+    .settings-panel {
+        grid-column: 1 / -1;
+        grid-row: 4;
     }
 
     .btn-generate,
     .btn-settings {
-        height: 40px;
-    }
-
-    .settings-panel {
-        padding: 12px 16px;
-        gap: 10px;
+        height: 44px;
     }
 }
