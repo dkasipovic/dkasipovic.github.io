@@ -18,9 +18,19 @@
 <body>
     <div class="container">
         <div class="main-layout">
+            <div class="score-bar" id="scoreBar">
+                <span class="score-stat"><span class="score-icon score-icon-correct">✓</span> <span id="scoreCorrect">0</span>/<span id="scoreTotal">0</span></span>
+                <span class="score-stat"><span class="score-icon">⏱</span> <span id="scoreAvg">0.0</span>s</span>
+            </div>
+
             <div class="sentence-card" id="sentenceCard">
                 <div class="sentence-text" id="sentenceText"></div>
-                <div class="sentence-hint">додирни за нову реченицу</div>
+                <div class="sentence-hint" id="sentenceHint">додирни за нову реченицу</div>
+            </div>
+
+            <div class="score-buttons" id="scoreButtons">
+                <button class="btn-score btn-correct" id="btnCorrect" title="Тачно">✓</button>
+                <button class="btn-score btn-wrong" id="btnWrong" title="Нетачно">✗</button>
             </div>
 
             <div class="controls">
@@ -47,6 +57,17 @@
                         <span class="setting-value" id="maxValue">7</span>
                     </label>
                     <input type="range" class="setting-range" id="maxWords" min="2" max="12" value="7">
+                </div>
+                <div class="setting-row">
+                    <label class="setting-label">
+                        <span>Праћење резултата</span>
+                        <button class="toggle-btn" id="trackScoreToggle" type="button" role="switch" aria-checked="false">
+                            <span class="toggle-knob"></span>
+                        </button>
+                    </label>
+                </div>
+                <div class="setting-row">
+                    <button class="btn-reset" id="resetBtn" type="button">Ресетуј све</button>
                 </div>
             </div>
         </div>

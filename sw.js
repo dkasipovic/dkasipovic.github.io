@@ -1,5 +1,5 @@
-const PRECACHE_NAME = 'tools-index-precache-v12';
-const RUNTIME_NAME = 'tools-index-runtime-v12';
+const PRECACHE_NAME = 'tools-index-precache-v13';
+const RUNTIME_NAME = 'tools-index-runtime-v13';
 
 const PRECACHE_ASSETS = [
   './',
