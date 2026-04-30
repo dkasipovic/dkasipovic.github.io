@@ -101,6 +101,7 @@ const LAST_NAMES = [
 // ── DOM ───────────────────────────────────────────────────
 const vendorGrid = document.getElementById('vendorGrid');
 const cardEl = document.getElementById('card');
+const cardStage = document.getElementById('cardStage');
 const cardBrand = document.getElementById('cardBrand');
 const cardBrandBack = document.getElementById('cardBrandBack');
 const cardNumberEl = document.getElementById('cardNumber');
@@ -114,6 +115,13 @@ const expiryValue = document.getElementById('expiryValue');
 const cvvValue = document.getElementById('cvvValue');
 const generateBtn = document.getElementById('generateBtn');
 const flipBtn = document.getElementById('flipBtn');
+const generatePanel = document.getElementById('generatePanel');
+const validatePanel = document.getElementById('validatePanel');
+const validateInput = document.getElementById('validateInput');
+const validateVendor = document.getElementById('validateVendor');
+const validateLength = document.getElementById('validateLength');
+const validateLuhn = document.getElementById('validateLuhn');
+const validateSummary = document.getElementById('validateSummary');
 
 let currentVendor = VENDORS[0];
 let currentCard = null;
@@ -166,6 +174,20 @@ function luhnIsValid(num) {
     return sum % 10 === 0;
 }
 
+function detectVendor(digits) {
+    for (const v of VENDORS) {
+        for (const p of v.prefixes) {
+            if (typeof p === 'string') {
+                if (digits.startsWith(p)) return v;
+            } else if (digits.length >= p.length) {
+                const n = parseInt(digits.slice(0, p.length), 10);
+                if (n >= p.from && n <= p.to) return v;
+            }
+        }
+    }
+    return null;
+}
+
 function generateNumber(vendor) {
     const prefix = pickPrefix(vendor);
     const targetLen = vendor.length - 1;
@@ -204,7 +226,6 @@ function generateCvv(len) {
 
 // ── Render ────────────────────────────────────────────────
 function setBrand(vendor) {
-    // Reset classes
     cardEl.className = 'card ' + vendor.id;
     cardBrand.className = 'card-brand';
     cardBrandBack.textContent = vendor.name;
@@ -222,31 +243,36 @@ function setBrand(vendor) {
     }
 }
 
+function applyName(name) {
+    const display = (name || '').trim() || 'FULL NAME';
+    cardNameEl.textContent = display.toUpperCase();
+    cardSignatureEl.textContent = display;
+    fieldValues.name = name;
+}
+
 function render(card) {
     currentCard = card;
     setBrand(card.vendor);
 
     cardNumberEl.textContent = formatNumber(card.number, card.vendor.groups);
-    cardNameEl.textContent = card.name;
     cardExpiryEl.textContent = card.expiry;
     cardCvvEl.textContent = card.cvv;
-    cardSignatureEl.textContent = card.name;
 
     numberValue.textContent = card.number;
-    nameValue.textContent = card.name;
+    nameValue.value = card.name;
     expiryValue.textContent = card.expiry;
     cvvValue.textContent = card.cvv;
 
     fieldValues.number = card.number;
-    fieldValues.name = card.name;
     fieldValues.expiry = card.expiry;
     fieldValues.cvv = card.cvv;
+
+    applyName(card.name);
 }
 
 function generate() {
     const number = generateNumber(currentVendor);
     if (!luhnIsValid(number)) {
-        // Should never happen — guard for safety
         console.error('Generated invalid Luhn number:', number);
     }
     render({
@@ -261,7 +287,7 @@ function generate() {
 // ── Vendor chips ──────────────────────────────────────────
 function renderVendorChips() {
     vendorGrid.innerHTML = VENDORS.map((v, i) =>
-        `<button class="vendor-chip${i === 0 ? ' active' : ''}" data-vendor="${v.id}">${v.name}</button>`
+        `<button class="vendor-chip${i === 0 ? ' active' : ''}" data-vendor="${v.id}" aria-pressed="${i === 0}">${v.name}</button>`
     ).join('');
 
     vendorGrid.querySelectorAll('.vendor-chip').forEach(chip => {
@@ -270,13 +296,138 @@ function renderVendorChips() {
             const v = VENDORS.find(x => x.id === id);
             if (!v) return;
             currentVendor = v;
-            vendorGrid.querySelectorAll('.vendor-chip').forEach(c => c.classList.remove('active'));
+            vendorGrid.querySelectorAll('.vendor-chip').forEach(c => {
+                c.classList.remove('active');
+                c.setAttribute('aria-pressed', 'false');
+            });
             chip.classList.add('active');
-            // Un-flip if showing back when switching vendors
+            chip.setAttribute('aria-pressed', 'true');
             cardEl.classList.remove('flipped');
             generate();
         });
     });
+}
+
+// ── Validator ─────────────────────────────────────────────
+const ICON_OK =
+    '<svg class="validate-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+const ICON_BAD =
+    '<svg class="validate-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+
+function setValidateRow(el, text, state) {
+    el.className = 'validate-row-value';
+    if (state === 'good') el.classList.add('is-good');
+    else if (state === 'bad') el.classList.add('is-bad');
+    else if (state === 'muted') el.classList.add('is-muted');
+
+    let icon = '';
+    if (state === 'good') icon = ICON_OK;
+    else if (state === 'bad') icon = ICON_BAD;
+
+    el.innerHTML = icon + '<span>' + text + '</span>';
+}
+
+function updateValidator() {
+    const raw = validateInput.value || '';
+    const digits = raw.replace(/\D/g, '');
+
+    if (digits.length === 0) {
+        setValidateRow(validateVendor, '—', 'muted');
+        setValidateRow(validateLength, '—', 'muted');
+        setValidateRow(validateLuhn, '—', 'muted');
+        validateSummary.className = 'validate-summary';
+        validateSummary.textContent = 'Enter a card number to validate';
+        return;
+    }
+
+    const vendor = detectVendor(digits);
+    const expectedLen = vendor ? vendor.length : null;
+
+    if (vendor) {
+        setValidateRow(validateVendor, vendor.name, 'good');
+    } else {
+        setValidateRow(validateVendor, 'Unknown', 'bad');
+    }
+
+    let lengthOk = false;
+    if (expectedLen) {
+        lengthOk = digits.length === expectedLen;
+        setValidateRow(
+            validateLength,
+            digits.length + ' / ' + expectedLen,
+            lengthOk ? 'good' : 'bad'
+        );
+    } else {
+        setValidateRow(validateLength, digits.length + ' digits', 'muted');
+    }
+
+    let luhnOk = false;
+    if (digits.length >= 12) {
+        luhnOk = luhnIsValid(digits);
+        setValidateRow(validateLuhn, luhnOk ? 'Pass' : 'Fail', luhnOk ? 'good' : 'bad');
+    } else {
+        setValidateRow(validateLuhn, 'Too short', 'muted');
+    }
+
+    if (vendor && lengthOk && luhnOk) {
+        validateSummary.className = 'validate-summary is-good';
+        validateSummary.textContent = 'Valid ' + vendor.name + ' number';
+    } else {
+        validateSummary.className = 'validate-summary is-bad';
+        const reasons = [];
+        if (!vendor) reasons.push('unknown vendor');
+        if (vendor && !lengthOk) reasons.push('wrong length');
+        if (digits.length >= 12 && !luhnOk) reasons.push('Luhn check failed');
+        if (digits.length < 12) reasons.push('not enough digits');
+        validateSummary.textContent = 'Invalid — ' + reasons.join(', ');
+    }
+}
+
+// ── Mode tabs ─────────────────────────────────────────────
+function setMode(mode) {
+    const isGenerate = mode === 'generate';
+    generatePanel.classList.toggle('hidden', !isGenerate);
+    validatePanel.classList.toggle('hidden', isGenerate);
+    document.querySelectorAll('.mode-tab').forEach(t => {
+        const active = t.dataset.mode === mode;
+        t.classList.toggle('active', active);
+        t.setAttribute('aria-selected', active ? 'true' : 'false');
+    });
+    if (!isGenerate) {
+        cardEl.classList.remove('tilting');
+        cardEl.style.transform = '';
+    }
+}
+
+document.querySelectorAll('.mode-tab').forEach(tab => {
+    tab.addEventListener('click', () => setMode(tab.dataset.mode));
+});
+
+// ── Parallax tilt ─────────────────────────────────────────
+const MAX_TILT = 10;
+
+function onStageMove(e) {
+    const rect = cardStage.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width;  // 0..1
+    const y = (e.clientY - rect.top) / rect.height;  // 0..1
+    // Card follows the cursor: nearest edge tilts toward viewer.
+    // CSS: +rotateX tilts top forward, +rotateY tilts right edge backward —
+    // so both axes need a negative sign to "look at" the cursor.
+    const rx = -(y - 0.5) * 2 * MAX_TILT;
+    const ry = -(x - 0.5) * 2 * MAX_TILT;
+    cardEl.classList.add('tilting');
+    cardEl.style.transform = 'rotateX(' + rx.toFixed(2) + 'deg) rotateY(' + ry.toFixed(2) + 'deg)';
+}
+
+function onStageLeave() {
+    cardEl.classList.remove('tilting');
+    cardEl.style.transform = '';
+}
+
+// Only enable tilt when the device has a real pointer (skip touch).
+if (window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    cardStage.addEventListener('mousemove', onStageMove);
+    cardStage.addEventListener('mouseleave', onStageLeave);
 }
 
 // ── Wiring ────────────────────────────────────────────────
@@ -293,6 +444,10 @@ cardEl.addEventListener('click', () => {
     cardEl.classList.toggle('flipped');
 });
 
+nameValue.addEventListener('input', () => {
+    applyName(nameValue.value);
+});
+
 document.querySelectorAll('.btn-copy').forEach(btn => {
     btn.addEventListener('click', () => {
         const field = btn.dataset.field;
@@ -305,8 +460,11 @@ document.querySelectorAll('.btn-copy').forEach(btn => {
     });
 });
 
+validateInput.addEventListener('input', updateValidator);
+
 document.addEventListener('keydown', (e) => {
     if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    if (validatePanel.classList.contains('hidden') === false) return;
     if (e.code === 'Space' || e.key === 'Enter') {
         e.preventDefault();
         cardEl.classList.remove('flipped');
@@ -319,6 +477,7 @@ document.addEventListener('keydown', (e) => {
 // ── Init ──────────────────────────────────────────────────
 renderVendorChips();
 generate();
+updateValidator();
 
 // Register service worker
 if ('serviceWorker' in navigator) {

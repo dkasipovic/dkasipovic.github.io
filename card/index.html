@@ -18,144 +18,179 @@
 <body>
     <div class="container">
         <div class="main-layout">
-            <section class="vendor-section">
-                <div class="section-label">Vendor</div>
-                <div class="vendor-grid" id="vendorGrid"></div>
-            </section>
+            <div class="mode-tabs" role="tablist">
+                <button class="mode-tab active" data-mode="generate" role="tab" aria-selected="true">Generate</button>
+                <button class="mode-tab" data-mode="validate" role="tab" aria-selected="false">Validate</button>
+            </div>
 
-            <section class="card-section">
-                <div class="card-stage">
-                    <div class="card" id="card">
-                        <div class="card-inner" id="cardInner">
-                            <div class="card-face card-front">
-                                <div class="card-bg"></div>
-                                <div class="card-shine"></div>
-                                <div class="card-top">
-                                    <div class="card-bank">Kasipovic Bank</div>
-                                    <div class="card-brand" id="cardBrand"></div>
-                                </div>
-                                <div class="card-mid">
-                                    <div class="card-chip" aria-hidden="true">
-                                        <svg viewBox="0 0 36 28" fill="none">
-                                            <rect x="1" y="1" width="34" height="26" rx="4" fill="#d4b87a" stroke="#a18a52" stroke-width="0.5"/>
-                                            <path d="M8 6 v16 M14 6 v16 M22 6 v16 M28 6 v16 M2 14 h32" stroke="#a18a52" stroke-width="0.5"/>
-                                            <rect x="11" y="9" width="14" height="10" rx="1.5" fill="#c4a66a" stroke="#a18a52" stroke-width="0.4"/>
-                                        </svg>
+            <div class="mode-panel" id="generatePanel">
+                <section class="vendor-section">
+                    <div class="section-label">Vendor</div>
+                    <div class="vendor-grid" id="vendorGrid"></div>
+                </section>
+
+                <section class="card-section">
+                    <div class="card-stage" id="cardStage">
+                        <div class="card" id="card">
+                            <div class="card-inner" id="cardInner">
+                                <div class="card-face card-front">
+                                    <div class="card-bg"></div>
+                                    <div class="card-shine"></div>
+                                    <div class="card-top">
+                                        <div class="card-bank">Kasipovic Bank</div>
+                                        <div class="card-brand" id="cardBrand"></div>
                                     </div>
-                                    <div class="card-contactless" aria-hidden="true">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-                                            <path d="M5 8a10 10 0 0 1 0 8"/>
-                                            <path d="M9 6a14 14 0 0 1 0 12"/>
-                                            <path d="M13 4a18 18 0 0 1 0 16"/>
-                                        </svg>
+                                    <div class="card-mid">
+                                        <div class="card-chip" aria-hidden="true">
+                                            <svg viewBox="0 0 36 28" fill="none">
+                                                <rect x="1" y="1" width="34" height="26" rx="4" fill="#d4b87a" stroke="#a18a52" stroke-width="0.5"/>
+                                                <path d="M8 6 v16 M14 6 v16 M22 6 v16 M28 6 v16 M2 14 h32" stroke="#a18a52" stroke-width="0.5"/>
+                                                <rect x="11" y="9" width="14" height="10" rx="1.5" fill="#c4a66a" stroke="#a18a52" stroke-width="0.4"/>
+                                            </svg>
+                                        </div>
+                                        <div class="card-contactless" aria-hidden="true">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                                                <path d="M5 8a10 10 0 0 1 0 8"/>
+                                                <path d="M9 6a14 14 0 0 1 0 12"/>
+                                                <path d="M13 4a18 18 0 0 1 0 16"/>
+                                            </svg>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="card-number" id="cardNumber">•••• •••• •••• ••••</div>
-                                <div class="card-bottom">
-                                    <div class="card-field card-field-name">
-                                        <div class="card-field-label">Cardholder</div>
-                                        <div class="card-field-value" id="cardName">FULL NAME</div>
-                                    </div>
-                                    <div class="card-field card-field-expiry">
-                                        <div class="card-field-label">Valid Thru</div>
-                                        <div class="card-field-value" id="cardExpiry">MM/YY</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-face card-back">
-                                <div class="card-bg"></div>
-                                <div class="card-magstripe"></div>
-                                <div class="card-back-row">
-                                    <div class="card-signature">
-                                        <span class="card-signature-text" id="cardSignature">Full Name</span>
-                                    </div>
-                                    <div class="card-cvv">
-                                        <div class="card-field-label">CVV</div>
-                                        <div class="card-cvv-value" id="cardCvv">•••</div>
+                                    <div class="card-number" id="cardNumber">•••• •••• •••• ••••</div>
+                                    <div class="card-bottom">
+                                        <div class="card-field card-field-name">
+                                            <div class="card-field-label">Cardholder</div>
+                                            <div class="card-field-value" id="cardName">FULL NAME</div>
+                                        </div>
+                                        <div class="card-field card-field-expiry">
+                                            <div class="card-field-label">Valid Thru</div>
+                                            <div class="card-field-value" id="cardExpiry">MM/YY</div>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="card-back-brand" id="cardBrandBack"></div>
+                                <div class="card-face card-back">
+                                    <div class="card-bg"></div>
+                                    <div class="card-magstripe"></div>
+                                    <div class="card-back-row">
+                                        <div class="card-signature">
+                                            <span class="card-signature-text" id="cardSignature">Full Name</span>
+                                        </div>
+                                        <div class="card-cvv">
+                                            <div class="card-field-label">CVV</div>
+                                            <div class="card-cvv-value" id="cardCvv">•••</div>
+                                        </div>
+                                    </div>
+                                    <div class="card-back-brand" id="cardBrandBack"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="card-actions">
-                    <button class="btn-primary" id="generateBtn">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <polyline points="23 4 23 10 17 10"/>
-                            <polyline points="1 20 1 14 7 14"/>
-                            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
-                        </svg>
-                        <span>Generate</span>
-                    </button>
-                    <button class="btn-secondary" id="flipBtn">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/>
-                            <path d="M21 3v5h-5"/>
-                            <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/>
-                            <path d="M3 21v-5h5"/>
-                        </svg>
-                        <span>Flip</span>
-                    </button>
-                </div>
-            </section>
+                    <div class="card-actions">
+                        <button class="btn-primary" id="generateBtn">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="23 4 23 10 17 10"/>
+                                <polyline points="1 20 1 14 7 14"/>
+                                <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+                            </svg>
+                            <span>Generate</span>
+                        </button>
+                        <button class="btn-secondary" id="flipBtn">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/>
+                                <path d="M21 3v5h-5"/>
+                                <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/>
+                                <path d="M3 21v-5h5"/>
+                            </svg>
+                            <span>Flip</span>
+                        </button>
+                    </div>
+                </section>
 
-            <section class="details-section">
-                <div class="detail-row">
-                    <div class="detail-label">Number</div>
-                    <div class="detail-value-container">
-                        <code class="detail-value mono" id="numberValue"></code>
-                        <button class="btn-copy" data-field="number" title="Copy number">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
-                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
-                            </svg>
-                        </button>
+                <section class="details-section">
+                    <div class="detail-row">
+                        <div class="detail-label">Number</div>
+                        <div class="detail-value-container">
+                            <code class="detail-value mono" id="numberValue"></code>
+                            <button class="btn-copy" data-field="number" title="Copy number">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                                </svg>
+                            </button>
+                        </div>
                     </div>
-                </div>
-                <div class="detail-row">
-                    <div class="detail-label">Cardholder</div>
-                    <div class="detail-value-container">
-                        <code class="detail-value mono" id="nameValue"></code>
-                        <button class="btn-copy" data-field="name" title="Copy name">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
-                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
-                            </svg>
-                        </button>
+                    <div class="detail-row">
+                        <div class="detail-label">Cardholder <span class="detail-label-hint">(editable)</span></div>
+                        <div class="detail-value-container">
+                            <input type="text" class="detail-value detail-value-input mono" id="nameValue"
+                                   maxlength="26" autocomplete="off" spellcheck="false"
+                                   aria-label="Cardholder name">
+                            <button class="btn-copy" data-field="name" title="Copy name">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                                </svg>
+                            </button>
+                        </div>
                     </div>
-                </div>
-                <div class="detail-row">
-                    <div class="detail-label">Expiry</div>
-                    <div class="detail-value-container">
-                        <code class="detail-value mono" id="expiryValue"></code>
-                        <button class="btn-copy" data-field="expiry" title="Copy expiry">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
-                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
-                            </svg>
-                        </button>
+                    <div class="detail-row">
+                        <div class="detail-label">Expiry</div>
+                        <div class="detail-value-container">
+                            <code class="detail-value mono" id="expiryValue"></code>
+                            <button class="btn-copy" data-field="expiry" title="Copy expiry">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                                </svg>
+                            </button>
+                        </div>
                     </div>
-                </div>
-                <div class="detail-row">
-                    <div class="detail-label">CVV</div>
-                    <div class="detail-value-container">
-                        <code class="detail-value mono" id="cvvValue"></code>
-                        <button class="btn-copy" data-field="cvv" title="Copy CVV">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
-                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
-                            </svg>
-                        </button>
+                    <div class="detail-row">
+                        <div class="detail-label">CVV</div>
+                        <div class="detail-value-container">
+                            <code class="detail-value mono" id="cvvValue"></code>
+                            <button class="btn-copy" data-field="cvv" title="Copy CVV">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                                </svg>
+                            </button>
+                        </div>
                     </div>
-                </div>
-            </section>
+                </section>
 
-            <p class="disclaimer">
-                For testing only. Numbers pass Luhn validation and use real IIN prefixes,
-                but they are not linked to any real account. Do not use for actual transactions.
-            </p>
+                <p class="disclaimer">
+                    For testing only. Numbers pass Luhn validation and use real IIN prefixes,
+                    but they are not linked to any real account. Do not use for actual transactions.
+                </p>
+            </div>
+
+            <div class="mode-panel hidden" id="validatePanel">
+                <section>
+                    <div class="section-label">Card number</div>
+                    <input type="text" class="validate-input mono" id="validateInput"
+                           placeholder="Paste or type a card number"
+                           inputmode="numeric" autocomplete="off" spellcheck="false"
+                           aria-label="Card number to validate">
+                </section>
+
+                <section class="validate-results" id="validateResults">
+                    <div class="validate-row">
+                        <div class="validate-row-label">Vendor</div>
+                        <div class="validate-row-value" id="validateVendor">—</div>
+                    </div>
+                    <div class="validate-row">
+                        <div class="validate-row-label">Length</div>
+                        <div class="validate-row-value" id="validateLength">—</div>
+                    </div>
+                    <div class="validate-row">
+                        <div class="validate-row-label">Luhn</div>
+                        <div class="validate-row-value" id="validateLuhn">—</div>
+                    </div>
+                    <div class="validate-summary" id="validateSummary"></div>
+                </section>
+            </div>
         </div>
     </div>
 
