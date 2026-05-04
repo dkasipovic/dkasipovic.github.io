@@ -394,8 +394,9 @@ function setMode(mode) {
         t.setAttribute('aria-selected', active ? 'true' : 'false');
     });
     if (!isGenerate) {
-        cardEl.classList.remove('tilting');
-        cardEl.style.transform = '';
+        resetTilt();
+    } else {
+        recalibrateOrientation();
     }
 }
 
@@ -406,6 +407,21 @@ document.querySelectorAll('.mode-tab').forEach(tab => {
 // ── Parallax tilt ─────────────────────────────────────────
 const MAX_TILT = 10;
 
+function clamp(v, min, max) {
+    return Math.max(min, Math.min(max, v));
+}
+
+function applyTilt(rx, ry) {
+    cardEl.classList.add('tilting');
+    cardEl.style.transform = 'rotateX(' + rx.toFixed(2) + 'deg) rotateY(' + ry.toFixed(2) + 'deg)';
+}
+
+function resetTilt() {
+    cardEl.classList.remove('tilting');
+    cardEl.style.transform = '';
+}
+
+// ── Mouse parallax (desktop / fine pointer) ───────────────
 function onStageMove(e) {
     const rect = cardStage.getBoundingClientRect();
     const x = (e.clientX - rect.left) / rect.width;  // 0..1
@@ -415,25 +431,84 @@ function onStageMove(e) {
     // so both axes need a negative sign to "look at" the cursor.
     const rx = -(y - 0.5) * 2 * MAX_TILT;
     const ry = -(x - 0.5) * 2 * MAX_TILT;
-    cardEl.classList.add('tilting');
-    cardEl.style.transform = 'rotateX(' + rx.toFixed(2) + 'deg) rotateY(' + ry.toFixed(2) + 'deg)';
+    applyTilt(rx, ry);
 }
 
-function onStageLeave() {
-    cardEl.classList.remove('tilting');
-    cardEl.style.transform = '';
-}
+const hasFinePointer =
+    window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
-// Only enable tilt when the device has a real pointer (skip touch).
-if (window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+if (hasFinePointer) {
     cardStage.addEventListener('mousemove', onStageMove);
-    cardStage.addEventListener('mouseleave', onStageLeave);
+    cardStage.addEventListener('mouseleave', resetTilt);
 }
+
+// ── Device orientation tilt (mobile) ──────────────────────
+// Beta = front/back tilt (-180..180), gamma = left/right tilt (-90..90).
+// 25° of phone movement maps to MAX_TILT degrees of card rotation.
+const ORIENT_RANGE = 25;
+let orientBaseline = null;
+let orientAttached = false;
+
+function onDeviceOrientation(e) {
+    if (e.beta == null || e.gamma == null) return;
+    // Only tilt while in Generate mode.
+    if (generatePanel.classList.contains('hidden')) return;
+
+    if (orientBaseline === null) {
+        orientBaseline = { beta: e.beta, gamma: e.gamma };
+        return;
+    }
+
+    const dBeta = e.beta - orientBaseline.beta;
+    const dGamma = e.gamma - orientBaseline.gamma;
+    const rx = clamp(-(dBeta / ORIENT_RANGE) * MAX_TILT, -MAX_TILT, MAX_TILT);
+    const ry = clamp((dGamma / ORIENT_RANGE) * MAX_TILT, -MAX_TILT, MAX_TILT);
+    applyTilt(rx, ry);
+}
+
+function attachDeviceOrientation() {
+    if (orientAttached) return;
+    orientAttached = true;
+    window.addEventListener('deviceorientation', onDeviceOrientation, true);
+}
+
+function recalibrateOrientation() {
+    orientBaseline = null;
+    if (orientAttached) resetTilt();
+}
+
+function maybeEnableDeviceOrientation() {
+    if (!('DeviceOrientationEvent' in window)) return;
+    const needsPermission = typeof DeviceOrientationEvent.requestPermission === 'function';
+    if (needsPermission) {
+        // iOS 13+: requestPermission must be called from a user gesture.
+        const trigger = () => {
+            DeviceOrientationEvent.requestPermission()
+                .then((result) => { if (result === 'granted') attachDeviceOrientation(); })
+                .catch(() => {});
+        };
+        document.addEventListener('touchend', trigger, { once: true, passive: true });
+        document.addEventListener('click', trigger, { once: true });
+    } else {
+        attachDeviceOrientation();
+    }
+}
+
+if (!hasFinePointer) {
+    maybeEnableDeviceOrientation();
+}
+
+// Recalibrate when device rotates or app comes back into view.
+window.addEventListener('orientationchange', recalibrateOrientation);
+document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') recalibrateOrientation();
+});
 
 // ── Wiring ────────────────────────────────────────────────
 generateBtn.addEventListener('click', () => {
     cardEl.classList.remove('flipped');
     generate();
+    recalibrateOrientation();
 });
 
 flipBtn.addEventListener('click', () => {
@@ -469,6 +544,7 @@ document.addEventListener('keydown', (e) => {
         e.preventDefault();
         cardEl.classList.remove('flipped');
         generate();
+        recalibrateOrientation();
     } else if (e.key === 'f' || e.key === 'F') {
         cardEl.classList.toggle('flipped');
     }

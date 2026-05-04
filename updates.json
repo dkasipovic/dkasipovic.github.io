@@ -2,7 +2,7 @@
   {
     "date": "2026-04-30T15:00:00Z",
     "tool": "Credit Card Generator",
-    "description": "Added validator mode, editable cardholder name, and parallax tilt on the card visual"
+    "description": "Added validator mode, editable cardholder name, mouse parallax tilt on desktop, and device-orientation tilt on phones"
   },
   {
     "date": "2026-04-30T12:00:00Z",

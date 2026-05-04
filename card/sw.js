@@ -1,5 +1,5 @@
-const PRECACHE_NAME = 'card-precache-v2';
-const RUNTIME_NAME = 'card-runtime-v2';
+const PRECACHE_NAME = 'card-precache-v3';
+const RUNTIME_NAME = 'card-runtime-v3';
 
 const PRECACHE_ASSETS = [
   './',
