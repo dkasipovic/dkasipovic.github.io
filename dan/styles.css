@@ -1,0 +1,214 @@
+/* Variables and reset inherited from /shared/styles.css */
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 24px;
+}
+
+/* Picker */
+.picker-section {
+    margin-bottom: 24px;
+}
+
+.picker-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.picker-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    white-space: nowrap;
+}
+
+.picker-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.picker-sep {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+select {
+    appearance: none;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    font-size: 15px;
+    font-weight: 600;
+    padding: 10px 36px 10px 14px;
+    cursor: pointer;
+    transition: border-color 0.15s ease, background 0.15s ease;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23606068' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+}
+
+select:hover {
+    border-color: var(--border-light);
+    background-color: var(--bg-tertiary);
+}
+
+select:focus {
+    outline: none;
+    border-color: var(--accent);
+}
+
+#daySelect {
+    min-width: 72px;
+}
+
+#monthSelect {
+    min-width: 100px;
+}
+
+/* Table */
+.table-wrapper {
+    overflow-x: auto;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+    min-width: 600px;
+}
+
+thead th {
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 12px 10px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+}
+
+thead th.year-header {
+    text-align: left;
+    padding-left: 16px;
+    position: sticky;
+    left: 0;
+    z-index: 3;
+}
+
+thead th.weekend {
+    color: var(--text-muted);
+}
+
+tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: background 0.1s ease;
+}
+
+tbody tr:last-child {
+    border-bottom: none;
+}
+
+tbody tr:hover {
+    background: var(--bg-tertiary);
+}
+
+tbody tr.current-year {
+    border-left: 3px solid var(--accent);
+}
+
+tbody tr.current-year .year-cell {
+    color: var(--accent);
+}
+
+td {
+    padding: 10px;
+    text-align: center;
+    font-size: 13px;
+    color: var(--text-secondary);
+    white-space: nowrap;
+}
+
+td.year-cell {
+    text-align: left;
+    padding-left: 16px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-muted);
+    background: var(--bg-primary);
+    position: sticky;
+    left: 0;
+    z-index: 1;
+    border-right: 1px solid var(--border);
+}
+
+tbody tr:hover td.year-cell {
+    background: var(--bg-tertiary);
+}
+
+tbody tr.current-year td.year-cell {
+    background: var(--bg-primary);
+}
+
+tbody tr.current-year:hover td.year-cell {
+    background: var(--bg-tertiary);
+}
+
+td.selected {
+    background: rgba(34, 197, 94, 0.18);
+    color: #4ade80;
+    font-weight: 700;
+    border-radius: 6px;
+    position: relative;
+}
+
+td.selected::after {
+    content: '';
+    position: absolute;
+    inset: 3px;
+    border: 1px solid rgba(34, 197, 94, 0.4);
+    border-radius: 4px;
+    pointer-events: none;
+}
+
+td.other-month {
+    color: var(--text-muted);
+    opacity: 0.5;
+}
+
+td.invalid {
+    color: var(--text-muted);
+    opacity: 0.3;
+    font-size: 16px;
+}
+
+td.weekend-col {
+    color: var(--text-muted);
+}
+
+@media (max-width: 600px) {
+    .container {
+        padding: 16px;
+    }
+
+    td, thead th {
+        padding: 9px 7px;
+        font-size: 12px;
+    }
+
+    td.year-cell {
+        padding-left: 10px;
+    }
+}
