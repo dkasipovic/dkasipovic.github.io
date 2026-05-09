@@ -1,20 +1,15 @@
 /* Full-viewport layout: picker fixed top, table scrolls below */
-body {
-    height: 100dvh;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-}
 
+/* Container spans the full screen below the always-present 56px titlebar */
 .container {
-    flex: 1;
+    position: fixed;
+    top: 56px;
+    left: 0;
+    right: 0;
+    bottom: 0;
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    min-height: 0;
-    width: 100%;
-    max-width: 100%;
-    padding: 0;
 }
 
 /* Picker bar */
