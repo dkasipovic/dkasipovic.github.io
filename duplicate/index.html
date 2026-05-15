@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#8b5cf6">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Duplicates">
+    <link rel="apple-touch-icon" href="icon.svg">
+    <link rel="manifest" href="manifest.json">
+    <title>Duplicate Counter - Kasipovic</title>
+    <link rel="stylesheet" href="/shared/styles.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="input-section">
+            <div class="textarea-wrapper">
+                <textarea id="textInput" placeholder="Paste your text here — each line will be counted…" spellcheck="false"></textarea>
+                <button class="btn-clear" id="clearBtn" title="Clear text">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <div class="controls" id="controls">
+            <div class="btn-group" id="filterGroup">
+                <button class="active" data-filter="all">All</button>
+                <button data-filter="duplicates">Duplicates</button>
+                <button data-filter="unique">Unique</button>
+            </div>
+            <div class="btn-group sort-group" id="sortGroup">
+                <button data-sort="alpha-asc">A→Z</button>
+                <button data-sort="alpha-desc">Z→A</button>
+                <button data-sort="count-asc">Count ↑</button>
+                <button class="active" data-sort="count-desc">Count ↓</button>
+            </div>
+        </div>
+
+        <div class="results-section" id="resultsSection">
+            <div class="stats-bar">
+                <span class="stats-text" id="statsText"></span>
+                <button class="btn-copy-tsv" id="copyTsvBtn" title="Copy results as TSV">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                    </svg>
+                    Copy TSV
+                </button>
+            </div>
+            <div class="table-wrapper">
+                <table class="results-table" id="resultsTable">
+                    <thead>
+                        <tr>
+                            <th class="col-line">Line</th>
+                            <th class="col-count">Count</th>
+                            <th class="col-action"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="resultsBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="empty-state" id="emptyState">
+            <div class="empty-icon">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="8" y1="6" x2="21" y2="6"/>
+                    <line x1="8" y1="12" x2="21" y2="12"/>
+                    <line x1="8" y1="18" x2="21" y2="18"/>
+                    <line x1="3" y1="6" x2="3.01" y2="6"/>
+                    <line x1="3" y1="12" x2="3.01" y2="12"/>
+                    <line x1="3" y1="18" x2="3.01" y2="18"/>
+                </svg>
+            </div>
+            <p>Paste text above to count duplicate lines</p>
+        </div>
+    </div>
+
+    <script src="/shared/app.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>

@@ -1,5 +1,10 @@
 [
   {
+    "date": "2026-05-15T12:00:00Z",
+    "tool": "Duplicate Counter",
+    "description": "Added Duplicate Counter tool to find and count repeated lines in text"
+  },
+  {
     "date": "2026-05-09T10:00:00Z",
     "tool": "Day Calendar",
     "description": "Added Day Calendar tool to see on which weekday a date falls across 31 years"

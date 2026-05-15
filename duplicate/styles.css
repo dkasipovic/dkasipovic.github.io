@@ -1,0 +1,314 @@
+.container {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 24px;
+}
+
+/* Input */
+
+.textarea-wrapper {
+    position: relative;
+}
+
+#textInput {
+    width: 100%;
+    min-height: 200px;
+    padding: 14px 16px;
+    padding-right: 40px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+    font-size: 13px;
+    line-height: 1.6;
+    resize: vertical;
+    box-sizing: border-box;
+    transition: border-color 0.15s ease;
+    outline: none;
+}
+
+#textInput:focus {
+    border-color: var(--accent);
+}
+
+#textInput::placeholder {
+    color: var(--text-muted);
+}
+
+.btn-clear {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    border-radius: var(--radius-sm);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: color 0.15s ease, background 0.15s ease;
+}
+
+.btn-clear:hover {
+    color: var(--text-primary);
+    background: var(--bg-hover);
+}
+
+/* Controls */
+
+.controls {
+    display: flex;
+    gap: 12px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+}
+
+.btn-group {
+    display: flex;
+    gap: 2px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 3px;
+}
+
+.btn-group button {
+    padding: 6px 14px;
+    background: transparent;
+    border: none;
+    border-radius: 7px;
+    color: var(--text-secondary);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: color 0.15s ease, background 0.15s ease;
+    white-space: nowrap;
+}
+
+.btn-group button:hover {
+    color: var(--text-primary);
+    background: var(--bg-hover);
+}
+
+.btn-group button.active {
+    background: var(--accent);
+    color: #fff;
+}
+
+.sort-group {
+    margin-left: auto;
+}
+
+/* Results */
+
+.results-section {
+    margin-top: 20px;
+    display: none;
+}
+
+.results-section.visible {
+    display: block;
+}
+
+.stats-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0 14px;
+    gap: 12px;
+}
+
+.stats-text {
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+.stats-text strong {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.btn-copy-tsv {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--text-secondary);
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+    white-space: nowrap;
+}
+
+.btn-copy-tsv:hover {
+    color: var(--text-primary);
+    border-color: var(--border-light);
+}
+
+.btn-copy-tsv.copied {
+    color: var(--success);
+    border-color: var(--success);
+}
+
+.table-wrapper {
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+}
+
+.results-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.results-table th {
+    padding: 10px 14px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border);
+}
+
+.results-table th.col-count,
+.results-table td.col-count {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+.results-table th.col-action,
+.results-table td.col-action {
+    width: 36px;
+    padding: 0 10px;
+}
+
+.results-table tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: background 0.1s ease;
+}
+
+.results-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.results-table tbody tr:hover {
+    background: var(--bg-hover);
+}
+
+.results-table tbody tr:hover .btn-copy-line {
+    opacity: 1;
+}
+
+.results-table td {
+    padding: 9px 14px;
+    color: var(--text-primary);
+    vertical-align: middle;
+}
+
+.results-table td.col-line {
+    font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+    font-size: 12px;
+    word-break: break-all;
+}
+
+.results-table td.col-count {
+    font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.results-table tr.is-duplicate {
+    background: var(--accent-glow);
+    border-left: 2px solid var(--accent);
+}
+
+.results-table tr.is-duplicate:hover {
+    background: rgba(139, 92, 246, 0.12);
+}
+
+.results-table tr.is-duplicate td.col-count {
+    color: var(--accent);
+}
+
+.btn-copy-line {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    background: transparent;
+    border: none;
+    border-radius: var(--radius-sm);
+    color: var(--text-muted);
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.15s ease, color 0.15s ease, background 0.15s ease;
+}
+
+.btn-copy-line:hover {
+    color: var(--text-primary);
+    background: var(--bg-hover);
+}
+
+.btn-copy-line.copied {
+    color: var(--success);
+    opacity: 1;
+}
+
+/* Empty state */
+
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 60px 0 40px;
+    color: var(--text-muted);
+    text-align: center;
+}
+
+.empty-state p {
+    margin: 0;
+    font-size: 14px;
+}
+
+.empty-state.hidden {
+    display: none;
+}
+
+/* Mobile */
+
+@media (max-width: 500px) {
+    .container {
+        padding: 16px;
+    }
+
+    .controls {
+        gap: 8px;
+    }
+
+    .sort-group {
+        margin-left: 0;
+    }
+
+    .btn-group button {
+        padding: 6px 10px;
+        font-size: 12px;
+    }
+
+    .btn-copy-line {
+        opacity: 1;
+    }
+}
