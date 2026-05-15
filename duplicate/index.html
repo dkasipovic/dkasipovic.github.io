@@ -46,13 +46,22 @@
         <div class="results-section" id="resultsSection">
             <div class="stats-bar">
                 <span class="stats-text" id="statsText"></span>
-                <button class="btn-copy-tsv" id="copyTsvBtn" title="Copy results as TSV">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
-                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
-                    </svg>
-                    Copy TSV
-                </button>
+                <div class="copy-btns">
+                    <button class="btn-copy-tsv" id="copyLinesBtn" title="Copy visible lines without counts">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                        </svg>
+                        Copy Lines
+                    </button>
+                    <button class="btn-copy-tsv" id="copyTsvBtn" title="Copy results as TSV">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                        </svg>
+                        Copy TSV
+                    </button>
+                </div>
             </div>
             <div class="table-wrapper">
                 <table class="results-table" id="resultsTable">
