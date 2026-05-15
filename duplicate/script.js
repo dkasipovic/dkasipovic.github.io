@@ -4,6 +4,7 @@ const filterGroup = document.getElementById('filterGroup');
 const sortGroup = document.getElementById('sortGroup');
 const resultsSection = document.getElementById('resultsSection');
 const statsText = document.getElementById('statsText');
+const copyLinesBtn = document.getElementById('copyLinesBtn');
 const copyTsvBtn = document.getElementById('copyTsvBtn');
 const resultsBody = document.getElementById('resultsBody');
 const emptyState = document.getElementById('emptyState');
@@ -130,6 +131,18 @@ resultsBody.addEventListener('click', (e) => {
     const btn = e.target.closest('.btn-copy-line');
     if (!btn) return;
     copyToClipboard(btn.dataset.line, btn);
+});
+
+copyLinesBtn.addEventListener('click', () => {
+    const text = textInput.value;
+    if (!text.trim()) return;
+    const all = processText(text);
+    const visible = applySort(applyFilter(all));
+    const lines = visible.map(({ line }) => line).join('\n');
+    copyToClipboard(lines, copyLinesBtn);
+    const original = copyLinesBtn.innerHTML;
+    copyLinesBtn.textContent = 'Copied!';
+    setTimeout(() => { copyLinesBtn.innerHTML = original; }, 1500);
 });
 
 copyTsvBtn.addEventListener('click', () => {

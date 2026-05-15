@@ -120,6 +120,13 @@
     justify-content: space-between;
     padding: 10px 0 14px;
     gap: 12px;
+    flex-wrap: wrap;
+}
+
+.copy-btns {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
 }
 
 .stats-text {
