@@ -1,118 +1,124 @@
+/* SpeedTest Pro — local overrides on top of /shared/styles.css */
+
 :root {
-  --bg-primary: #0f172a;
-  --bg-secondary: #1e293b;
-  --bg-tertiary: #334155;
-  --text-primary: #f1f5f9;
-  --text-secondary: #94a3b8;
-  --text-muted: #64748b;
-  --accent: #3b82f6;
-  --accent-hover: #2563eb;
-  --success: #22c55e;
-  --warning: #eab308;
-  --danger: #ef4444;
-  --border: #475569;
-  --gauge-bg: #1e293b;
-  --gauge-track: #334155;
+  --accent-hover: #7c3aed;
+  --danger: var(--error);
+  --gauge-bg: var(--bg-secondary);
+  --gauge-track: var(--bg-tertiary);
 }
 
-[data-theme="light"] {
-  --bg-primary: #f8fafc;
-  --bg-secondary: #ffffff;
-  --bg-tertiary: #e2e8f0;
-  --text-primary: #0f172a;
-  --text-secondary: #475569;
-  --text-muted: #94a3b8;
-  --border: #cbd5e1;
-  --gauge-bg: #ffffff;
-  --gauge-track: #e2e8f0;
+/* Desktop: sidebar handles branding, hide the shared app titlebar */
+.app-titlebar {
+  display: none;
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+body.has-app-bar {
+  padding-top: 0;
 }
 
+
+/* ── App Shell ── */
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-  background: var(--bg-primary);
-  color: var(--text-primary);
-  min-height: 100vh;
-  transition: background 0.3s, color 0.3s;
+  overflow: hidden;
 }
 
-/* Header */
-.header {
-  background: var(--bg-secondary);
-  border-bottom: 1px solid var(--border);
-  padding: 1rem 2rem;
+.app {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  height: 100vh;
+  height: 100dvh;
+}
+
+/* ── Sidebar (Desktop) ── */
+.sidebar {
+  width: 240px;
+  background: var(--bg-secondary);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+.sidebar-header {
+  padding: 24px 20px;
+  border-bottom: 1px solid var(--border);
 }
 
 .logo {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--accent);
-}
-
-.header-actions {
   display: flex;
-  gap: 1rem;
   align-items: center;
+  gap: 12px;
 }
 
-.theme-toggle {
-  background: var(--bg-tertiary);
-  border: 1px solid var(--border);
-  color: var(--text-primary);
-  padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
-  cursor: pointer;
-  font-size: 1rem;
-  transition: all 0.2s;
+/* Back button inside sidebar logo row (injected via JS when #app) */
+.logo .app-back-btn {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
 }
 
-.theme-toggle:hover {
-  background: var(--border);
-}
-
-/* Navigation */
-.nav {
+.logo-icon {
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-hover) 100%);
+  border-radius: 10px;
   display: flex;
-  gap: 0;
-  background: var(--bg-secondary);
-  border-bottom: 1px solid var(--border);
-  padding: 0 2rem;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
 }
 
-.nav-btn {
-  background: none;
+.logo-text {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+}
+
+.nav-items {
+  padding: 12px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
   border: none;
+  border-radius: 8px;
+  background: transparent;
   color: var(--text-secondary);
-  padding: 1rem 1.5rem;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
   cursor: pointer;
-  font-size: 1rem;
-  border-bottom: 2px solid transparent;
-  transition: all 0.2s;
+  transition: all 0.2s ease;
+  width: 100%;
+  text-align: left;
 }
 
-.nav-btn:hover {
-  color: var(--text-primary);
+.nav-item:hover {
   background: var(--bg-tertiary);
+  color: var(--text-primary);
 }
 
-.nav-btn.active {
+.nav-item.active {
+  background: var(--accent-glow);
   color: var(--accent);
-  border-bottom-color: var(--accent);
 }
 
-/* Main Content */
-.main {
-  padding: 2rem;
-  max-width: 1400px;
-  margin: 0 auto;
+.nav-item.active svg {
+  stroke: var(--accent);
+}
+
+/* ── Main Content ── */
+.content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 32px 40px;
 }
 
 .tab-content {
@@ -123,17 +129,66 @@ body {
   display: block;
 }
 
-/* Speed Test Tab */
+.panel-header {
+  margin-bottom: 32px;
+}
+
+.panel-header h1 {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  margin-bottom: 6px;
+}
+
+.panel-subtitle {
+  color: var(--text-secondary);
+  font-size: 15px;
+}
+
+/* ── Bottom Navigation (Mobile) ── */
+.bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--bg-secondary);
+  border-top: 1px solid var(--border);
+  padding: 8px 0;
+  padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px));
+  z-index: 100;
+}
+
+.bottom-nav-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 0;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.bottom-nav-item.active {
+  color: var(--accent);
+}
+
+.bottom-nav-item.active svg {
+  stroke: var(--accent);
+}
+
+/* ── Speed Test Tab ── */
 .test-container {
   display: grid;
   grid-template-columns: 1fr 350px;
   gap: 2rem;
-}
-
-@media (max-width: 1024px) {
-  .test-container {
-    grid-template-columns: 1fr;
-  }
 }
 
 .test-main {
@@ -222,16 +277,19 @@ body {
   align-items: center;
   justify-content: center;
   margin: 0 auto 0.5rem;
-  font-size: 1.25rem;
+  color: var(--text-secondary);
+  transition: all 0.3s ease;
 }
 
 .status-icon.active {
   background: var(--accent);
+  color: #fff;
   animation: pulse 1s infinite;
 }
 
 .status-icon.done {
   background: var(--success);
+  color: #fff;
 }
 
 @keyframes pulse {
@@ -350,12 +408,6 @@ body {
   margin-top: 2rem;
 }
 
-@media (max-width: 768px) {
-  .results-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
 .result-card {
   background: var(--bg-secondary);
   border-radius: 1rem;
@@ -365,8 +417,8 @@ body {
 }
 
 .result-icon {
-  font-size: 1.5rem;
   margin-bottom: 0.5rem;
+  color: var(--accent);
 }
 
 .result-value {
@@ -476,16 +528,11 @@ body {
 /* History Tab */
 .history-header {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
   margin-bottom: 1.5rem;
   flex-wrap: wrap;
   gap: 1rem;
-}
-
-.history-title {
-  font-size: 1.5rem;
-  font-weight: 600;
 }
 
 .history-actions {
@@ -612,8 +659,8 @@ body {
 }
 
 .empty-state-icon {
-  font-size: 4rem;
   margin-bottom: 1rem;
+  color: var(--text-muted);
 }
 
 /* Map Tab */
@@ -630,7 +677,7 @@ body {
 }
 
 .leaflet-popup-content {
-  font-family: inherit;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
 }
 
 .map-popup {
@@ -681,19 +728,42 @@ body {
   max-height: 400px;
 }
 
-/* Responsive */
+/* ── Responsive ── */
+@media (max-width: 1024px) {
+  .test-container {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (max-width: 768px) {
-  .header {
-    padding: 1rem;
+  .app-titlebar {
+    display: flex;
   }
 
-  .nav {
-    padding: 0 1rem;
-    overflow-x: auto;
+  body.has-app-bar {
+    padding-top: 56px;
   }
 
-  .main {
-    padding: 1rem;
+  .sidebar {
+    display: none;
+  }
+
+  .app {
+    flex-direction: column;
+  }
+
+  .bottom-nav {
+    display: flex;
+  }
+
+  .panel-header {
+    display: none;
+  }
+
+  .content {
+    padding: 24px 20px;
+    padding-top: 24px;
+    padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px));
   }
 
   .gauge-container {
@@ -705,9 +775,29 @@ body {
     font-size: 3rem;
   }
 
+  .results-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
   .history-table {
     display: block;
     overflow-x: auto;
+  }
+
+  .content {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .content::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .content {
+    padding: 20px 16px;
+    padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px));
   }
 }
 
@@ -718,20 +808,19 @@ body {
 .quality-poor { color: var(--danger); }
 
 /* Scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+.content::-webkit-scrollbar {
+  width: 6px;
 }
 
-::-webkit-scrollbar-track {
-  background: var(--bg-primary);
+.content::-webkit-scrollbar-track {
+  background: transparent;
 }
 
-::-webkit-scrollbar-thumb {
-  background: var(--border);
-  border-radius: 4px;
+.content::-webkit-scrollbar-thumb {
+  background: var(--border-light);
+  border-radius: 3px;
 }
 
-::-webkit-scrollbar-thumb:hover {
+.content::-webkit-scrollbar-thumb:hover {
   background: var(--text-muted);
 }

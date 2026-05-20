@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#0a0a0a">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -11,18 +11,11 @@
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-192.png">
 <title>WHOIS Lookup</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/shared/styles.css">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 <div class="app">
-  <header class="header">
-    <div class="logo"><span class="logo-dot"></span>whois</div>
-    <div class="tagline">domain lookup via RDAP</div>
-  </header>
-
   <div class="search-wrap">
     <form class="search-box" id="searchForm" autocomplete="off">
       <input
@@ -62,6 +55,7 @@
   </div>
 </div>
 
+<script src="/shared/app.js"></script>
 <script src="script.js"></script>
 </body>
 </html>

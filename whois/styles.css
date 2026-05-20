@@ -1,21 +1,12 @@
-*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
 :root {
-  --bg: #0a0a0a;
-  --surface: #141414;
-  --surface2: #1c1c1c;
-  --border: #252525;
-  --border-focus: #3a3a3a;
-  --text: #e8e8e8;
-  --text-dim: #808080;
-  --text-muted: #555;
-  --accent: #22c55e;
-  --accent-dim: #166534;
-  --accent-glow: rgba(34, 197, 94, 0.08);
-  --error: #ef4444;
-  --warning: #f59e0b;
-  --mono: 'JetBrains Mono', monospace;
-  --sans: 'DM Sans', system-ui, sans-serif;
+  --bg: var(--bg-primary);
+  --surface: var(--bg-secondary);
+  --surface2: var(--bg-tertiary);
+  --border-focus: var(--border-light);
+  --text: var(--text-primary);
+  --text-dim: var(--text-secondary);
+  --mono: ui-monospace, 'SF Mono', 'Cascadia Code', 'Segoe UI Mono', Menlo, Monaco, Consolas, monospace;
+  --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
   --radius: 12px;
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
@@ -131,13 +122,13 @@ body {
   flex-shrink: 0;
 }
 
-.search-btn:hover { background: #16a34a; }
-.search-btn:active { background: #15803d; }
+.search-btn:hover { background: #7c3aed; }
+.search-btn:active { background: #6d28d9; }
 
 .search-btn svg {
   width: 20px;
   height: 20px;
-  color: #000;
+  color: #fff;
 }
 
 .search-btn:disabled {
@@ -261,7 +252,7 @@ body {
 }
 
 .status-registered {
-  background: rgba(34, 197, 94, 0.1);
+  background: var(--accent-glow);
   color: var(--accent);
 }
 

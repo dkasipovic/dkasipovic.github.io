@@ -1,0 +1,122 @@
+[
+  {
+    "date": "2026-05-15T12:00:00Z",
+    "tool": "Duplicate Counter",
+    "description": "Added Duplicate Counter tool to find and count repeated lines in text"
+  },
+  {
+    "date": "2026-05-09T10:00:00Z",
+    "tool": "Day Calendar",
+    "description": "Added Day Calendar tool to see on which weekday a date falls across 31 years"
+  },
+  {
+    "date": "2026-04-30T12:00:00Z",
+    "tool": "Credit Card Generator",
+    "description": "Added Luhn-valid test card generator with realistic card visualization"
+  },
+  {
+    "date": "2026-03-30T12:00:00Z",
+    "tool": "Вук",
+    "description": "Added score tracking mode, TV/landscape layout, and settings reset"
+  },
+  {
+    "date": "2026-03-29T12:00:00Z",
+    "tool": "Вук",
+    "description": "Added Cyrillic sentence generator for primary school reading practice"
+  },
+  {
+    "date": "2026-02-28T12:00:00Z",
+    "tool": "Currency",
+    "description": "Added currency converter with live rates and history"
+  },
+  {
+    "date": "2026-02-25T21:00:00Z",
+    "tool": "WHOIS Lookup",
+    "description": "Fixed titlebar sliding under iPhone status bar"
+  },
+  {
+    "date": "2026-02-25T20:00:00Z",
+    "tool": "WHOIS Lookup",
+    "description": "Updated color scheme to match site-wide purple accent"
+  },
+  {
+    "date": "2026-02-25T18:00:00Z",
+    "tool": "SpeedTest",
+    "description": "Fixed header overlap when opened from index — back button now shows in both mobile titlebar and desktop sidebar"
+  },
+  {
+    "date": "2026-02-25T17:00:00Z",
+    "tool": "SpeedTest",
+    "description": "Redesigned navigation to match the main index — sidebar on desktop, bottom bar on mobile, dark mode only"
+  },
+  {
+    "date": "2026-02-25T16:00:00Z",
+    "tool": "All Tools",
+    "description": "Unified app titlebar across all tools — shows title always, back button only when opened from the tools index"
+  },
+  {
+    "date": "2026-02-25T15:00:00Z",
+    "tool": "Speedometer",
+    "description": "Fixed initialization error caused by duplicated wake lock code preventing the GPS tracker from loading"
+  },
+  {
+    "date": "2026-02-25T14:00:00Z",
+    "tool": "Tools Index",
+    "description": "Removed external font dependencies across all tools and introduced shared design system with consistent styling"
+  },
+  {
+    "date": "2026-02-25T13:30:00Z",
+    "tool": "Kamere",
+    "description": "Updated Kamere to use the shared design system for consistent styling across all tools"
+  },
+  {
+    "date": "2026-02-25T13:00:00Z",
+    "tool": "WHOIS Lookup",
+    "description": "Removed Google Fonts dependency and updated to use the shared design system"
+  },
+  {
+    "date": "2026-02-25T12:30:00Z",
+    "tool": "DocEdit",
+    "description": "Removed Google Fonts dependency and updated to use the shared design system"
+  },
+  {
+    "date": "2026-02-25T12:00:00Z",
+    "tool": "SpeedTest Pro",
+    "description": "Updated SpeedTest Pro to use the shared design system for consistent styling across all tools"
+  },
+  {
+    "date": "2026-02-25T11:30:00Z",
+    "tool": "Image Tool",
+    "description": "Updated Image Tool to use the shared design system for consistent styling across all tools"
+  },
+  {
+    "date": "2026-02-25T11:00:00Z",
+    "tool": "GPS Speed",
+    "description": "Updated GPS Speed to use the shared design system for consistent styling across all tools"
+  },
+  {
+    "date": "2026-02-25T10:30:00Z",
+    "tool": "IP Scanner",
+    "description": "Updated IP Scanner to use the shared design system for consistent styling across all tools"
+  },
+  {
+    "date": "2026-02-25T10:00:00Z",
+    "tool": "Hash Calculator",
+    "description": "Updated Hash Calculator to use the shared design system for consistent styling across all tools"
+  },
+  {
+    "date": "2026-02-24T14:00:00Z",
+    "tool": "EXIF Inspector",
+    "description": "Updated EXIF Inspector to use the shared design system for consistent styling across all tools"
+  },
+  {
+    "date": "2026-02-24T12:00:00Z",
+    "tool": "QR Studio",
+    "description": "Updated QR Studio to use the shared design system for consistent styling across all tools"
+  },
+  {
+    "date": "2026-02-22T12:00:00Z",
+    "tool": "Tools Index",
+    "description": "Launched the tools index page with PWA support, offline capability, and responsive design"
+  }
+]

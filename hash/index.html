@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#8b5cf6">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Hash">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <link rel="manifest" href="manifest.json">
+    <title>Hash Calculator - Kasipovic</title>
+    <link rel="stylesheet" href="/shared/styles.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="main-layout">
+            <div class="drop-zone" id="dropZone">
+                <div class="drop-zone-icon">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <polyline points="14 2 14 8 20 8"/>
+                        <line x1="12" y1="18" x2="12" y2="12"/>
+                        <line x1="9" y1="15" x2="12" y2="12"/>
+                        <line x1="15" y1="15" x2="12" y2="12"/>
+                    </svg>
+                </div>
+                <div class="drop-zone-text">Drop a file here</div>
+                <div class="drop-zone-hint">or click to browse</div>
+                <input type="file" id="fileInput">
+            </div>
+
+            <div class="file-info" id="fileInfo">
+                <div class="file-info-details">
+                    <div class="file-info-name" id="fileName"></div>
+                    <div class="file-info-meta" id="fileMeta"></div>
+                </div>
+                <button class="btn-new" id="loadNewBtn" title="Load another file">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="progress-container" id="progressContainer">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="progress-text" id="progressText">Calculating hashes...</div>
+            </div>
+
+            <div class="results" id="results">
+                <div class="hash-row" id="md5Row">
+                    <div class="hash-label">
+                        <span class="hash-name">MD5</span>
+                        <span class="hash-bits">128-bit</span>
+                    </div>
+                    <div class="hash-value-container">
+                        <code class="hash-value" id="md5Value"></code>
+                        <button class="btn-copy" data-hash="md5" title="Copy">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="hash-row" id="sha1Row">
+                    <div class="hash-label">
+                        <span class="hash-name">SHA-1</span>
+                        <span class="hash-bits">160-bit</span>
+                    </div>
+                    <div class="hash-value-container">
+                        <code class="hash-value" id="sha1Value"></code>
+                        <button class="btn-copy" data-hash="sha1" title="Copy">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="hash-row" id="sha256Row">
+                    <div class="hash-label">
+                        <span class="hash-name">SHA-256</span>
+                        <span class="hash-bits">256-bit</span>
+                    </div>
+                    <div class="hash-value-container">
+                        <code class="hash-value" id="sha256Value"></code>
+                        <button class="btn-copy" data-hash="sha256" title="Copy">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="hash-row" id="sha384Row">
+                    <div class="hash-label">
+                        <span class="hash-name">SHA-384</span>
+                        <span class="hash-bits">384-bit</span>
+                    </div>
+                    <div class="hash-value-container">
+                        <code class="hash-value" id="sha384Value"></code>
+                        <button class="btn-copy" data-hash="sha384" title="Copy">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="hash-row" id="sha512Row">
+                    <div class="hash-label">
+                        <span class="hash-name">SHA-512</span>
+                        <span class="hash-bits">512-bit</span>
+                    </div>
+                    <div class="hash-value-container">
+                        <code class="hash-value" id="sha512Value"></code>
+                        <button class="btn-copy" data-hash="sha512" title="Copy">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="hash-row" id="crc32Row">
+                    <div class="hash-label">
+                        <span class="hash-name">CRC-32</span>
+                        <span class="hash-bits">32-bit</span>
+                    </div>
+                    <div class="hash-value-container">
+                        <code class="hash-value" id="crc32Value"></code>
+                        <button class="btn-copy" data-hash="crc32" title="Copy">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/shared/app.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>

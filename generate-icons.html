@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Generate Root Icons</title>
+</head>
+
+<body>
+    <h1>Root Icon Generator</h1>
+    <p>This page generates icon-192.png and icon-512.png from icon.svg. They will download automatically.</p>
+    <script>
+        async function generateIcon(size) {
+            const res = await fetch('icon.svg');
+            const svgText = await res.text();
+
+            const canvas = document.createElement('canvas');
+            canvas.width = size;
+            canvas.height = size;
+            const ctx = canvas.getContext('2d');
+
+            const img = new Image();
+            const svgBlob = new Blob([svgText], { type: 'image/svg+xml' });
+            const url = URL.createObjectURL(svgBlob);
+
+            img.onload = function () {
+                ctx.drawImage(img, 0, 0, size, size);
+                URL.revokeObjectURL(url);
+
+                canvas.toBlob(function (blob) {
+                    const a = document.createElement('a');
+                    a.download = `icon-${size}.png`;
+                    a.href = URL.createObjectURL(blob);
+                    a.click();
+                    console.log(`Generated icon-${size}.png`);
+                });
+            };
+
+            img.src = url;
+        }
+
+        setTimeout(() => generateIcon(192), 100);
+        setTimeout(() => generateIcon(512), 500);
+
+        console.log('Icons will download automatically...');
+    </script>
+</body>
+
+</html>

@@ -10,44 +10,52 @@ let mapInitialized = false;
 
 // ===== INITIALIZATION =====
 document.addEventListener('DOMContentLoaded', async () => {
-  initTheme();
+  initAppContext();
   initNavigation();
   await detectDeviceInfo();
   renderHistory();
 });
 
-// ===== THEME =====
-function initTheme() {
-  const saved = localStorage.getItem('speedtest-theme') || 'dark';
-  document.documentElement.setAttribute('data-theme', saved);
-  updateThemeButton(saved);
-}
+// ===== APP CONTEXT =====
+// When opened from the main index (#app hash), inject a back button into the
+// desktop sidebar header so the user can navigate back.
+function initAppContext() {
+  if (window.location.hash !== '#app') return;
 
-function toggleTheme() {
-  const current = document.documentElement.getAttribute('data-theme');
-  const next = current === 'dark' ? 'light' : 'dark';
-  document.documentElement.setAttribute('data-theme', next);
-  localStorage.setItem('speedtest-theme', next);
-  updateThemeButton(next);
-}
+  const header = document.querySelector('.sidebar-header .logo');
+  if (!header) return;
 
-function updateThemeButton(theme) {
-  const btn = document.querySelector('.theme-toggle');
-  btn.textContent = theme === 'dark' ? '☀️ Light' : '🌙 Dark';
+  const backBtn = document.createElement('a');
+  backBtn.href = '/';
+  backBtn.className = 'app-back-btn';
+  backBtn.setAttribute('aria-label', 'Back to Tools');
+  backBtn.innerHTML =
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+      '<polyline points="15 18 9 12 15 6"/>' +
+    '</svg>';
+
+  header.insertBefore(backBtn, header.firstChild);
 }
 
 // ===== NAVIGATION =====
 function initNavigation() {
-  document.querySelectorAll('.nav-btn').forEach(btn => {
+  const allButtons = document.querySelectorAll('[data-tab]');
+  const panels = document.querySelectorAll('.tab-content');
+
+  allButtons.forEach(btn => {
     btn.addEventListener('click', () => {
       const tab = btn.dataset.tab;
-      
-      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      
-      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+
+      // Remove active from ALL buttons
+      allButtons.forEach(b => b.classList.remove('active'));
+      // Add active to all buttons matching this tab (sidebar + bottom nav)
+      document.querySelectorAll(`[data-tab="${tab}"]`).forEach(b => b.classList.add('active'));
+
+      // Hide all panels, show selected
+      panels.forEach(p => p.classList.remove('active'));
       document.getElementById(`tab-${tab}`).classList.add('active');
-      
+
+      // Lazy-load map/charts when needed
       if (tab === 'map') {
         setTimeout(() => initMap(), 100);
       } else if (tab === 'charts') {
@@ -831,9 +839,8 @@ function initChart() {
     chart.destroy();
   }
   
-  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-  const gridColor = isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)';
-  const textColor = isDark ? '#94a3b8' : '#64748b';
+  const gridColor = 'rgba(255,255,255,0.1)';
+  const textColor = '#94a3b8';
   
   chart = new Chart(ctx, {
     type: 'line',

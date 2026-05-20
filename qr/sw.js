@@ -1,12 +1,13 @@
-const CACHE_NAME = 'qr-studio-v1';
+const CACHE_NAME = 'qr-studio-v3';
 const ASSETS = [
   './',
   './index.html',
   './manifest.json',
   './icon-192.png',
   './icon-512.png',
-  'https://unpkg.com/qr-code-styling@1.6.0-rc.1/lib/qr-code-styling.js',
-  'https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap'
+  '/shared/styles.css',
+  '/shared/app.js',
+  'https://unpkg.com/qr-code-styling@1.6.0-rc.1/lib/qr-code-styling.js'
 ];
 
 // Install event - cache assets

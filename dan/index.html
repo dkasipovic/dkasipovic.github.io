@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#8b5cf6">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Day Calendar">
+    <link rel="apple-touch-icon" href="/icon-192.png">
+    <link rel="manifest" href="manifest.json">
+    <title>Day Calendar - Kasipovic</title>
+    <link rel="stylesheet" href="/shared/styles.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="picker-section">
+            <div class="picker-row">
+                <label class="picker-label">Pick a date</label>
+                <div class="picker-controls">
+                    <select id="daySelect" aria-label="Day"></select>
+                    <span class="picker-sep">.</span>
+                    <select id="monthSelect" aria-label="Month"></select>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-wrapper">
+            <table id="calTable">
+                <thead>
+                    <tr>
+                        <th class="year-header">Year</th>
+                        <th>Mon</th>
+                        <th>Tue</th>
+                        <th>Wed</th>
+                        <th>Thu</th>
+                        <th>Fri</th>
+                        <th class="weekend">Sat</th>
+                        <th class="weekend">Sun</th>
+                    </tr>
+                </thead>
+                <tbody id="calBody"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="/shared/app.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>

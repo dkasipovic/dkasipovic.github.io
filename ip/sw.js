@@ -1,9 +1,11 @@
-const CACHE_NAME = 'ip-scanner-v1';
+const CACHE_NAME = 'ip-scanner-v2';
 const ASSETS = [
   './',
   './index.html',
   './styles.css',
-  './script.js'
+  './script.js',
+  '/shared/styles.css',
+  '/shared/app.js'
 ];
 
 // Install event - cache assets

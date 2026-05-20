@@ -13,11 +13,7 @@
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="icon-192.png">
     <title>QR - Kasipovic</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
-        rel="stylesheet">
+    <link rel="stylesheet" href="/shared/styles.css">
     <link rel="stylesheet" href="styles.css">
 </head>
 
@@ -31,18 +27,6 @@
     </div>
 
     <header class="header">
-        <div class="logo">
-            <svg viewBox="0 0 32 32" fill="none">
-                <rect x="2" y="2" width="10" height="10" rx="2" fill="currentColor" />
-                <rect x="20" y="2" width="10" height="10" rx="2" fill="currentColor" />
-                <rect x="2" y="20" width="10" height="10" rx="2" fill="currentColor" />
-                <rect x="14" y="14" width="4" height="4" rx="1" fill="currentColor" />
-                <rect x="22" y="22" width="6" height="6" rx="1" fill="currentColor" />
-                <rect x="14" y="22" width="4" height="4" rx="1" fill="currentColor" />
-                <rect x="22" y="14" width="4" height="4" rx="1" fill="currentColor" />
-            </svg>
-            QR Studio
-        </div>
         <div class="header-actions">
             <div class="dropdown" id="presetsDropdown">
                 <button class="btn" id="presetsBtn">
@@ -483,6 +467,7 @@
             document.write('<script src="https://cdn.jsdelivr.net/npm/qr-code-styling@1.6.0-rc.1/lib/qr-code-styling.js"><\/script>');
         }
     </script>
+    <script src="/shared/app.js"></script>
     <script src="script.js"></script>
 </body>
 

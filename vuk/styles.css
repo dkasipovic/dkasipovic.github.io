@@ -1,0 +1,453 @@
+/* Variables and reset inherited from /shared/styles.css */
+
+.container {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 24px;
+    min-height: calc(100vh - 56px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.main-layout {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Score Bar */
+.score-bar {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    gap: 28px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 10px 20px;
+}
+
+.score-bar.visible {
+    display: flex;
+}
+
+.score-stat {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.score-icon {
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+.score-icon-correct {
+    color: #22c55e;
+}
+
+/* Sentence Card */
+.sentence-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 48px 32px 32px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    user-select: none;
+    min-height: 160px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+.sentence-card:hover {
+    border-color: var(--border-light);
+    background: var(--bg-tertiary);
+}
+
+.sentence-card:active {
+    transform: scale(0.99);
+}
+
+.sentence-card.no-click {
+    cursor: default;
+}
+
+.sentence-card.no-click:hover {
+    border-color: var(--border);
+    background: var(--bg-secondary);
+}
+
+.sentence-card.no-click:active {
+    transform: none;
+}
+
+.sentence-text {
+    font-family: Arial, sans-serif;
+    font-size: 32px;
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--text-primary);
+    letter-spacing: 0.3px;
+    word-spacing: 4px;
+}
+
+.sentence-hint {
+    font-size: 12px;
+    color: var(--text-muted);
+    letter-spacing: 0.5px;
+    min-height: 16px;
+}
+
+/* Score Buttons */
+.score-buttons {
+    display: none;
+    gap: 16px;
+}
+
+.score-buttons.visible {
+    display: flex;
+}
+
+.btn-score {
+    flex: 1;
+    height: 80px;
+    font-size: 40px;
+    font-weight: 700;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    line-height: 1;
+}
+
+.btn-correct {
+    background: #22c55e;
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(34, 197, 94, 0.3);
+}
+
+.btn-correct:hover {
+    background: #16a34a;
+    box-shadow: 0 4px 20px rgba(34, 197, 94, 0.45);
+}
+
+.btn-wrong {
+    background: #ef4444;
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(239, 68, 68, 0.3);
+}
+
+.btn-wrong:hover {
+    background: #dc2626;
+    box-shadow: 0 4px 20px rgba(239, 68, 68, 0.45);
+}
+
+.btn-score:active {
+    transform: scale(0.94);
+}
+
+/* Controls */
+.controls {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.btn-generate {
+    flex: 1;
+    height: 48px;
+    background: var(--accent);
+    border: none;
+    border-radius: 12px;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    letter-spacing: 0.3px;
+    font-family: inherit;
+}
+
+.btn-generate:hover {
+    background: var(--accent-dim);
+}
+
+.btn-generate:active {
+    transform: scale(0.98);
+}
+
+.btn-settings {
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.btn-settings:hover {
+    background: var(--bg-hover);
+    border-color: var(--border-light);
+    color: var(--text-primary);
+}
+
+.btn-settings.active {
+    background: var(--accent-glow);
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+/* Settings Panel */
+.settings-panel {
+    display: none;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    gap: 16px;
+    flex-direction: column;
+}
+
+.settings-panel.visible {
+    display: flex;
+}
+
+.setting-row {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.setting-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.setting-value {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--accent);
+    min-width: 20px;
+    text-align: right;
+}
+
+.setting-range {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 4px;
+    background: var(--bg-tertiary);
+    border-radius: 2px;
+    outline: none;
+}
+
+.setting-range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: pointer;
+    border: 3px solid var(--bg-primary);
+    transition: transform 0.15s ease;
+}
+
+.setting-range::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+}
+
+.setting-range::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: pointer;
+    border: 3px solid var(--bg-primary);
+}
+
+/* Toggle Switch */
+.toggle-btn {
+    width: 48px;
+    height: 28px;
+    border-radius: 14px;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border);
+    position: relative;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+    flex-shrink: 0;
+}
+
+.toggle-btn[aria-checked="true"] {
+    background: var(--accent);
+    border-color: var(--accent);
+}
+
+.toggle-knob {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #fff;
+    transition: transform 0.2s ease;
+    pointer-events: none;
+}
+
+.toggle-btn[aria-checked="true"] .toggle-knob {
+    transform: translateX(20px);
+}
+
+/* Reset Button */
+.btn-reset {
+    width: 100%;
+    height: 44px;
+    background: transparent;
+    border: 1px solid #ef4444;
+    border-radius: 10px;
+    color: #ef4444;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.15s ease;
+    letter-spacing: 0.3px;
+}
+
+.btn-reset:hover {
+    background: rgba(239, 68, 68, 0.1);
+}
+
+.btn-reset:active {
+    transform: scale(0.98);
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .container {
+        padding: 16px;
+    }
+
+    .sentence-card {
+        padding: 36px 20px 24px;
+        min-height: 140px;
+    }
+
+    .sentence-text {
+        font-size: 26px;
+    }
+
+    .btn-score {
+        height: 72px;
+        font-size: 36px;
+    }
+}
+
+/* TV / Landscape mode */
+@media (orientation: landscape) and (min-aspect-ratio: 4/3) {
+    body.has-app-bar .container {
+        padding: 12px 20px;
+        max-width: 100%;
+        min-height: calc(100vh - 56px);
+        align-items: stretch;
+    }
+
+    .main-layout {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        grid-template-rows: auto 1fr auto auto;
+        gap: 12px;
+        height: calc(100vh - 56px - 24px);
+    }
+
+    /* score bar spans full width at top */
+    .score-bar {
+        grid-column: 1 / -1;
+        grid-row: 1;
+    }
+
+    /* sentence card fills left area */
+    .sentence-card {
+        grid-column: 1;
+        grid-row: 2;
+        min-height: unset;
+        padding: 20px 28px;
+        cursor: default;
+    }
+
+    .sentence-card:hover {
+        border-color: var(--border-light);
+        background: var(--bg-tertiary);
+    }
+
+    .sentence-card.no-click:hover {
+        border-color: var(--border);
+        background: var(--bg-secondary);
+    }
+
+    .sentence-text {
+        font-size: clamp(28px, 5.5vw, 68px);
+    }
+
+    .sentence-hint {
+        display: none;
+    }
+
+    /* score buttons stack vertically on the right */
+    .score-buttons {
+        grid-column: 2;
+        grid-row: 2;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .btn-score {
+        width: 88px;
+        flex: 1;
+        height: unset;
+        min-height: 72px;
+        font-size: 44px;
+        border-radius: 16px;
+    }
+
+    /* controls row spans bottom */
+    .controls {
+        grid-column: 1 / -1;
+        grid-row: 3;
+    }
+
+    /* settings panel spans bottom */
+    .settings-panel {
+        grid-column: 1 / -1;
+        grid-row: 4;
+    }
+
+    .btn-generate,
+    .btn-settings {
+        height: 44px;
+    }
+}

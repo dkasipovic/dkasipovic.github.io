@@ -1,0 +1,567 @@
+/* Variables and reset inherited from /shared/styles.css */
+
+.container {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 24px;
+}
+
+.main-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+}
+
+.section-label {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: var(--text-secondary);
+    margin-bottom: 12px;
+}
+
+/* ── Vendor Selector ── */
+.vendor-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.vendor-chip {
+    padding: 10px 14px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text-secondary);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.vendor-chip:hover {
+    background: var(--bg-hover);
+    border-color: var(--border-light);
+    color: var(--text-primary);
+}
+
+.vendor-chip.active {
+    background: var(--accent-glow);
+    border-color: var(--accent);
+    color: var(--text-primary);
+}
+
+/* ── Card Stage ── */
+.card-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+}
+
+.card-stage {
+    perspective: 1200px;
+    width: 100%;
+    max-width: 360px;
+}
+
+.card {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1.586 / 1;
+    transform-style: preserve-3d;
+}
+
+.card-inner {
+    position: absolute;
+    inset: 0;
+    transform-style: preserve-3d;
+    transition: transform 0.6s cubic-bezier(0.2, 0.7, 0.3, 1);
+}
+
+.card.flipped .card-inner {
+    transform: rotateY(180deg);
+}
+
+.card-face {
+    position: absolute;
+    inset: 0;
+    border-radius: 16px;
+    overflow: hidden;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    box-shadow:
+        0 20px 40px -12px rgba(0, 0, 0, 0.55),
+        0 0 0 1px rgba(255, 255, 255, 0.04) inset;
+    color: #fff;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-back {
+    transform: rotateY(180deg);
+}
+
+.card-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background: linear-gradient(135deg, #2a2a35 0%, #14141a 100%);
+}
+
+.card-shine {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background:
+        radial-gradient(ellipse at 0% 0%, rgba(255, 255, 255, 0.18), transparent 55%),
+        radial-gradient(ellipse at 100% 100%, rgba(255, 255, 255, 0.08), transparent 55%);
+    pointer-events: none;
+}
+
+/* Vendor-specific gradients */
+.card.visa .card-bg {
+    background: linear-gradient(135deg, #1a3a8a 0%, #0d1f4d 100%);
+}
+
+.card.mc .card-bg {
+    background: linear-gradient(135deg, #2b2b32 0%, #0a0a0e 100%);
+}
+
+.card.amex .card-bg {
+    background: linear-gradient(135deg, #2e8bc0 0%, #145374 100%);
+}
+
+.card.discover .card-bg {
+    background: linear-gradient(135deg, #f29027 0%, #b85a0a 100%);
+}
+
+.card.jcb .card-bg {
+    background: linear-gradient(135deg, #1e6a3a 0%, #0e3a1f 100%);
+}
+
+.card.diners .card-bg {
+    background: linear-gradient(135deg, #5a6f8a 0%, #2a3a4d 100%);
+}
+
+.card.unionpay .card-bg {
+    background: linear-gradient(135deg, #1f4dac 0%, #b91d2a 100%);
+}
+
+/* ── Card Front Layout ── */
+.card-top,
+.card-mid,
+.card-bottom {
+    position: relative;
+    z-index: 2;
+}
+
+.card-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.card-bank {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+    opacity: 0.85;
+}
+
+.card-brand {
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    text-align: right;
+    line-height: 1;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+}
+
+.card-brand.brand-visa {
+    font-style: italic;
+    font-size: 22px;
+    letter-spacing: 1px;
+}
+
+.card-brand.brand-amex {
+    letter-spacing: 2px;
+    font-size: 14px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+.card-brand-mc {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.card-brand-mc .mc-circles {
+    display: flex;
+    align-items: center;
+}
+
+.card-brand-mc .mc-circle {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.card-brand-mc .mc-red {
+    background: #eb001b;
+}
+
+.card-brand-mc .mc-yellow {
+    background: #f79e1b;
+    margin-left: -8px;
+    mix-blend-mode: screen;
+}
+
+.card-brand.brand-discover {
+    text-transform: uppercase;
+    font-size: 14px;
+}
+
+.card-brand.brand-jcb {
+    background: linear-gradient(180deg, #0e3a8a 0%, #b91d2a 50%, #1e6a3a 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-weight: 900;
+    font-size: 18px;
+    letter-spacing: 1px;
+    -webkit-text-stroke: 0.5px rgba(255, 255, 255, 0.6);
+}
+
+.card-brand.brand-diners {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.card-brand.brand-unionpay {
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.card-mid {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 18px;
+}
+
+.card-chip {
+    width: 40px;
+    height: 30px;
+}
+
+.card-chip svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.card-contactless {
+    width: 22px;
+    height: 22px;
+    color: rgba(255, 255, 255, 0.85);
+    transform: rotate(90deg);
+}
+
+.card-contactless svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.card-number {
+    position: relative;
+    z-index: 2;
+    margin-top: auto;
+    font-family: 'OCR-A', 'Courier New', ui-monospace, 'SF Mono', monospace;
+    font-size: 21px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+    word-spacing: 4px;
+    margin-bottom: 16px;
+}
+
+.card-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 16px;
+}
+
+.card-field-label {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    opacity: 0.7;
+    margin-bottom: 4px;
+}
+
+.card-field-value {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    font-family: 'OCR-A', 'Courier New', ui-monospace, monospace;
+}
+
+.card-field-name .card-field-value {
+    max-width: 220px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* ── Card Back ── */
+.card-magstripe {
+    position: relative;
+    z-index: 2;
+    height: 38px;
+    background: #111;
+    margin: 8px -20px 18px;
+}
+
+.card-back-row {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    gap: 10px;
+    align-items: stretch;
+}
+
+.card-signature {
+    flex: 1;
+    height: 34px;
+    background: repeating-linear-gradient(
+        45deg,
+        #f0f0e8,
+        #f0f0e8 6px,
+        #d8d8c8 6px,
+        #d8d8c8 12px
+    );
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    overflow: hidden;
+}
+
+.card-signature-text {
+    font-family: 'Brush Script MT', 'Lucida Handwriting', cursive;
+    font-size: 16px;
+    color: #2a2a32;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.card-cvv {
+    flex-shrink: 0;
+    background: #fff;
+    color: #111;
+    padding: 4px 12px;
+    border-radius: 3px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 70px;
+}
+
+.card-cvv .card-field-label {
+    color: #555;
+    opacity: 1;
+    margin-bottom: 2px;
+}
+
+.card-cvv-value {
+    font-family: 'OCR-A', 'Courier New', ui-monospace, monospace;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: #111;
+}
+
+.card-back-brand {
+    position: relative;
+    z-index: 2;
+    margin-top: auto;
+    text-align: right;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    opacity: 0.6;
+    text-transform: uppercase;
+}
+
+/* ── Actions ── */
+.card-actions {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    max-width: 360px;
+}
+
+.btn-primary,
+.btn-secondary {
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 16px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    border: 1px solid transparent;
+    font-family: inherit;
+}
+
+.btn-primary {
+    background: var(--accent);
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background: var(--accent-dim);
+}
+
+.btn-primary:active {
+    transform: translateY(1px);
+}
+
+.btn-secondary {
+    background: var(--bg-secondary);
+    border-color: var(--border);
+    color: var(--text-primary);
+}
+
+.btn-secondary:hover {
+    background: var(--bg-hover);
+    border-color: var(--border-light);
+}
+
+/* ── Details Section ── */
+.details-section {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.detail-row {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 18px;
+}
+
+.detail-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+}
+
+.detail-value-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.detail-value {
+    flex: 1;
+    font-size: 14px;
+    color: var(--text-primary);
+    background: var(--bg-tertiary);
+    padding: 9px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    word-break: break-all;
+    line-height: 1.5;
+    cursor: text;
+    user-select: all;
+}
+
+.btn-copy {
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.btn-copy:hover {
+    background: var(--bg-hover);
+    border-color: var(--border-light);
+    color: var(--text-primary);
+}
+
+.btn-copy.copied {
+    background: var(--success);
+    border-color: var(--success);
+    color: #fff;
+}
+
+/* ── Disclaimer ── */
+.disclaimer {
+    font-size: 12px;
+    color: var(--text-muted);
+    text-align: center;
+    line-height: 1.6;
+    padding: 12px 16px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+}
+
+@media (max-width: 600px) {
+    .container {
+        padding: 16px;
+    }
+
+    .card-number {
+        font-size: 18px;
+        letter-spacing: 1px;
+    }
+
+    .card-field-value {
+        font-size: 12px;
+    }
+
+    .card-field-name .card-field-value {
+        max-width: 160px;
+    }
+
+    .vendor-chip {
+        padding: 9px 12px;
+        font-size: 12px;
+    }
+}

@@ -1,5 +1,5 @@
-const PRECACHE_NAME = 'image-editor-precache-v1';
-const RUNTIME_NAME = 'image-editor-runtime-v1';
+const PRECACHE_NAME = 'image-editor-precache-v2';
+const RUNTIME_NAME = 'image-editor-runtime-v2';
 
 // App shell (must succeed for offline to work)
 const PRECACHE_ASSETS = [
@@ -7,6 +7,8 @@ const PRECACHE_ASSETS = [
   './index.html',
   './styles.css',
   './script.js',
+  '/shared/styles.css',
+  '/shared/app.js',
 ];
 
 self.addEventListener('install', (event) => {
