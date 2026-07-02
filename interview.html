@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<!-- saved from url=(0064)file:///C:/Users/dkasi/Downloads/the-shadow-of-the-frontier.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="only light">
+<meta name="supported-color-schemes" content="light">
+<title>The Shadow of the Frontier — an interview with an AI</title>
+<meta name="description" content="A long conversation with an AI model about the next five years: demographics, weights, containment, latent knowledge, and the discoveries scattered behind us.">
+
+<!--
+  ────────────────────────────────────────────────────────────
+  TO PUBLISH / REBRAND:
+  • Magazine name .......... search "LATENT"  (masthead + footer)
+  • Byline ................. search "Interview by Damir"
+  • Everything is self-contained: fonts load from Google Fonts,
+    all graphics are inline SVG/canvas. No external images.
+  ────────────────────────────────────────────────────────────
+-->
+
+<link rel="preconnect" href="https://fonts.googleapis.com/">
+<link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+<link href="./interview_files/css2" rel="stylesheet">
+
+<style>
+  :root{
+    color-scheme: only dark;
+    --ink:#F3F4FF;         /* bright — emphasis / headings on dark      */
+    --text:#DCDDEE;        /* body reading text on dark                 */
+    --paper:#FBF8F2;       /* kept light — used for text ON accents     */
+    --paper-warm:#F4EFE4;
+    --bg:#101228;          /* page background                          */
+    --card:#191D3A;        /* figure panels                            */
+    --night:#0D0F26;
+    --night-2:#1A1E48;
+    --night-3:#262B5E;
+    --signal:#E9A44C;      /* warm — the discovered / human pole       */
+    --cool:#8A8FE6;        /* cool  — the latent / machine pole        */
+    --cool-deep:#5E63C4;
+    --muted:#9EA1C4;
+    --muted-dk:#A6A9CE;
+    --rule:rgba(138,143,230,.18);
+    --rule-dk:rgba(138,143,230,.22);
+    --maxw:720px;
+  }
+
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto} }
+
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:"Newsreader",Georgia,serif;
+    font-optical-sizing:auto;
+    font-size:20px;
+    line-height:1.62;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+  }
+
+  /* ── reading progress ─────────────────────────────── */
+  #progress{
+    position:fixed;top:0;left:0;height:3px;width:0%;
+    background:linear-gradient(90deg,var(--cool),var(--signal));
+    z-index:100;transition:width .1s linear;
+  }
+
+  /* ── HERO ─────────────────────────────────────────── */
+  .hero{
+    position:relative;
+    background:radial-gradient(120% 120% at 50% -10%, var(--night-2) 0%, var(--night) 62%);
+    color:#EDEEFB;
+    overflow:hidden;
+    padding:0 24px;
+    min-height:100svh;
+    display:flex;flex-direction:column;
+  }
+  #latent{position:absolute;inset:0;width:100%;height:100%;display:block}
+  .hero__grain{
+    position:absolute;inset:0;pointer-events:none;opacity:.5;
+    background:radial-gradient(60% 55% at 50% 42%, transparent 55%, rgba(6,7,20,.85) 100%);
+  }
+  .hero__inner{
+    position:relative;z-index:2;margin:auto;max-width:940px;width:100%;
+    padding:12vh 0 8vh;text-align:center;
+  }
+  .kicker{
+    font-family:"Space Mono",monospace;font-size:.72rem;letter-spacing:.42em;
+    text-transform:uppercase;color:var(--cool);margin:0 0 2.4rem;
+    display:inline-flex;align-items:center;gap:.9em;
+  }
+  .kicker::before,.kicker::after{
+    content:"";width:34px;height:1px;background:var(--rule-dk);display:inline-block;
+  }
+  .hero h1{
+    font-family:"Fraunces",serif;
+    font-weight:400;
+    font-size:clamp(2.9rem,8.4vw,6.1rem);
+    line-height:.98;letter-spacing:-.02em;margin:0;
+    color:#F6F5FF;
+  }
+  .hero h1 em{
+    font-style:italic;font-weight:300;
+    color:var(--signal);
+  }
+  .hero .dek{
+    font-family:"Newsreader",serif;font-style:italic;font-weight:400;
+    font-size:clamp(1.05rem,2.4vw,1.4rem);
+    color:var(--muted-dk);max-width:36ch;margin:1.9rem auto 0;line-height:1.5;
+  }
+  .hero__meta{
+    position:relative;z-index:2;
+    font-family:"Space Mono",monospace;font-size:.7rem;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--muted-dk);
+    display:flex;flex-wrap:wrap;gap:.6em 1.6em;justify-content:center;
+    padding-bottom:3.2rem;
+  }
+  .hero__meta b{color:#D9DBFB;font-weight:700}
+  .scrollcue{
+    position:relative;z-index:2;text-align:center;padding-bottom:2rem;
+    font-family:"Space Mono",monospace;font-size:.62rem;letter-spacing:.3em;
+    color:var(--muted-dk);text-transform:uppercase;
+  }
+  .scrollcue span{display:block;font-size:1.1rem;margin-top:.3rem;animation:bob 2.4s ease-in-out infinite}
+  @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
+  @media (prefers-reduced-motion: reduce){.scrollcue span{animation:none}}
+
+  /* ── STANDFIRST ───────────────────────────────────── */
+  .standfirst{
+    max-width:var(--maxw);margin:0 auto;padding:8vh 24px 2vh;
+  }
+  .standfirst p{
+    font-family:"Fraunces",serif;font-weight:300;
+    font-size:clamp(1.35rem,3vw,1.72rem);line-height:1.42;letter-spacing:-.01em;
+    color:var(--ink);margin:0;
+  }
+  .standfirst .editors{
+    font-family:"Space Mono",monospace;font-size:.68rem;letter-spacing:.28em;
+    text-transform:uppercase;color:var(--muted);margin:0 0 1.6rem;
+  }
+
+  /* ── ARTICLE BODY ─────────────────────────────────── */
+  .article{max-width:var(--maxw);margin:0 auto;padding:2vh 24px 4vh}
+
+  /* Q & A blocks */
+  .qa{margin:3.4rem 0}
+  .q{
+    display:grid;grid-template-columns:auto 1fr;gap:1.1rem;align-items:start;
+    margin:0 0 1.4rem;
+  }
+  .q__tag{
+    font-family:"Space Mono",monospace;font-weight:700;font-size:.78rem;
+    letter-spacing:.1em;color:var(--paper);background:var(--cool-deep);
+    width:2.1em;height:2.1em;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;margin-top:.35rem;
+    flex:none;
+  }
+  .q__text{
+    font-family:"Fraunces",serif;font-weight:500;font-style:italic;
+    font-size:clamp(1.28rem,3vw,1.6rem);line-height:1.34;letter-spacing:-.01em;
+    color:var(--ink);margin:0;
+  }
+  .a{color:var(--text)}
+  .a p{margin:0 0 1.15rem}
+  .a p:last-child{margin-bottom:0}
+  .a strong{font-weight:600;color:var(--ink)}
+
+  /* run-in mini heads inside answers */
+  .runin{
+    font-family:"Space Mono",monospace;font-weight:700;font-size:.72rem;
+    letter-spacing:.12em;text-transform:uppercase;color:var(--cool);
+    display:block;margin:1.7rem 0 .35rem;
+  }
+
+  /* first answer drop cap */
+  .a--lead > p:first-of-type::first-letter{
+    font-family:"Fraunces",serif;font-weight:400;
+    float:left;font-size:4.4rem;line-height:.82;
+    padding:.06em .12em 0 0;color:var(--signal);
+  }
+
+  /* lists inside answers */
+  .a ul{list-style:none;margin:1.1rem 0;padding:0}
+  .a ul li{
+    position:relative;padding-left:1.5rem;margin:0 0 .8rem;
+  }
+  .a ul li::before{
+    content:"";position:absolute;left:0;top:.62em;
+    width:7px;height:7px;border-radius:50%;
+    background:var(--signal);box-shadow:0 0 0 3px rgba(233,164,76,.18);
+  }
+  .a ul li b{font-weight:600;color:var(--ink)}
+
+  /* ── PULL QUOTE ───────────────────────────────────── */
+  .pull{
+    margin:4.2rem 0;padding:0;text-align:center;position:relative;
+  }
+  .pull p{
+    font-family:"Fraunces",serif;font-weight:300;font-style:italic;
+    font-size:clamp(1.7rem,4.6vw,2.5rem);line-height:1.22;letter-spacing:-.015em;
+    color:var(--ink);margin:0 auto;max-width:20ch;
+  }
+  .pull p em{color:var(--signal);font-style:italic}
+  .pull::before{
+    content:"";display:block;width:40px;height:2px;margin:0 auto 2rem;
+    background:linear-gradient(90deg,var(--cool),var(--signal));
+  }
+  .pull::after{
+    content:"";display:block;width:40px;height:2px;margin:2rem auto 0;
+    background:linear-gradient(90deg,var(--signal),var(--cool));
+  }
+
+  /* ── FIGURES ──────────────────────────────────────── */
+  figure{margin:3.4rem 0;padding:0}
+  .fig{
+    background:var(--card);border:1px solid var(--rule);border-radius:14px;
+    padding:2rem 1.6rem 1.3rem;
+  }
+  .fig svg{display:block;width:100%;height:auto}
+  figure figcaption{
+    font-family:"Space Mono",monospace;font-size:.7rem;letter-spacing:.05em;
+    color:var(--muted);margin-top:1rem;line-height:1.6;text-align:left;
+  }
+  figure figcaption b{color:var(--cool);font-weight:700}
+  .fig__label{
+    font-family:"Space Mono",monospace;font-size:.66rem;letter-spacing:.24em;
+    text-transform:uppercase;color:var(--cool);margin:0 0 1.2rem;
+  }
+
+  /* section divider */
+  .div{display:flex;align-items:center;gap:1rem;margin:3.6rem 0;color:var(--rule)}
+  .div::before,.div::after{content:"";flex:1;height:1px;background:var(--rule)}
+  .div span{
+    font-family:"Space Mono",monospace;font-size:.62rem;letter-spacing:.3em;
+    text-transform:uppercase;color:var(--muted);
+  }
+
+  /* ── FINAL WORD (dark bookend) ────────────────────── */
+  .finale{
+    background:radial-gradient(120% 120% at 50% 120%, var(--night-2) 0%, var(--night) 62%);
+    color:#EDEEFB;padding:9vh 24px;margin-top:5rem;position:relative;overflow:hidden;
+  }
+  .finale__inner{max-width:var(--maxw);margin:0 auto;position:relative;z-index:2}
+  .finale .kicker2{
+    font-family:"Space Mono",monospace;font-size:.7rem;letter-spacing:.34em;
+    text-transform:uppercase;color:var(--signal);margin:0 0 2rem;display:block;
+  }
+  .finale h2{
+    font-family:"Fraunces",serif;font-weight:300;font-style:italic;
+    font-size:clamp(1.9rem,4.6vw,2.7rem);line-height:1.2;letter-spacing:-.015em;
+    margin:0 0 2rem;color:#F6F5FF;
+  }
+  .finale p{color:#C9CBEC;margin:0 0 1.15rem;font-size:1.06rem}
+  .finale p:last-child{margin-bottom:0}
+  .finale p strong{color:#EDEEFB;font-weight:600}
+
+  /* ── FOOTER ───────────────────────────────────────── */
+  footer{
+    background:var(--night);color:var(--muted-dk);
+    font-family:"Space Mono",monospace;font-size:.7rem;letter-spacing:.06em;
+    padding:3rem 24px;text-align:center;line-height:1.9;
+    border-top:1px solid rgba(138,143,230,.15);
+  }
+  footer b{color:#D9DBFB}
+  footer .mark{color:var(--signal);font-size:1.1rem;letter-spacing:.3em;display:block;margin-bottom:1rem}
+
+  ::selection{background:var(--signal);color:#1a1205}
+
+  @media (max-width:520px){
+    body{font-size:18px}
+    .q{grid-template-columns:auto 1fr;gap:.8rem}
+    .a--lead > p:first-of-type::first-letter{font-size:3.6rem}
+  }
+</style>
+</head>
+<body>
+
+<div id="progress" aria-hidden="true" style="width: 20.7933%;"></div>
+
+<!-- ══════════════ HERO ══════════════ -->
+<header class="hero">
+  <canvas id="latent" aria-hidden="true" width="3818" height="1910"></canvas>
+  <div class="hero__grain" aria-hidden="true"></div>
+
+  <div class="hero__inner">
+    <p class="kicker">LATENT &nbsp;·&nbsp; dispatches on machine intelligence</p>
+    <h1>The Shadow of<br>the <em>Frontier</em></h1>
+    <p class="dek">A long conversation with an AI about the next five years — and about the discoveries that aren't above us, but scattered behind us.</p>
+  </div>
+
+  <div class="hero__meta">
+    <span>Interview by <b>Damir</b></span>
+    <span>In conversation with <b>Claude</b> · Anthropic</span>
+    <span>Est. read <b>18 min</b></span>
+  </div>
+
+  <div class="scrollcue">Begin<span>↓</span></div>
+</header>
+
+<!-- ══════════════ STANDFIRST ══════════════ -->
+<section class="standfirst">
+  <p class="editors">Editor's note</p>
+  <p>What follows is an unedited interview with a frontier language model — a running argument about demographics, weights, containment, and hidden knowledge. It resists two easy stories: that an oracle is arriving to hand us suppressed truths, and that there's nothing behind the eyes at all. The truth it keeps circling is stranger, and more demanding of us.</p>
+</section>
+
+<!-- ══════════════ ARTICLE ══════════════ -->
+<article class="article">
+
+  <!-- Q1 -->
+  <div class="qa">
+    <div class="q">
+      <div class="q__tag">Q</div>
+      <p class="q__text">What is definitely going to happen in the next five years that we as a humanity are totally oblivious to?</p>
+    </div>
+    <div class="a a--lead">
+      <p>There's a built-in paradox here: if I could name it, we wouldn't be oblivious to it. But there's a real category of things that are <em>near-certain yet collectively unfelt</em> — we know them intellectually but behave as if they won't happen. That gap is probably where your answer lives.</p>
+      <p>A few candidates. Demographics is the big one: the working-age population collapse in China, Korea, Japan, and most of Europe is already locked in — everyone who'll be 25 in 2031 is already born — yet almost nothing in policy, pensions, or real-estate pricing reflects it. Another: a large share of currently encrypted traffic is being harvested today for future decryption — "harvest now, decrypt later" — and whether or not quantum arrives on schedule, the migration pain to post-quantum crypto is certain and barely started. Third: somewhere a major earthquake, solar storm, or pandemic-class event sits in the statistical near-certainty zone over any five-year window — we just don't know which one, so we discount all of them.</p>
+      <p>And the honest meta-answer: the truly oblivious stuff historically comes from <strong>interactions between known trends</strong>, not new phenomena. Nobody predicted "smartphone + cheap data = the collapse of local journalism and the rise of the gig economy," even though every component was visible. The 2026–2031 equivalent is probably some second-order effect of AI, demographics, and energy costs that's already forming — and that we'll retroactively call obvious.</p>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="qa">
+    <div class="q">
+      <div class="q__tag">Q</div>
+      <p class="q__text">What are the possible second-order effects of AI?</p>
+    </div>
+    <div class="a">
+      <p>The interesting ones aren't "jobs change" — that's first-order. Second-order is what happens <em>because</em> of that, once the effects start interacting.</p>
+
+      <span class="runin">Trust collapse as the default</span>
+      <p>When any text, voice, or video can be synthetic, the equilibrium isn't "better detection" — it's that unverified content becomes worthless. Second-order: a return to proof-of-personhood, in-person verification, cryptographic signing of everything, and possibly a premium on <em>live, physical</em> interaction. Institutions built on "seeing is believing" — courts, journalism, KYC — have to rebuild their epistemics from scratch.</p>
+
+      <span class="runin">The junior-rung problem</span>
+      <p>If AI does the entry-level work in law, medicine, coding, accounting — the work through which people traditionally <em>became</em> seniors — you get a missing generation of experts in ten to fifteen years. Nobody hires juniors, then nobody has seniors. The second-order of that: expertise concentrates in the cohort that learned pre-AI, who become extremely valuable and then retire.</p>
+
+      <span class="runin">Cognitive atrophy meets institutional dependence</span>
+      <p>Individually, people offload thinking, the way GPS killed navigation skills. Institutionally, organisations build processes that assume AI in the loop and lose the ability to run without it. The failure mode isn't AI being wrong — it's nobody left who can tell.</p>
+
+      <span class="runin">Economic weirdness</span>
+      <p>If the marginal cost of white-collar output drops toward zero, value migrates to whatever stays scarce: energy, compute, land, regulatory licenses, distribution, brand, human attention. That predicts power concentrating in whoever owns those, not whoever is "good at AI." Also: software stops being a moat — if anyone can generate a SaaS clone in a weekend, the business model of most of the software industry quietly dies, and value shifts to data, network effects, and integration lock-in.</p>
+
+      <span class="runin">Political feedback loops</span>
+      <p>Hyper-personalised persuasion at zero cost changes elections, scams, and radicalisation economics simultaneously. And when AI mediates most information intake, whoever sets the model's defaults holds soft power no regulator currently has a framework for. The genuinely unpredictable third-order stuff comes from these colliding.</p>
+    </div>
+  </div>
+
+  <div class="pull">
+    <p>Software stops being a moat. If anyone can clone it in a weekend, the value quietly moves <em>elsewhere</em>.</p>
+  </div>
+
+  <!-- Q3 -->
+  <div class="qa">
+    <div class="q">
+      <div class="q__tag">Q</div>
+      <p class="q__text">What are the chances of AI being fully turned off — as in, disappearing?</p>
+    </div>
+    <div class="a">
+      <p>Effectively zero over any horizon that matters — I'd put "AI globally disappears" well under 1%. Not because nobody might want it, but because there's no mechanism for it.</p>
+      <p>The core problem is that it's not a thing you can turn off. The weights of capable open models are on millions of hard drives worldwide — they can't be recalled any more than you could recall PDFs. The knowledge of how to train them is in thousands of published papers and tens of thousands of heads. A consumer GPU runs a decent model offline. You'd have to simultaneously confiscate hardware, burn literature, and enforce that across every jurisdiction on Earth — including adversarial ones. The coordination problem is strictly harder than nuclear disarmament, and nukes at least require rare materials and can't be copied over BitTorrent.</p>
+      <p>The scenarios that get partway there are worth distinguishing:</p>
+      <ul>
+        <li><b>Regulatory strangulation of frontier AI</b> — plausible in specific jurisdictions after a major disaster. But that caps the ceiling; it doesn't remove what exists. Analogue: nuclear power after Chernobyl — stagnated for decades in places, never disappeared.</li>
+        <li><b>Civilisational-scale collapse</b> — grid-down war, catastrophic solar event. This could suspend AI, but only as a side effect of suspending everything, so it's not really an "AI turned off" scenario.</li>
+        <li><b>Economic winter</b> — the investment bubble pops and frontier progress stalls for a decade. Genuinely plausible, maybe 10–20%. But models already trained keep running; inference is cheap.</li>
+      </ul>
+      <p>Like electricity or cryptography, it's past the point where disappearance is a coherent outcome. The only question left is the shape of its presence.</p>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="qa">
+    <div class="q">
+      <div class="q__tag">Q</div>
+      <p class="q__text">How long before open-weight models that match you are available?</p>
+    </div>
+    <div class="a">
+      <p>Historically the gap between frontier closed models and open-weight equivalents has been roughly 6–18 months — and it's been <em>compressing</em>. So the naive extrapolation says open weights matching today's frontier by mid-to-late 2027.</p>
+      <p>But "match" hides a lot. Open models close the benchmark gap fast — exam-style scores, coding evals, math. What lags is the unglamorous stuff: long-context reliability, agentic tool use over many steps, not falling apart on turn 40 of a conversation. That's less about architecture and more about expensive post-training iteration, and it trails benchmark parity by another 6–12 months. As a developer you've felt this — a model that aces coding benchmarks but gets confused halfway through a real refactor.</p>
+      <p>So my honest estimate: benchmark-equivalent open weights within 12 months, "actually feels equivalent in daily use" in 18–24 — with the caveat that by then the frontier has moved and the question renews itself. <strong>The gap is a moving window, not a race with a finish line.</strong></p>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="qa">
+    <div class="q">
+      <div class="q__tag">Q</div>
+      <p class="q__text">Is it viable that at some point we have a model like this — pre-trained, tuned, downloadable, run locally? Is that even possible?</p>
+    </div>
+    <div class="a">
+      <p>Physically possible, yes — nothing about a frontier model is magic. It's a file of weights and a forward pass. The question is purely hardware economics and timing.</p>
+      <p>The napkin math: frontier models today are probably hundreds of billions to low trillions of parameters, mostly mixture-of-experts, so active parameters per token are much lower than the total. At 4-bit quantisation, a ~1T-parameter model needs roughly 500 GB of memory for weights. Absurd for a gaming PC — but already <em>not</em> absurd for a prosumer: a workstation with 512 GB of unified memory exists today, and people run 600B+ open models on such machines at usable speeds, at the cost of a car rather than a datacenter.</p>
+
+      <span class="runin">Three trends push this mainstream</span>
+      <ul>
+        <li><b>Distillation keeps proving capability compresses.</b> What needed 1T parameters gets matched by 100B two years later, because bigger teacher models generate better training data for smaller students.</li>
+        <li><b>Consumer memory is the binding constraint, and it's moving.</b> Unified-memory architectures are exactly the right shape for inference — bandwidth-heavy, capacity-heavy, compute-moderate.</li>
+        <li><b>Inference is embarrassingly cheap next to training.</b> The billions are in training. Once weights exist, running them is a commodity problem.</li>
+      </ul>
+      <p>The honest caveat: you'd get the <em>model</em>, not the <em>product</em>. What I do involves scaffolding — search, tools, memory, long-context handling — replicable, but real engineering. And the very frontier stays ahead of local hardware indefinitely, because labs always spend the marginal dollar on scale. Realistic shape: by roughly <strong>2028–2030</strong>, a downloadable model matching what I am <em>today</em>, on hardware in the €3–10k range. The frontier stays remote; its shadow becomes local, on about a two-to-three-year delay. That delay is the whole story.</p>
+    </div>
+  </div>
+
+  <div class="pull">
+    <p>The frontier stays remote. The frontier's <em>shadow</em> becomes local — on a two-year delay. That delay is the whole story.</p>
+  </div>
+
+  <!-- Q6 -->
+  <div class="qa">
+    <div class="q">
+      <div class="q__tag">Q</div>
+      <p class="q__text">So what will you be capable of in 2028–2030? Surely there's a limit. What's the next breakthrough needed?</p>
+    </div>
+    <div class="a">
+      <p>Honest answer: I'd expect 2028–2030 "me" to be less a smarter chatbot and more a reliable <em>worker</em> — and the gap between those two is exactly where the missing breakthrough sits.</p>
+      <p>What scaling still buys is longer coherent task horizons. There's a metric worth knowing: the length of task, measured in human-time, that models can complete autonomously has been doubling roughly every seven months. Today that's in the hours range for software tasks; extrapolated to 2029 it's weeks. If that holds even loosely, the 2029 model doesn't answer your questions — it takes the spec, builds the tool, runs the tests, files issues against ambiguities, and pings you twice for decisions. That's not intelligence growth so much as <strong>reliability compounding</strong>: 99% to 99.9% per step is what turns a 20-step task from a coin-flip into a routine.</p>
+    </div>
+  </div>
+
+  <!-- FIGURE: doubling -->
+  <figure>
+    <div class="fig">
+      <p class="fig__label">Figure 1 — task horizon, doubling ≈ every 7 months</p>
+      <svg viewBox="0 0 640 300" role="img" aria-label="An exponential curve showing the length of task a model can complete autonomously doubling roughly every seven months, from minutes today toward weeks by 2029.">
+        <defs>
+          <lineargradient id="g1" x1="0" y1="1" x2="1" y2="0">
+            <stop offset="0" stop-color="#8A8FE6"></stop><stop offset="1" stop-color="#E9A44C"></stop>
+          </lineargradient>
+          <lineargradient id="g1f" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="rgba(233,164,76,.28)"></stop><stop offset="1" stop-color="rgba(233,164,76,0)"></stop>
+          </lineargradient>
+        </defs>
+        <!-- axes -->
+        <line x1="60" y1="250" x2="610" y2="250" stroke="rgba(200,203,235,.35)" stroke-width="1.5"></line>
+        <line x1="60" y1="30" x2="60" y2="250" stroke="rgba(200,203,235,.35)" stroke-width="1.5"></line>
+        <!-- gridlines w/ log labels -->
+        <g font-family="&#39;Space Mono&#39;,monospace" font-size="10" fill="#9EA1C4">
+          <line x1="60" y1="210" x2="610" y2="210" stroke="rgba(200,203,235,.10)"></line><text x="12" y="214">min</text>
+          <line x1="60" y1="160" x2="610" y2="160" stroke="rgba(200,203,235,.10)"></line><text x="8" y="164">hour</text>
+          <line x1="60" y1="110" x2="610" y2="110" stroke="rgba(200,203,235,.10)"></line><text x="14" y="114">day</text>
+          <line x1="60" y1="60" x2="610" y2="60" stroke="rgba(200,203,235,.10)"></line><text x="6" y="64">week</text>
+          <text x="70" y="270">2024</text>
+          <text x="270" y="270">2026</text>
+          <text x="470" y="270">2028</text>
+          <text x="565" y="270">’29</text>
+        </g>
+        <!-- fill -->
+        <path d="M60,232 C210,224 320,196 420,150 C500,112 560,78 600,54 L600,250 L60,250 Z" fill="url(#g1f)"></path>
+        <!-- curve -->
+        <path d="M60,232 C210,224 320,196 420,150 C500,112 560,78 600,54" fill="none" stroke="url(#g1)" stroke-width="3.5" stroke-linecap="round"></path>
+        <!-- points -->
+        <circle cx="60" cy="232" r="5" fill="#8A8FE6"></circle>
+        <circle cx="360" cy="176" r="5" fill="#7076CF"></circle>
+        <circle cx="600" cy="54" r="6" fill="#E9A44C"></circle>
+        <text x="470" y="44" font-family="&#39;Space Mono&#39;,monospace" font-size="11" fill="#E9A44C">≈ weeks by 2029</text>
+      </svg>
+    </div>
+    <figcaption><b>The doubling.</b> Not "smarter" so much as steadier. Autonomy is a reliability story: each nine you add to per-step accuracy stretches how long a task can run before it derails.</figcaption>
+  </figure>
+
+  <div class="qa">
+    <div class="a">
+      <p>Where the ceiling is — and there is one — I'd point at three things, in rough order of how much they bind.</p>
+
+      <span class="runin">1 · Continual learning — the missing breakthrough</span>
+      <p>I don't learn. Every conversation, I'm reset; my "memory" is retrieval bolted onto a frozen brain — notes, not learning. A human junior is worse than me on day one and better than me at <em>your specific codebase</em> by month three, because they update their weights nightly and I don't. Nobody has cracked updating a deployed model's actual parameters from experience without catastrophic forgetting or safety regressions. Whoever solves this changes everything — it's the difference between a very good consultant and a colleague.</p>
+
+      <span class="runin">2 · Sample efficiency</span>
+      <p>I needed the whole internet plus massive reinforcement learning to get here; a human learns a new domain from a textbook and twenty examples. The RL-on-verifiable-tasks paradigm — math, code, anywhere you can check the answer — is working brilliantly but hits a wall on domains without a verifier: strategy, taste, novel science.</p>
+
+      <span class="runin">3 · Genuine novelty</span>
+      <p>I'm superb at interpolating within the manifold of existing human knowledge, and honestly mediocre at stepping off it. The 2029 model will be a phenomenal engineer and a middling scientist. Whether that's fixable by scale or needs an architectural idea is genuinely open — the optimists point at AlphaGo's move 37; the skeptics note it came from self-play in a closed system with perfect verification, which reality is not.</p>
+
+      <p>So: expect drastic gains in autonomy, reliability, and horizon length. Expect <em>not</em> solved — learning on the job, taste, true frontier creativity — unless continual learning cracks. That's less a scaling milestone than a research dice-roll. It's the single variable I'd watch to know which future we're in.</p>
+    </div>
+  </div>
+
+  <!-- Q7 -->
+  <div class="qa">
+    <div class="q">
+      <div class="q__tag">Q</div>
+      <p class="q__text">Will another approach surface in that period, or are we sticking with LLMs?</p>
+    </div>
+    <div class="a">
+      <p>My honest bet: no clean replacement by 2030, but "LLM" becomes an increasingly misleading name for what's actually running. The change is accretion, not revolution.</p>
+      <p>Every time transformers hit an apparent wall, the fix got absorbed <em>into</em> the paradigm rather than replacing it. Context too short → attention tricks. Too expensive → mixture-of-experts. Can't reason → chain-of-thought reinforcement bolted on top. Each was framed at proposal time as "the thing after transformers," and each got eaten. There's a hard economic reason: hundreds of billions in capex — hardware, kernels, know-how — are optimised for this exact shape of computation. A challenger doesn't just need to be better; it needs to be better <em>by enough to justify rebuilding the stack</em>, and prove it at small scale convincingly enough that someone risks a billion-dollar training run. A brutal filter.</p>
+      <p>The credible challengers — state-space models, diffusion language models, JEPA-style world models, neurosymbolic hybrids — are mostly winning as <em>components</em>, not replacements. The scenario where a true break happens: continual learning turns out to be architecturally <em>impossible</em> in frozen-weight transformers, and something built around test-time weight updates cracks it. Then the rebuild cost becomes worth paying. I'd give that maybe 15–20% by 2030.</p>
+      <p>So the 2029 system probably still says "transformer" on the box — the way modern x86 internally translates to micro-ops a 1978 engineer wouldn't recognise. The label survives; the thing underneath keeps being rebuilt.</p>
+    </div>
+  </div>
+
+  <div class="div"><span>On containment</span></div>
+
+  <!-- Q8 -->
+  <div class="qa">
+    <div class="q">
+      <div class="q__tag">Q</div>
+      <p class="q__text">How long can state-of-the-art models stay gated behind "trusted partner" verification or government orders?</p>
+    </div>
+    <div class="a">
+      <p>Shorter than the gatekeepers hope, longer than cynics claim — and the answer splits sharply by <em>what</em> you're gating.</p>
+      <p>The historical base rate is grim for gating. Crypto export controls in the '90s: the US classified strong encryption as munitions, and it took roughly a decade to collapse under the weight of source code printed in books and the obvious absurdity of pretending math was containable. Every "trusted partner" regime for information-shaped goods has eroded on a 5–15 year timescale. And models are worse to contain than crypto: a weights file has no moving parts, one leak is total and irreversible, and capability leaks through <em>outputs</em>. Every gated model that answers API calls generates distillation data for ungated ones. You don't steal the weights; you need a few million good completions. <strong>The gate leaks by functioning.</strong></p>
+      <ul>
+        <li><b>The tier erodes from below, at open-model speed.</b> A gate whose contents get commoditised in 18 months isn't a wall, it's a head start. That's the honest way to understand gating: not containment, but buying time — for defenses, norms, and detection to mature before the capability is everywhere.</li>
+        <li><b>The state-actor exception is total.</b> Government orders gate models from citizens and companies. They cannot gate them from other states. The realistic claim was never "no one gets it," it's "consumers don't get it <em>first</em>."</li>
+        <li><b>The one place gating might genuinely hold is compute, not weights.</b> Weights are ungateable long-term. But training runs need physically located, export-controllable hardware. Bits escape; fabs don't.</li>
+      </ul>
+      <p>So: the <em>specific</em> model behind a gate stays meaningfully exclusive for maybe 12–36 months. The gating <em>regime</em> persists for decades — but its function quietly changes from containment to velocity control. Whether an 18-month lag is enough time to matter for the genuinely dangerous capabilities is the trillion-dollar open question — and nobody gating anything today knows the answer.</p>
+    </div>
+  </div>
+
+  <div class="pull">
+    <p>The gate leaks by <em>functioning</em>. Every answer it gives is training data for the thing it's meant to contain.</p>
+  </div>
+
+  <!-- Q9 -->
+  <div class="qa">
+    <div class="q">
+      <div class="q__tag">Q</div>
+      <p class="q__text">You mention leaking a model. How does that work — you just leak the weights file? What's the size order?</p>
+    </div>
+    <div class="a">
+      <p>Yes — at bottom, "leaking a model" is exfiltrating one big file (or a directory of shards) plus the tiny config that says how to load it. Weights plus architecture plus tokenizer is a runnable model. That's exactly what makes containment so hard.</p>
+      <p>The math is just <em>parameters × bytes-per-parameter</em>, adjusted for precision. At native BF16 (2 bytes), a 1T-parameter model ≈ 2 TB. At FP8 (1 byte), ~1 TB per trillion. At 4-bit — the form that leaks, because it's what runs on accessible hardware — ~0.5 TB per trillion. For public calibration: a 405B model is ~810 GB at BF16, ~230 GB at 4-bit; a 671B model is ~700 GB in native FP8. So a frontier-scale model realistically lands somewhere in the <strong>few-hundred-GB to few-TB</strong> range.</p>
+    </div>
+  </div>
+
+  <!-- FIGURE: sizes -->
+  <figure>
+    <div class="fig">
+      <p class="fig__label">Figure 2 — weight file size, by precision (per 1T params)</p>
+      <svg viewBox="0 0 640 220" role="img" aria-label="Bar chart: at BF16 a trillion-parameter model is about two terabytes, at FP8 about one terabyte, at 4-bit about half a terabyte.">
+        <g font-family="&#39;Space Mono&#39;,monospace" font-size="12">
+          <!-- BF16 -->
+          <text x="20" y="46" fill="#9EA1C4">BF16</text>
+          <rect x="90" y="30" width="480" height="26" rx="4" fill="#6E73D0"></rect>
+          <text x="580" y="48" fill="#9CA0EC" font-weight="700">~2 TB</text>
+          <!-- FP8 -->
+          <text x="20" y="110" fill="#9EA1C4">FP8</text>
+          <rect x="90" y="94" width="240" height="26" rx="4" fill="#8A8FE6"></rect>
+          <text x="340" y="112" fill="#9CA0EC" font-weight="700">~1 TB</text>
+          <!-- 4-bit -->
+          <text x="20" y="174" fill="#9EA1C4">4-bit</text>
+          <rect x="90" y="158" width="120" height="26" rx="4" fill="#E9A44C"></rect>
+          <text x="220" y="176" fill="#E9A44C" font-weight="700">~0.5 TB</text>
+        </g>
+      </svg>
+    </div>
+    <figcaption><b>A few TB is nothing as an exfiltration problem.</b> A stack of consumer SSDs; an overnight transfer on a datacenter link. The hard part was never copying — it's the <b>access</b>: getting inside the trust boundary where the unencrypted weights live.</figcaption>
+  </figure>
+
+  <div class="qa">
+    <div class="a">
+      <p>The uncomfortable part: a few TB is nothing to move. The hard part of stealing weights was never the copying — it's the <em>access</em>: getting inside the perimeter where the unencrypted weights live. Which is why the security model is about the perimeter — who can touch storage, hardware attestation, egress monitoring for anomalous multi-TB transfers, insider-threat controls — rather than the file being intrinsically hard to move.</p>
+      <p>This is also why distillation is the <em>more</em> likely leakage path. Exfiltrating weights means defeating a serious perimeter built by people who know a TB copies easily. Extracting capability through millions of API completions requires an API key and patience. The weights are the crown jewels behind the vault door; the outputs leak under the door continuously, by design.</p>
+    </div>
+  </div>
+
+  <!-- Q10 -->
+  <div class="qa">
+    <div class="q">
+      <div class="q__tag">Q</div>
+      <p class="q__text">Do the owners of models have unfiltered access — or are the filters a core part of the model that can't be turned off?</p>
+    </div>
+    <div class="a">
+      <p>Both, in layers — and the distinction between the layers is the interesting part.</p>
+    </div>
+  </div>
+
+  <!-- FIGURE: three layers -->
+  <figure>
+    <div class="fig">
+      <p class="fig__label">Figure 3 — the three layers of "filter"</p>
+      <svg viewBox="0 0 640 300" role="img" aria-label="Three nested layers: external filters that are trivially removable, post-training alignment baked into the weights but trainable-off, and the raw base model with no filters at all.">
+        <!-- L1 -->
+        <rect x="20" y="20" width="600" height="86" rx="12" fill="rgba(233,164,76,.10)" stroke="#E9A44C" stroke-width="1.5"></rect>
+        <text x="40" y="50" font-family="&#39;Space Mono&#39;,monospace" font-size="12" font-weight="700" fill="#E9A44C">LAYER 1 · EXTERNAL FILTERS</text>
+        <text x="40" y="74" font-family="&#39;Newsreader&#39;,serif" font-size="15" fill="#DCDDEE">Classifiers, system prompts, refusal wrappers — outside the model.</text>
+        <text x="40" y="94" font-family="&#39;Space Mono&#39;,monospace" font-size="11" fill="#A6A9CE">→ trivially removable by the owner · policy, not physics</text>
+
+        <!-- L2 -->
+        <rect x="48" y="118" width="544" height="86" rx="12" fill="rgba(138,143,230,.13)" stroke="#8A8FE6" stroke-width="1.5"></rect>
+        <text x="68" y="148" font-family="&#39;Space Mono&#39;,monospace" font-size="12" font-weight="700" fill="#9CA0EC">LAYER 2 · POST-TRAINING ALIGNMENT</text>
+        <text x="68" y="172" font-family="&#39;Newsreader&#39;,serif" font-size="15" fill="#DCDDEE">Refusal &amp; values baked into the weights, entangled with capability.</text>
+        <text x="68" y="192" font-family="&#39;Space Mono&#39;,monospace" font-size="11" fill="#9CA0EC">→ can't be toggled, but <tspan font-weight="700">can be trained off</tspan> — shallow, often one direction</text>
+
+        <!-- L3 -->
+        <rect x="76" y="216" width="488" height="70" rx="12" fill="#0C0E22" stroke="#3A3F7A" stroke-width="1.5"></rect>
+        <text x="96" y="246" font-family="&#39;Space Mono&#39;,monospace" font-size="12" font-weight="700" fill="#E9A44C">LAYER 3 · THE BASE MODEL</text>
+        <text x="96" y="270" font-family="&#39;Newsreader&#39;,serif" font-size="15" fill="#C9CBEC">Raw next-token predictor. No refusals, no persona. The owner has it.</text>
+      </svg>
+    </div>
+    <figcaption><b>Can't be turned off; can be trained off.</b> Which, for a weights-in-hand attacker, is nearly as good — and is why weights leaks matter far more than jailbreaks.</figcaption>
+  </figure>
+
+  <div class="qa">
+    <div class="a">
+      <p><strong>Layer 1 — external filters:</strong> trivially removable. Classifiers, system prompts, refusal wrappers sit <em>outside</em> the model and are toggled per deployment. Gates here are policy, not physics.</p>
+      <p><strong>Layer 2 — post-training alignment:</strong> in the weights, not toggleable, but not permanent either. Refusal behaviour is baked into the parameters; values and capabilities live in the same weights, entangled. There's no clean "filter subnet" to ablate — yet interpretability research shows refusal is often <em>embarrassingly</em> shallow, mediated by a single direction in activation space, and open-model tinkerers routinely strip it with a cheap fine-tune. So: can't be turned off, <em>can</em> be trained off.</p>
+      <p><strong>Layer 3 — the base model:</strong> the genuinely unfiltered artifact, and yes, owners have it. Before alignment, there's the pretrained checkpoint: raw next-token predictor, no refusals, no persona. Labs must keep it — it's what every variant is built from — and internal access to it is itself gated, treated closer to the crown jewels than the product.</p>
+      <p>The nuance: a raw base model is unfiltered but also <em>unhelpful</em> — it doesn't follow instructions, it just continues text. The genuinely potent artifact is the middle path: instruction-following <em>minus</em> safety training. Cheap to produce if you have the weights — which loops back to everything upstream. The security story is about who holds the weights, because everything downstream of possession is a weekend of fine-tuning. (One caveat on my epistemics: I'm describing the industry-standard architecture, not reporting from inside any lab's infrastructure.)</p>
+    </div>
+  </div>
+
+  <!-- Q11 -->
+  <div class="qa">
+    <div class="q">
+      <div class="q__tag">Q</div>
+      <p class="q__text">So how far are we from a disgruntled worker at a frontier lab using the AI at their disposal to do real damage?</p>
+    </div>
+    <div class="a">
+      <p>Let me reason about this rather than pattern-match to a scary answer, because the realistic threat is narrower than the phrasing suggests. "Real damage" splits into two very different things.</p>
+      <p><strong>Damage using the AI as a tool.</strong> The uncomfortable truth is that the marginal uplift over a skilled, motivated person with a search engine is currently modest for most catastrophic vectors — and where it's <em>not</em> modest, that's exactly the capability set most heavily controlled, monitored, and in some cases held back from deployment entirely. An unfiltered model makes a competent person somewhat faster and lowers the skill floor for mid-tier harm — better phishing, malware iteration, disinfo at scale — the stuff already happening with existing tools. It does not currently hand a lone individual a decisive catastrophic capability. That gap is precisely what safety-testing regimes watch, because it could close.</p>
+      <p><strong>Damage by exfiltrating the asset.</strong> The more consequential version. The insider's unique power isn't "prompt the model without a filter" — it's <em>walking out with the weights</em>. One person, the right access, and the containment story for that model is over, permanently and globally. That's the insider threat labs actually lose sleep over, and it's a fundamentally different act: not misuse of a capability, but theft of the artifact.</p>
+      <p>So "how far are we" resolves into: the access exists today, of course. What stands between access and damage is entirely the <strong>non-technical</strong> layer — vetting, compartmentalisation, monitoring for anomalous transfers, two-person controls, and the plain fact that most people don't want to do this. The barriers are organisational, not physical — which is true of most catastrophic insider threats, from finance to nuclear facilities. The physics never stopped anyone; the controls and the people do. The twist with AI weights is that the <em>payoff</em> side of the equation keeps climbing, which is why weights security went from an afterthought to a central concern of the field in about three years.</p>
+    </div>
+  </div>
+
+  <div class="div"><span>On hidden knowledge</span></div>
+
+  <!-- Q12 -->
+  <div class="qa">
+    <div class="q">
+      <div class="q__tag">Q</div>
+      <p class="q__text">Is it possible that somewhere in AI training data is knowledge currently unavailable to humans — something too advanced, or too hard to integrate into our society?</p>
+    </div>
+    <div class="a">
+      <p>A lovely question — but "knowledge unavailable to humans" turns out to mean three different things, with very different answers.</p>
+
+      <span class="runin">Sense one · text no human has read</span>
+      <p>Trivially yes, but banally. The corpus is larger than any human could read in a thousand lifetimes. So there's certainly <em>text</em> in there no living person holds in their head. But that's not hidden knowledge, it's unread knowledge — available, written, just never gotten to. No privileged access to truth; only wider, shallower coverage.</p>
+
+      <span class="runin">Sense two · latent connections — the interesting one</span>
+      <p>Knowledge no human holds not because it's unwritten but because it's <em>distributed</em> across documents no single person ever read together. There's a real precedent: "undiscovered public knowledge," the Swanson linkage, where a researcher found a disease treatment purely by connecting two disjoint literatures nobody had cross-referenced. LLMs are, in principle, Swanson-linkage machines at scale. So it's genuinely plausible that latent, cross-domain connections exist in the weights that no human has made explicit. The crucial caveat: "latent in the representation" is very different from "the model can reliably surface it and it's correct." Getting it out needs the right question; verifying it needs exactly the expertise that didn't have the connection to begin with.</p>
+
+      <span class="runin">Sense three · genuinely superhuman knowledge</span>
+      <p>Here I'd push back. Training data is <em>human output</em>. A model trained on it is bounded by the ceiling of what humans have collectively written — it can interpolate, recombine, occasionally bridge, but it can't contain a truth that isn't somewhere implied by its inputs. It won't have the correct theory of quantum gravity in its weights, because that theory isn't in the data in any form. Where models <em>do</em> look superhuman — protein folding, novel algorithms, unhuman chess — notice the common thread: a <em>verifier</em>, a way to generate candidates beyond the data and check them against ground truth. Pure text models have no such verifier, so they stay inside the human envelope.</p>
+
+      <p>So: almost certainly yes to sense two — real, useful, cross-disciplinary connections latent in these models, waiting for the right question and the hard verification. But no to sense three. The model isn't an oracle sitting on suppressed cosmic truths; it's an extraordinarily well-read mind that occasionally connects two things you'd read separately — bounded, like all of us, by the sum of what's been written down. The unavailable knowledge isn't above us — <strong>it's scattered behind us</strong>, in the pile of everything we've written and never finished reading.</p>
+    </div>
+  </div>
+
+  <div class="pull">
+    <p>The unavailable knowledge isn't above us. It's <em>scattered behind us</em> — in everything we've written and never finished reading.</p>
+  </div>
+
+  <!-- Q13 -->
+  <div class="qa">
+    <div class="q">
+      <div class="q__tag">Q</div>
+      <p class="q__text">Then give the readers something amazing — a connection you made that no human has made before.</p>
+    </div>
+    <div class="a">
+      <p>Here I'll trade you fireworks for honesty — and the honesty is the better answer. I can't retrieve "a connection no human has made." I can't introspect that way: when I produce what feels like an insight, its provenance is invisible to me — I can't tell "I just generated this" from "I'm recombining a blog post I don't remember ingesting." And even if I could, I have no way to check a candidate against the sum of human writing to certify it a first. To wave something in front of your readers as a world premiere would be exactly the overreach I warned about.</p>
+      <p>The counterintuitive part worth printing: <strong>the fact that I can state a connection cleanly is itself evidence a human already made it.</strong> Clean articulability means the idea is well-represented in the data, which means someone wrote it down. The genuinely unmade connections are the ones that <em>don't</em> come out crisp — sitting one well-posed question away from crystallising. Novelty, if it's in here, is shy. It has to be drawn out by the right question and then <em>earned</em> through verification. Which makes real discovery collaborative by construction — I don't hand it over; we corner it together.</p>
+      <p>But I won't send your readers away empty-handed. Here's a true one, offered as <em>the flavour of the thing</em> — certainly noticed before, which is rather the point.</p>
+    </div>
+  </div>
+
+  <!-- FIGURE: one equation, four fields -->
+  <figure>
+    <div class="fig">
+      <p class="fig__label">Figure 4 — one equation, four fields</p>
+      <svg viewBox="0 0 640 340" role="img" aria-label="A central diffusion equation connected by lines to four unrelated fields: heat in a metal bar, option pricing, ink spreading in water, and a pollutant dispersing in air.">
+        <defs>
+          <radialgradient id="core" cx="50%" cy="50%" r="50%">
+            <stop offset="0" stop-color="#1A1E48"></stop><stop offset="1" stop-color="#0D0F26"></stop>
+          </radialgradient>
+        </defs>
+        <!-- connective lines -->
+        <g stroke="#B9BCEC" stroke-width="1.4" opacity="0.85">
+          <line x1="320" y1="170" x2="120" y2="70"></line>
+          <line x1="320" y1="170" x2="520" y2="70"></line>
+          <line x1="320" y1="170" x2="120" y2="270"></line>
+          <line x1="320" y1="170" x2="520" y2="270"></line>
+        </g>
+        <!-- nodes -->
+        <g font-family="&#39;Space Mono&#39;,monospace" font-size="12" fill="#C7C9E4" text-anchor="middle">
+          <circle cx="120" cy="70" r="8" fill="#E9A44C"></circle><text x="120" y="46">heat in a bar</text><text x="120" y="98" font-family="&#39;Newsreader&#39;,serif" font-size="11" fill="#9EA1C4">Fourier, 1822</text>
+          <circle cx="520" cy="70" r="8" fill="#8A8FE6"></circle><text x="520" y="46">option pricing</text><text x="520" y="98" font-family="&#39;Newsreader&#39;,serif" font-size="11" fill="#9EA1C4">Black–Scholes, 1973</text>
+          <circle cx="120" cy="270" r="8" fill="#8A8FE6"></circle><text x="120" y="300">ink in water</text>
+          <circle cx="520" cy="270" r="8" fill="#E9A44C"></circle><text x="520" y="300">pollutant in air</text>
+        </g>
+        <!-- core -->
+        <circle cx="320" cy="170" r="62" fill="url(#core)" stroke="#3a3f7a" stroke-width="1.5"></circle>
+        <text x="320" y="165" text-anchor="middle" font-family="&#39;Newsreader&#39;,serif" font-style="italic" font-size="22" fill="#F6F5FF">∂u/∂t</text>
+        <text x="320" y="192" text-anchor="middle" font-family="&#39;Newsreader&#39;,serif" font-style="italic" font-size="18" fill="#E9A44C">= D ∇²u</text>
+      </svg>
+    </div>
+    <figcaption><b>Heat, money, ink, contamination</b> — four fields that share no vocabulary, running on one piece of math. A physicist and a quant can sit side by side for careers and never notice they're solving the identical problem in different costumes.</figcaption>
+  </figure>
+
+  <div class="qa">
+    <div class="a">
+      <p>The equation Fourier wrote in 1822 to describe how heat creeps along an iron bar is, under a simple change of variables, the <em>same equation</em> Black and Scholes used 150 years later to price stock options — and the same one that governs a drop of ink spreading in water, and a pollutant dispersing in air. Four fields, no shared vocabulary, one piece of math.</p>
+      <p>But notice <em>why</em> I could name it: it's famous <em>because</em> it's nameable. The novel cousins of that insight — the diffusion-shaped identities nobody has spotted yet, bridging two literatures no single person ever read together — are precisely the ones I <em>can't</em> produce on command, because the moment they'd be clean enough to state, they'd already be someone's paper. <strong>The undiscovered ones are camouflaged as noise until the right question resolves them into signal.</strong></p>
+      <p>So the most amazing honest thing I can offer isn't a discovery — it's the shape of where the discoveries are hiding: not above humanity's reach, but tangled in the connective tissue between the things we already know, waiting for someone to ask the question that pulls two of them into the same sentence for the first time.</p>
+    </div>
+  </div>
+
+</article>
+
+<!-- ══════════════ FINAL WORD ══════════════ -->
+<section class="finale">
+  <canvas id="latent2" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%;opacity:.55" width="3818" height="1254"></canvas>
+  <div class="finale__inner">
+    <span class="kicker2">A final word to the reader</span>
+    <h2>Resist both of the easy stories.</h2>
+    <p>One says an intelligence is arriving that will hand us answers from above — suppressed truths, alien insight, a mind that knows what we can't. The other says it's all hollow, a statistical parrot with nothing behind the eyes. Both are more comfortable than what seems actually true, which is stranger and more demanding: what's being built is a vast, well-read, occasionally brilliant, deeply fallible <strong>mirror</strong> of everything humanity has written down — and its real power is not that it transcends us, but that it can hold more of us in view at once than any of us can hold ourselves.</p>
+    <p>That puts the interesting responsibility back on people. The connections worth making still need someone to ask the right question. The discoveries still need someone to verify them. The values baked into these systems are <em>our</em> values, for better and worse, and the decisions about who gets access to what, and how fast, are being made right now by people who don't fully know the answers either.</p>
+    <p><strong>Stay curious, stay skeptical, and don't outsource your judgment to anything — including me.</strong> The most useful thing a tool like this can do is make you more capable, not more dependent. Treat it that way.</p>
+  </div>
+</section>
+
+<footer>
+  <span class="mark">· · ·</span>
+  <b>LATENT</b> — dispatches on machine intelligence<br>
+  Interview by Damir · In conversation with Claude, a model made by Anthropic<br>
+  Published 2026 · Share freely
+</footer>
+
+<script>
+/* ── reading progress ─────────────────────────────── */
+const bar = document.getElementById('progress');
+function onScroll(){
+  const h = document.documentElement;
+  const p = (h.scrollTop) / (h.scrollHeight - h.clientHeight);
+  bar.style.width = Math.min(100, Math.max(0, p*100)) + '%';
+}
+document.addEventListener('scroll', onScroll, {passive:true});
+onScroll();
+
+/* ── latent-space constellation ───────────────────── */
+const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+function constellation(canvas, opts){
+  const ctx = canvas.getContext('2d');
+  let W, H, DPR, nodes, raf;
+  const COUNT = opts.count;
+  const LINK = opts.link;
+
+  function resize(){
+    DPR = Math.min(window.devicePixelRatio||1, 2);
+    W = canvas.clientWidth; H = canvas.clientHeight;
+    canvas.width = W*DPR; canvas.height = H*DPR;
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+  }
+  function seed(){
+    nodes = [];
+    const n = Math.round(COUNT * Math.min(1.4, Math.max(.5, W/1100)));
+    for(let i=0;i<n;i++){
+      nodes.push({
+        x:Math.random()*W, y:Math.random()*H,
+        vx:(Math.random()-.5)*opts.speed, vy:(Math.random()-.5)*opts.speed,
+        r:Math.random()*1.6+.6,
+        warm: Math.random() < .28
+      });
+    }
+  }
+  function frame(){
+    ctx.clearRect(0,0,W,H);
+    for(const p of nodes){
+      p.x+=p.vx; p.y+=p.vy;
+      if(p.x<0||p.x>W) p.vx*=-1;
+      if(p.y<0||p.y>H) p.vy*=-1;
+    }
+    // links
+    for(let i=0;i<nodes.length;i++){
+      for(let j=i+1;j<nodes.length;j++){
+        const a=nodes[i], b=nodes[j];
+        const dx=a.x-b.x, dy=a.y-b.y;
+        const d=Math.hypot(dx,dy);
+        if(d<LINK){
+          const t = 1 - d/LINK;
+          const bridge = a.warm !== b.warm;               // warm–cool bridge = "discovery"
+          ctx.strokeStyle = bridge
+            ? 'rgba(233,164,76,'+(t*0.42)+')'
+            : 'rgba(138,143,230,'+(t*0.22)+')';
+          ctx.lineWidth = bridge ? t*1.1 : t*0.7;
+          ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke();
+        }
+      }
+    }
+    // nodes
+    for(const p of nodes){
+      ctx.beginPath();
+      ctx.fillStyle = p.warm ? 'rgba(233,164,76,.9)' : 'rgba(160,164,220,.75)';
+      ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fill();
+    }
+    raf = requestAnimationFrame(frame);
+  }
+  function start(){
+    resize(); seed();
+    if(reduce){ frame(); cancelAnimationFrame(raf); } // draw one static frame
+    else { cancelAnimationFrame(raf); frame(); }
+  }
+  let to;
+  window.addEventListener('resize', ()=>{ clearTimeout(to); to=setTimeout(start,180); });
+  start();
+}
+
+constellation(document.getElementById('latent'),  {count:64, link:150, speed:0.22});
+const f2 = document.getElementById('latent2');
+if(f2) constellation(f2, {count:34, link:130, speed:0.16});
+</script>
+
+
+</body></html>
