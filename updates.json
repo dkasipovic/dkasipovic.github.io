@@ -1,5 +1,10 @@
 [
   {
+    "date": "2026-07-04T12:00:00Z",
+    "tool": "Гео",
+    "description": "Added Гео — interactive map app for learning country capitals with learn and game modes"
+  },
+  {
     "date": "2026-05-15T12:00:00Z",
     "tool": "Duplicate Counter",
     "description": "Added Duplicate Counter tool to find and count repeated lines in text"
