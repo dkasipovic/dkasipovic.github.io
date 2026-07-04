@@ -1,5 +1,10 @@
 [
   {
+    "date": "2026-07-04T14:00:00Z",
+    "tool": "Гео",
+    "description": "Added map zoom and pan (pinch, drag, wheel) with automatic zoom to the selected country"
+  },
+  {
     "date": "2026-07-04T12:00:00Z",
     "tool": "Гео",
     "description": "Added Гео — interactive map app for learning country capitals with learn and game modes"

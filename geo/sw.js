@@ -1,5 +1,5 @@
-const PRECACHE_NAME = 'geo-precache-v1';
-const RUNTIME_NAME = 'geo-runtime-v1';
+const PRECACHE_NAME = 'geo-precache-v2';
+const RUNTIME_NAME = 'geo-runtime-v2';
 
 const PRECACHE_ASSETS = [
   './',
