@@ -1,0 +1,356 @@
+html, body {
+    height: 100%;
+    overflow: hidden;
+}
+
+.app {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 8px;
+    height: 100vh;
+    height: 100dvh;
+    box-sizing: border-box;
+}
+
+body.has-app-bar .app {
+    height: calc(100vh - 56px);
+    height: calc(100dvh - 56px);
+}
+
+/* ── Top / bottom panels ── */
+
+.panel {
+    flex: 0 0 auto;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    min-height: 96px;
+    padding: 12px 16px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    text-align: center;
+    overflow: hidden;
+}
+
+.panel-label {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text-muted);
+}
+
+.panel-value {
+    font-size: clamp(24px, 6vw, 48px);
+    font-weight: 700;
+    line-height: 1.15;
+    color: var(--text-primary);
+}
+
+.panel-value.placeholder {
+    color: var(--text-muted);
+    font-size: clamp(18px, 4.5vw, 32px);
+    font-weight: 500;
+}
+
+.panel-country .panel-value.active {
+    color: var(--accent);
+}
+
+/* ── Map panel ── */
+
+.panel-map {
+    flex: 1;
+    min-height: 0;
+    position: relative;
+    background: #0d0d10;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+}
+
+.map-host {
+    width: 100%;
+    height: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+}
+
+.map-host svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.territory {
+    fill: #16161b;
+    stroke: #222228;
+    stroke-width: 0.5;
+    pointer-events: none;
+}
+
+.country {
+    fill: #2e2e3a;
+    stroke: #585866;
+    stroke-width: 0.75;
+    cursor: pointer;
+    transition: fill 0.15s ease;
+}
+
+.country:hover {
+    fill: #3d3d4c;
+}
+
+.country.selected {
+    fill: var(--accent);
+    stroke: #c4b5fd;
+    filter: drop-shadow(0 0 10px rgba(139, 92, 246, 0.7));
+}
+
+.dot {
+    fill: #8a8a98;
+    pointer-events: none;
+}
+
+.dot.selected {
+    fill: var(--accent);
+    filter: drop-shadow(0 0 8px rgba(139, 92, 246, 0.9));
+}
+
+.tap {
+    fill: transparent;
+    stroke: none;
+    pointer-events: all;
+    cursor: pointer;
+}
+
+/* ── Toolbar ── */
+
+.map-toolbar {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 2;
+    display: flex;
+    gap: 8px;
+}
+
+.btn-random {
+    height: 48px;
+    padding: 0 20px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s ease, transform 0.1s ease;
+}
+
+.btn-random:hover {
+    background: var(--accent-dim);
+}
+
+.btn-random:active {
+    transform: scale(0.96);
+}
+
+.btn-settings {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-tertiary);
+    color: var(--text-secondary);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.btn-settings:hover {
+    background: var(--bg-hover);
+    border-color: var(--border-light);
+    color: var(--text-primary);
+}
+
+/* ── Capital cover (game mode) ── */
+
+.capital-cover {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    background: var(--bg-tertiary);
+    border: 2px dashed var(--accent);
+    border-radius: var(--radius-lg);
+    color: var(--text-secondary);
+    font-family: inherit;
+    font-size: clamp(16px, 3.5vw, 22px);
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.capital-cover[hidden] {
+    display: none;
+}
+
+.capital-cover:hover {
+    background: var(--bg-hover);
+}
+
+.cover-icon {
+    font-size: 24px;
+}
+
+/* ── Settings overlay ── */
+
+.settings-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+}
+
+.settings-overlay[hidden] {
+    display: none;
+}
+
+.settings-card {
+    width: 100%;
+    max-width: 420px;
+    padding: 20px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.settings-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.btn-close {
+    width: 36px;
+    height: 36px;
+    background: var(--bg-tertiary);
+    color: var(--text-secondary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.btn-close:hover {
+    background: var(--bg-hover);
+    color: var(--text-primary);
+}
+
+.setting-group {
+    margin-bottom: 20px;
+}
+
+.setting-group:last-child {
+    margin-bottom: 0;
+}
+
+.setting-group-label {
+    margin-bottom: 10px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-muted);
+}
+
+.continent-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.continent-grid button,
+.mode-toggle button {
+    min-height: 48px;
+    padding: 8px 12px;
+    background: var(--bg-tertiary);
+    color: var(--text-secondary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.continent-grid button:hover,
+.mode-toggle button:hover {
+    background: var(--bg-hover);
+    border-color: var(--border-light);
+}
+
+.continent-grid button.active,
+.mode-toggle button.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+}
+
+.mode-toggle {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+/* ── Landscape / TV ── */
+
+@media (orientation: landscape) and (min-aspect-ratio: 4/3) {
+    .panel {
+        min-height: 72px;
+        padding: 8px 16px;
+    }
+
+    .panel-value {
+        font-size: clamp(22px, 4vh, 40px);
+    }
+
+    .panel-value.placeholder {
+        font-size: clamp(16px, 3vh, 28px);
+    }
+
+    .panel-label {
+        font-size: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .btn-random {
+        font-size: 14px;
+        padding: 0 14px;
+    }
+}

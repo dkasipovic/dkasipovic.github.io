@@ -1,17 +1,23 @@
-const PRECACHE_NAME = 'tools-index-precache-v17';
-const RUNTIME_NAME = 'tools-index-runtime-v17';
+const PRECACHE_NAME = 'geo-precache-v1';
+const RUNTIME_NAME = 'geo-runtime-v1';
 
 const PRECACHE_ASSETS = [
   './',
   './index.html',
   './styles.css',
-  './updates.json',
+  './script.js',
+  './data.json',
   './manifest.json',
-  './icon.svg',
   './icon-192.png',
   './icon-512.png',
-  './shared/styles.css',
-  './shared/app.js',
+  './maps/europe.svg',
+  './maps/asia.svg',
+  './maps/africa.svg',
+  './maps/north-america.svg',
+  './maps/south-america.svg',
+  './maps/oceania.svg',
+  '/shared/styles.css',
+  '/shared/app.js',
 ];
 
 const BEST_EFFORT_EXTERNAL_ASSETS = [];
