@@ -1,5 +1,10 @@
 [
   {
+    "date": "2026-07-05T12:00:00Z",
+    "tool": "GPS Speed",
+    "description": "Fixed screen staying awake while the app is open, especially in installed PWA mode"
+  },
+  {
     "date": "2026-07-04T14:00:00Z",
     "tool": "Гео",
     "description": "Added map zoom and pan (pinch, drag, wheel) with automatic zoom to the selected country"

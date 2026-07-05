@@ -762,65 +762,79 @@ const NOSLEEP_MP4 = 'data:video/mp4;base64,AAAAIGZ0eXBpc29tAAACAGlzb21pc28yYXZjM
 const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 const isStandalone = window.navigator.standalone === true || window.matchMedia('(display-mode: standalone)').matches;
 
+// In iOS home-screen web apps before 18.4, navigator.wakeLock.request()
+// resolves but the screen still sleeps (WebKit bug fixed in 18.4). Route
+// those installs to the video fallback; everywhere else trust the API.
+function iosAtLeast(major, minor) {
+  let m = navigator.userAgent.match(/OS (\d+)[._](\d+)/);          // iPhone/iPod UA
+  if (!m) m = navigator.userAgent.match(/Version\/(\d+)\.(\d+)/);  // iPad desktop-mode UA (Safari version tracks iOS)
+  if (!m) return false; // unknown version: assume old, use the fallback
+  const [maj, min] = [parseInt(m[1], 10), parseInt(m[2], 10)];
+  return maj > major || (maj === major && min >= minor);
+}
+const nativeWakeLockBroken = isIOS && isStandalone && !iosAtLeast(18, 4);
+
+let wakeLockPending = false;
+
 async function requestWakeLock() {
-  if (state.wakeLock) return; // already held
+  if (state.wakeLock || wakeLockPending) return;
 
-  // On iOS standalone/PWA: Wake Lock API exists but silently fails — go straight to video
-  if (isIOS && isStandalone) {
-    enableNoSleepVideo();
-    return;
-  }
-
-  // Try the native Screen Wake Lock API first
-  if ('wakeLock' in navigator) {
+  if ('wakeLock' in navigator && !nativeWakeLockBroken) {
+    wakeLockPending = true;
     try {
-      state.wakeLock = await navigator.wakeLock.request('screen');
-      state.wakeLock.addEventListener('release', () => {
-        state.wakeLock = null;
+      const lock = await navigator.wakeLock.request('screen');
+      state.wakeLock = lock;
+      lock.addEventListener('release', () => {
+        if (state.wakeLock === lock) state.wakeLock = null;
+        // Released while still visible (e.g. OS reclaimed it) — re-acquire.
+        if (document.visibilityState === 'visible') requestWakeLock();
       });
-      return; // success
+      disableNoSleepVideo(); // native lock held, fallback not needed
+      return;
     } catch (e) {
-      // API threw — fall through to video fallback.
-      // Common on Safari without user gesture, or PWA mode on iOS < 18.4.
+      // NotAllowedError: page hidden, battery saver, or Safari without a
+      // user gesture yet. Fall through to the video fallback; the API is
+      // retried on the next gesture / visibilitychange.
+    } finally {
+      wakeLockPending = false;
     }
   }
 
-  // Fallback: loop a silent MP4 with an audio track to prevent screen sleep.
   enableNoSleepVideo();
 }
 
 function enableNoSleepVideo() {
-  if (state.noSleepVideo) return;
+  if (state.noSleepVideo) {
+    if (state.noSleepVideo.paused) state.noSleepVideo.play().catch(() => {});
+    return;
+  }
   const video = document.createElement('video');
   video.src = NOSLEEP_MP4;
   video.loop = true;
   video.setAttribute('playsinline', '');
   video.setAttribute('webkit-playsinline', '');
+  video.setAttribute('title', 'Screen keep-awake');
   video.style.cssText = 'position:fixed;width:1px;height:1px;opacity:0.01;pointer-events:none;z-index:-1';
   document.body.appendChild(video);
   state.noSleepVideo = video;
 
-  // Start muted (allowed without gesture), then unmute on first touch for full iOS wake
+  // Start muted (allowed without gesture), then unmute on first touch —
+  // iOS only counts a video with an active audio session as "playing"
+  // for sleep-prevention purposes.
   video.muted = true;
   video.play().catch(() => {});
 
   if (isIOS) {
     const unmute = () => {
+      if (!state.noSleepVideo) return;
       video.muted = false;
       video.volume = 0.01;       // near-silent but creates active audio session
       video.play().catch(() => {});
-      document.removeEventListener('touchstart', unmute);
     };
-    document.addEventListener('touchstart', unmute, { once: true });
+    document.addEventListener('touchend', unmute, { once: true });
   }
 
-  // Re-start if the video ends or the tab becomes visible again
   video.addEventListener('ended', () => { video.play().catch(() => {}); });
-  document.addEventListener('visibilitychange', () => {
-    if (document.visibilityState === 'visible' && state.noSleepVideo) {
-      state.noSleepVideo.play().catch(() => {});
-    }
-  });
 }
 
 function disableNoSleepVideo() {
@@ -848,29 +862,34 @@ function init() {
     }, 150);
   });
 
-  // Safari requires a user gesture to grant wake lock.
-  // Acquire it on the first user interaction (tap/click).
-  let wakeLockActivated = false;
-  function activateWakeLockOnGesture() {
-    if (wakeLockActivated) return;
-    wakeLockActivated = true;
-    // If we already hold the video fallback, release it and try the real API
-    // now that we have a user gesture.
-    disableNoSleepVideo();
+  // Safari only grants the wake lock from a user gesture, so retry on
+  // every tap until a lock is actually held (requestWakeLock is a no-op
+  // once it is). A gesture also lets a blocked fallback video start.
+  function onUserGesture() {
     requestWakeLock();
+    if (state.noSleepVideo && state.noSleepVideo.paused) {
+      state.noSleepVideo.play().catch(() => {});
+    }
   }
-  document.addEventListener('click', activateWakeLockOnGesture, { once: false });
-  document.addEventListener('touchend', activateWakeLockOnGesture, { once: false });
+  document.addEventListener('click', onUserGesture);
+  document.addEventListener('touchend', onUserGesture);
 
-  // Also attempt on load (works on Chrome/Firefox, silently fails on Safari).
+  // Also attempt on load (works on Chrome/Firefox, rejected on Safari
+  // until the first gesture).
   requestWakeLock();
 
-  // Re-acquire wake lock when returning to the page.
+  // The lock is auto-released whenever the page is hidden (screen off,
+  // app switch) — re-acquire on return. Browsers allow this re-request
+  // without a new gesture. Small delay: Safari can fire the event before
+  // the document counts as visible, causing a NotAllowedError.
   document.addEventListener('visibilitychange', () => {
-    if (document.visibilityState === 'visible' && !state.wakeLock) {
-      // Small delay: Safari may fire this event before the document is fully
-      // considered "visible", causing a NotAllowedError.
-      setTimeout(() => requestWakeLock(), 100);
+    if (document.visibilityState === 'visible') {
+      setTimeout(() => {
+        requestWakeLock();
+        if (state.noSleepVideo && state.noSleepVideo.paused) {
+          state.noSleepVideo.play().catch(() => {});
+        }
+      }, 100);
     }
   });
 }
