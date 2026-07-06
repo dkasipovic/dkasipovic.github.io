@@ -1,5 +1,10 @@
 [
   {
+    "date": "2026-07-06T12:00:00Z",
+    "tool": "Гео",
+    "description": "Added illustrated landmarks for every country — famous sights pop out of the map, and smaller countries reveal theirs when you zoom in"
+  },
+  {
     "date": "2026-07-05T12:00:00Z",
     "tool": "GPS Speed",
     "description": "Fixed screen staying awake while the app is open, especially in installed PWA mode"
