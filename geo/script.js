@@ -7,6 +7,34 @@
     var TAP_SLOP_PX = 8;
     var DOT_SCREEN_R = 5;   // px — visible microstate marker
     var TAP_SCREEN_R = 22;  // px — invisible tap target (~44px diameter)
+    var LM_ICON_PX = 46;    // px — on-screen landmark icon size
+    var LM_SHOW_AT_PX = 90; // px — country screen diagonal at which its landmark appears
+    var SVGNS = 'http://www.w3.org/2000/svg';
+
+    // Same projection as build-maps.mjs: per-continent lon/lat windows,
+    // equirectangular scaled by cos(mid-latitude), WIDTH = 1000.
+    var PROJ = {
+        'europe': { lon: [-25, 50], lat: [34, 72], shift: 0 },
+        'asia': { lon: [25, 150], lat: [-11, 62], shift: 1 },
+        'africa': { lon: [-26, 60], lat: [-36, 38], shift: 0 },
+        'north-america': { lon: [-170, -12], lat: [5, 84], shift: 2 },
+        'south-america': { lon: [-93, -32], lat: [-57, 13], shift: 0 },
+        'oceania': { lon: [110, 240], lat: [-50, 10], shift: 3 }
+    };
+
+    function projectPoint(continent, lat, lon) {
+        var win = PROJ[continent];
+        if (!win) return null;
+        if (win.shift === 1 && lon < -150) lon += 360;
+        if (win.shift === 2 && lon > 150) lon -= 360;
+        if (win.shift === 3 && lon < 0) lon += 360;
+        var cosMid = Math.cos(((win.lat[0] + win.lat[1]) / 2) * Math.PI / 180);
+        var scale = 1000 / ((win.lon[1] - win.lon[0]) * cosMid);
+        return {
+            x: (lon - win.lon[0]) * cosMid * scale,
+            y: (win.lat[1] - lat) * scale
+        };
+    }
 
     // ── State ──
     var data = null;
@@ -15,6 +43,8 @@
     var svgCache = {};
     var settings = { continent: DEFAULTS.continent, mode: DEFAULTS.mode };
     var selectedCode = null;
+    var landmarks = [];        // [{el, x, y, diag, code}] projected landmark markers
+    var landmarksReady = false; // landmarks.svg symbol defs injected into the document
 
     // ── Camera ──
     var svgEl = null;
@@ -25,6 +55,7 @@
 
     // ── DOM ──
     var countryName = document.getElementById('countryName');
+    var landmarkName = document.getElementById('landmarkName');
     var capitalName = document.getElementById('capitalName');
     var capitalCover = document.getElementById('capitalCover');
     var mapHost = document.getElementById('mapHost');
@@ -93,6 +124,15 @@
         for (var i = 0; i < markers.length; i++) {
             var target = markers[i].tap ? TAP_SCREEN_R : DOT_SCREEN_R;
             markers[i].el.setAttribute('r', target * unitsPerPx);
+        }
+        for (var j = 0; j < landmarks.length; j++) {
+            var lm = landmarks[j];
+            var s = LM_ICON_PX * unitsPerPx / 64;
+            lm.el.setAttribute('transform', 'translate(' + lm.x + ' ' + lm.y + ') scale(' + s + ')');
+            // Landmarks of countries that are tiny on screen stay hidden until
+            // you zoom in — a reward for exploring the map.
+            var visible = lm.code === selectedCode || lm.diag / unitsPerPx >= LM_SHOW_AT_PX;
+            lm.el.classList.toggle('lm-hidden', !visible);
         }
         resetViewBtn.hidden = view.w > base.w * 0.999;
     }
@@ -179,6 +219,7 @@
         countryName.textContent = 'Додирни државу на карти';
         countryName.classList.add('placeholder');
         countryName.classList.remove('active');
+        landmarkName.hidden = true;
         capitalName.textContent = '—';
         capitalName.classList.add('placeholder');
         capitalCover.hidden = true;
@@ -198,15 +239,85 @@
 
         var prev = mapHost.querySelectorAll('.selected');
         for (var i = 0; i < prev.length; i++) prev[i].classList.remove('selected');
-        var nodes = mapHost.querySelectorAll('.country[data-code="' + code + '"], .dot[data-code="' + code + '"]');
+        var nodes = mapHost.querySelectorAll('.country[data-code="' + code + '"], .dot[data-code="' + code + '"], .lm[data-code="' + code + '"]');
         for (var j = 0; j < nodes.length; j++) nodes[j].classList.add('selected');
 
         selectedCode = code;
         countryName.textContent = country.name;
         countryName.classList.remove('placeholder');
         countryName.classList.add('active');
+        if (country.landmark) {
+            landmarkName.textContent = '⭐ ' + country.landmark.name;
+            landmarkName.hidden = false;
+        } else {
+            landmarkName.hidden = true;
+        }
         applyReveal();
         zoomToCountry(code);
+    }
+
+    // ── Landmarks ──
+
+    function buildLandmarks(continent) {
+        landmarks = [];
+        if (!landmarksReady || !svgEl) return;
+        var pool = countriesByContinent[continent] || [];
+        var layer = document.createElementNS(SVGNS, 'g');
+        layer.setAttribute('class', 'landmarks');
+        for (var i = 0; i < pool.length; i++) {
+            var c = pool[i];
+            if (!c.landmark) continue;
+            var p = projectPoint(continent, c.landmark.lat, c.landmark.lon);
+            if (!p) continue;
+
+            // Screen-size diagonal of the country decides when its landmark shows.
+            var nodes = svgEl.querySelectorAll('.country[data-code="' + c.code + '"]');
+            var minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+            for (var n = 0; n < nodes.length; n++) {
+                var b = nodes[n].getBBox();
+                minX = Math.min(minX, b.x);
+                minY = Math.min(minY, b.y);
+                maxX = Math.max(maxX, b.x + b.width);
+                maxY = Math.max(maxY, b.y + b.height);
+            }
+            var diag = minX === Infinity ? 0 : Math.hypot(maxX - minX, maxY - minY);
+
+            var g = document.createElementNS(SVGNS, 'g');
+            g.setAttribute('class', 'lm lm-hidden');
+            g.setAttribute('data-code', c.code);
+
+            // Transparent hit box: painted-area hit testing would miss the
+            // gaps inside the icons.
+            var hit = document.createElementNS(SVGNS, 'rect');
+            hit.setAttribute('class', 'lm-hit');
+            hit.setAttribute('x', -32);
+            hit.setAttribute('y', -60);
+            hit.setAttribute('width', 64);
+            hit.setAttribute('height', 62);
+
+            var shadow = document.createElementNS(SVGNS, 'ellipse');
+            shadow.setAttribute('class', 'lm-shadow');
+            shadow.setAttribute('cx', 0);
+            shadow.setAttribute('cy', -0.5);
+            shadow.setAttribute('rx', 13);
+            shadow.setAttribute('ry', 3.2);
+
+            var use = document.createElementNS(SVGNS, 'use');
+            use.setAttribute('href', '#lm-' + c.landmark.icon);
+            use.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', '#lm-' + c.landmark.icon);
+            use.setAttribute('x', -32);
+            use.setAttribute('y', -60);
+            use.setAttribute('width', 64);
+            use.setAttribute('height', 64);
+
+            g.appendChild(hit);
+            g.appendChild(shadow);
+            g.appendChild(use);
+            layer.appendChild(g);
+            landmarks.push({ el: g, x: p.x, y: p.y, diag: diag, code: c.code });
+        }
+        svgEl.appendChild(layer);
+        applyView(view);
     }
 
     // ── Map ──
@@ -223,6 +334,7 @@
                 markers.push({ el: circles[i], tap: circles[i].classList.contains('tap') });
             }
             resetCamera(false);
+            buildLandmarks(continent);
             setIdle();
             if (done) done();
         };
@@ -426,10 +538,26 @@
 
     loadSettings();
 
-    fetch('./data.json')
-        .then(function (r) { return r.json(); })
-        .then(function (json) {
-            data = json;
+    Promise.all([
+        fetch('./data.json').then(function (r) { return r.json(); }),
+        // Landmark icons are decorative — the app still works if they fail.
+        fetch('./landmarks.svg')
+            .then(function (r) { return r.ok ? r.text() : null; })
+            .catch(function () { return null; })
+    ])
+        .then(function (results) {
+            data = results[0];
+            if (results[1]) {
+                var holder = document.createElement('div');
+                holder.setAttribute('aria-hidden', 'true');
+                holder.style.position = 'absolute';
+                holder.style.width = '0';
+                holder.style.height = '0';
+                holder.style.overflow = 'hidden';
+                holder.innerHTML = results[1];
+                document.body.appendChild(holder);
+                landmarksReady = true;
+            }
             for (var i = 0; i < data.countries.length; i++) {
                 var c = data.countries[i];
                 countriesByCode[c.code] = c;

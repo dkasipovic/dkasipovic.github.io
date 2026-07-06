@@ -1,5 +1,5 @@
-const PRECACHE_NAME = 'geo-precache-v2';
-const RUNTIME_NAME = 'geo-runtime-v2';
+const PRECACHE_NAME = 'geo-precache-v3';
+const RUNTIME_NAME = 'geo-runtime-v3';
 
 const PRECACHE_ASSETS = [
   './',
@@ -7,6 +7,7 @@ const PRECACHE_ASSETS = [
   './styles.css',
   './script.js',
   './data.json',
+  './landmarks.svg',
   './manifest.json',
   './icon-192.png',
   './icon-512.png',

@@ -1,0 +1,666 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="0" height="0">
+<!-- Landmark icon library for the Geo capital-learning map.
+     Each symbol is 64x64 with the ground line at y=58-60 so markers
+     appear to stand on the map. Right-hand faces are shaded darker
+     for a simple 2.5D "popping out" look. -->
+<defs>
+
+<symbol id="lm-eiffel" viewBox="0 0 64 64">
+<rect x="30.6" y="4" width="2.8" height="7" fill="#8a5a35"/>
+<polygon points="29,11 35,11 37.5,28 26.5,28" fill="#c98a4b"/>
+<polygon points="32,11 35,11 37.5,28 32,28" fill="#a56a33"/>
+<rect x="24.5" y="27" width="15" height="3.4" fill="#8a5a35"/>
+<polygon points="27,30.4 31.5,30.4 25,58 16,58" fill="#c98a4b"/>
+<polygon points="32.5,30.4 37,30.4 48,58 39,58" fill="#a56a33"/>
+<path d="M22 58 Q32 40 42 58" fill="none" stroke="#a56a33" stroke-width="2.5"/>
+<rect x="20.5" y="43" width="23" height="3" fill="#8a5a35"/>
+</symbol>
+
+<symbol id="lm-bigben" viewBox="0 0 64 64">
+<rect x="25" y="21" width="12" height="37" fill="#d9bc82"/>
+<polygon points="37,21 41,18 41,55 37,58" fill="#b3945c"/>
+<polygon points="25,21 29,18 41,18 37,21" fill="#ead9ac"/>
+<polygon points="24,21 31,6.5 38,21" fill="#4f7d63"/>
+<rect x="30.4" y="2.5" width="1.4" height="5" fill="#d9a520"/>
+<circle cx="31" cy="30" r="5" fill="#fdf6e3" stroke="#6b5327" stroke-width="1.2"/>
+<path d="M31 30 L31 26.8 M31 30 L33.4 30" stroke="#6b5327" stroke-width="1.2" stroke-linecap="round"/>
+<rect x="28.5" y="42" width="5" height="8" rx="2.5" fill="#a8895a"/>
+</symbol>
+
+<symbol id="lm-colosseum" viewBox="0 0 64 64">
+<path d="M8 56 L8 26 Q8 22 12 22 L34 22 L34 30 L40 30 L40 36 L56 36 L56 56 Z" fill="#e3cfa2"/>
+<polygon points="50,36 56,36 56,56 50,56" fill="#c9b280"/>
+<path d="M12 31 v-3.5 a2.5 2.5 0 0 1 5 0 v3.5 z M20 31 v-3.5 a2.5 2.5 0 0 1 5 0 v3.5 z M28 31 v-3.5 a2.5 2.5 0 0 1 5 0 v3.5 z" fill="#8a744a"/>
+<path d="M12 43 v-3.5 a2.5 2.5 0 0 1 5 0 v3.5 z M20 43 v-3.5 a2.5 2.5 0 0 1 5 0 v3.5 z M28 43 v-3.5 a2.5 2.5 0 0 1 5 0 v3.5 z M36 43 v-3.5 a2.5 2.5 0 0 1 5 0 v3.5 z M44 43 v-3.5 a2.5 2.5 0 0 1 5 0 v3.5 z" fill="#8a744a"/>
+<path d="M12 54 v-4 a2.7 2.7 0 0 1 5.4 0 v4 z M20 54 v-4 a2.7 2.7 0 0 1 5.4 0 v4 z M28 54 v-4 a2.7 2.7 0 0 1 5.4 0 v4 z M36 54 v-4 a2.7 2.7 0 0 1 5.4 0 v4 z M44 54 v-4 a2.7 2.7 0 0 1 5.4 0 v4 z" fill="#6e5a38"/>
+<path d="M8 34 H34 M8 46 H56" stroke="#c9b280" stroke-width="1"/>
+</symbol>
+
+<symbol id="lm-pyramid" viewBox="0 0 64 64">
+<polygon points="14,38 4,56 22,56" fill="#d9b06a"/>
+<polygon points="33,10 8,56 44,56" fill="#ecc985"/>
+<polygon points="33,10 44,56 56,47" fill="#c49a4e"/>
+<ellipse cx="32" cy="57" rx="27" ry="2.4" fill="#e8d4a0"/>
+</symbol>
+
+<symbol id="lm-liberty" viewBox="0 0 64 64">
+<polygon points="24,46 28,43.5 44,43.5 40,46" fill="#e8dcc0"/>
+<polygon points="24,46 40,46 40,58 24,58" fill="#d9c8a0"/>
+<polygon points="40,46 44,43.5 44,55.5 40,58" fill="#b3a077"/>
+<rect x="26.5" y="49.5" width="11" height="2" fill="#b3a077"/>
+<polygon points="28.5,27 35.5,27 37.5,43.5 26.5,43.5" fill="#6fc2a3"/>
+<polygon points="32,27 35.5,27 37.5,43.5 32,43.5" fill="#55a98c"/>
+<circle cx="32" cy="22.5" r="3.4" fill="#6fc2a3"/>
+<polygon points="27.5,20.5 29,14.5 30.5,20 32,13 33.5,20 35,14.5 36.5,20.5" fill="#4e9d81"/>
+<polygon points="34.5,28 37,26.5 42.5,15 40,14" fill="#6fc2a3"/>
+<rect x="39.2" y="12.5" width="3.6" height="2.4" fill="#d99a1f"/>
+<circle cx="41" cy="10.3" r="2.6" fill="#f6c445"/>
+<rect x="24.5" y="31" width="4.5" height="8" fill="#4e9d81"/>
+</symbol>
+
+<symbol id="lm-tajmahal" viewBox="0 0 64 64">
+<rect x="9" y="52" width="46" height="5" fill="#e8dcc8"/>
+<rect x="12" y="30" width="4" height="22" fill="#f5efe4"/>
+<circle cx="14" cy="29" r="2.6" fill="#f5efe4"/>
+<rect x="48" y="30" width="4" height="22" fill="#f5efe4"/>
+<circle cx="50" cy="29" r="2.6" fill="#f5efe4"/>
+<rect x="19" y="36" width="26" height="16" fill="#f7f1e6"/>
+<polygon points="41,36 45,36 45,52 41,52" fill="#ddd2bd"/>
+<path d="M20 36 a3.4 3.4 0 0 1 6.8 0 Z" fill="#efe7d5"/>
+<path d="M37.2 36 a3.4 3.4 0 0 1 6.8 0 Z" fill="#efe7d5"/>
+<path d="M32 14 C26 17 24.5 24 26.5 30 L26.5 36 L37.5 36 L37.5 30 C39.5 24 38 17 32 14 Z" fill="#f7f1e6"/>
+<path d="M32 14 C38 17 39.5 24 37.5 30 L37.5 36 L32 36 Z" fill="#ded2ba"/>
+<rect x="31.5" y="9.5" width="1" height="5" fill="#d99a1f"/>
+<path d="M28.5 52 L28.5 44 A3.5 4.5 0 0 1 35.5 44 L35.5 52 Z" fill="#8a6f4e"/>
+</symbol>
+
+<symbol id="lm-greatwall" viewBox="0 0 64 64">
+<rect x="6" y="42" width="52" height="16" fill="#b7ab90"/>
+<rect x="6" y="39" width="4" height="3" fill="#b7ab90"/>
+<rect x="13" y="39" width="4" height="3" fill="#b7ab90"/>
+<rect x="20" y="39" width="4" height="3" fill="#b7ab90"/>
+<rect x="44" y="39" width="4" height="3" fill="#b7ab90"/>
+<rect x="51" y="39" width="4" height="3" fill="#b7ab90"/>
+<rect x="6" y="54" width="52" height="4" fill="#998c70"/>
+<path d="M6 47 H58 M6 51 H58" stroke="#a89a7c" stroke-width="0.8"/>
+<rect x="25" y="26" width="14" height="24" fill="#cabfa4"/>
+<rect x="25" y="23" width="3.4" height="3" fill="#cabfa4"/>
+<rect x="30.3" y="23" width="3.4" height="3" fill="#cabfa4"/>
+<rect x="35.6" y="23" width="3.4" height="3" fill="#cabfa4"/>
+<rect x="36" y="26" width="3" height="24" fill="#b0a488"/>
+<path d="M29.5 42 v-5 a2.5 2.5 0 0 1 5 0 v5 z" fill="#6e5f45"/>
+</symbol>
+
+<symbol id="lm-redeemer" viewBox="0 0 64 64">
+<polygon points="14,58 32,44 50,58" fill="#7a8290"/>
+<polygon points="32,44 50,58 32,58" fill="#5d6470"/>
+<rect x="28" y="38" width="8" height="8" fill="#cfc7b8"/>
+<rect x="16" y="18.5" width="32" height="3.6" rx="1.8" fill="#f2ede4"/>
+<polygon points="29.5,17 34.5,17 36.5,38 27.5,38" fill="#f2ede4"/>
+<polygon points="32,17 34.5,17 36.5,38 32,38" fill="#d5cdbb"/>
+<circle cx="32" cy="13.5" r="3.2" fill="#f2ede4"/>
+</symbol>
+
+<symbol id="lm-opera" viewBox="0 0 64 64">
+<rect x="7" y="51" width="50" height="6" fill="#d9d2c0"/>
+<rect x="7" y="55" width="50" height="2" fill="#b8b09a"/>
+<path d="M10 51 Q17 30 28 51 Z" fill="#efeadf" stroke="#c9c2b0" stroke-width="1"/>
+<path d="M36 51 Q46 28 54 51 Z" fill="#e6e0d2" stroke="#c9c2b0" stroke-width="1"/>
+<path d="M20 51 Q30 22 43 51 Z" fill="#ffffff" stroke="#c9c2b0" stroke-width="1"/>
+</symbol>
+
+<symbol id="lm-stbasil" viewBox="0 0 64 64">
+<rect x="16" y="34" width="9" height="24" fill="#f0e9db"/>
+<rect x="21.5" y="34" width="3.5" height="24" fill="#e0d6c0"/>
+<rect x="39" y="34" width="9" height="24" fill="#f0e9db"/>
+<rect x="44.5" y="34" width="3.5" height="24" fill="#e0d6c0"/>
+<rect x="27.5" y="28" width="9" height="30" fill="#f7f1e6"/>
+<rect x="33.5" y="28" width="3" height="30" fill="#e3d9c4"/>
+<path d="M20.5 22 C15.5 24.5 15 30 16.5 34 L24.5 34 C26 30 25.5 24.5 20.5 22 Z" fill="#4aa3e0"/>
+<path d="M43.5 22 C38.5 24.5 38 30 39.5 34 L47.5 34 C49 30 48.5 24.5 43.5 22 Z" fill="#f6c445"/>
+<path d="M32 13 C25.5 16 25 23 26.5 28 L37.5 28 C39 23 38.5 16 32 13 Z" fill="#e05656"/>
+<path d="M29 26.5 C29 19.5 30.5 16 32 14 M35 26.5 C35 19.5 33.5 16 32 14" stroke="#f7f1e6" stroke-width="1.3" fill="none"/>
+<rect x="20" y="17.5" width="1" height="4.5" fill="#d99a1f"/>
+<rect x="43" y="17.5" width="1" height="4.5" fill="#d99a1f"/>
+<rect x="31.5" y="8" width="1" height="5" fill="#d99a1f"/>
+<rect x="30" y="9.6" width="4" height="1" fill="#d99a1f"/>
+<rect x="19.5" y="40" width="3" height="6" rx="1.5" fill="#8a744a"/>
+<rect x="30.5" y="36" width="3" height="7" rx="1.5" fill="#8a744a"/>
+<rect x="42.5" y="40" width="3" height="6" rx="1.5" fill="#8a744a"/>
+</symbol>
+
+<symbol id="lm-mayan" viewBox="0 0 64 64">
+<rect x="9" y="50" width="46" height="8" fill="#d9bc8a"/>
+<rect x="15" y="42" width="34" height="8" fill="#cfb17d"/>
+<rect x="21" y="34" width="22" height="8" fill="#d9bc8a"/>
+<rect x="24.5" y="23" width="15" height="2.5" fill="#b08d55"/>
+<rect x="26" y="25.5" width="12" height="8.5" fill="#c9a86d"/>
+<polygon points="27,25.5 37,25.5 42,58 22,58" fill="#e8d4a8"/>
+<path d="M25 34 H39 M24 42 H40 M23 50 H41" stroke="#c9ae7a" stroke-width="1.2"/>
+<rect x="30" y="27.5" width="4" height="6" fill="#5f4d32"/>
+</symbol>
+
+<symbol id="lm-machu" viewBox="0 0 64 64">
+<polygon points="44,20 30,58 60,58" fill="#8fb99a"/>
+<polygon points="24,14 4,58 46,58" fill="#5aa570"/>
+<path d="M14 46 H36 M11 51 H40 M17 41 H32" stroke="#3d7a4e" stroke-width="2"/>
+<rect x="22" y="30.5" width="6" height="4.5" fill="#e8dcc0"/>
+<polygon points="21.5,30.5 25,27.5 28.5,30.5" fill="#c9ae7a"/>
+<rect x="29" y="36" width="5" height="4" fill="#e8dcc0"/>
+</symbol>
+
+<symbol id="lm-burj" viewBox="0 0 64 64">
+<polygon points="26,44 38,44 38,58 26,58" fill="#9fc3d8"/>
+<polygon points="34,44 38,44 38,58 34,58" fill="#7095ab"/>
+<polygon points="28.5,30 35.5,30 35.5,44 28.5,44" fill="#8db2c9"/>
+<polygon points="33,30 35.5,30 35.5,44 33,44" fill="#7aa3ba"/>
+<polygon points="30.5,16 33.5,16 33.5,30 30.5,30" fill="#9fc3d8"/>
+<rect x="31.5" y="5" width="1.2" height="11" fill="#7aa3ba"/>
+<path d="M27 48 H37 M27 52 H37 M29.5 34 H35 M29.5 39 H35" stroke="#6f95ab" stroke-width="0.7"/>
+</symbol>
+
+<symbol id="lm-angkor" viewBox="0 0 64 64">
+<rect x="9" y="55" width="46" height="3.5" fill="#a89878"/>
+<path d="M12.5 55 L13.5 44 Q14.5 37 18 33 Q21.5 37 22.5 44 L23.5 55 Z" fill="#a89878"/>
+<path d="M40.5 55 L41.5 44 Q42.5 37 46 33 Q49.5 37 50.5 44 L51.5 55 Z" fill="#a89878"/>
+<path d="M26.5 55 L27.5 38 Q28.5 30 32 25 Q35.5 30 36.5 38 L37.5 55 Z" fill="#b8a888"/>
+<path d="M28.5 44 H35.5 M29.5 38 H34.5 M30.5 32 H33.5 M14.5 44 H21.5 M15.5 39 H20.5 M42.5 44 H49.5 M43.5 39 H48.5" stroke="#8a7a5e" stroke-width="1"/>
+</symbol>
+
+<symbol id="lm-windmill" viewBox="0 0 64 64">
+<polygon points="26,32 38,32 42,58 22,58" fill="#c96f4e"/>
+<polygon points="32,32 38,32 42,58 32,58" fill="#a05238"/>
+<path d="M25 32 A7.5 7 0 0 1 39 32 Z" fill="#6e4526"/>
+<g transform="rotate(45 32 26)">
+<rect x="31.4" y="8" width="1.2" height="18" fill="#6e4526"/>
+<rect x="32.6" y="9" width="4" height="12" fill="#efe6d2" stroke="#c9bda4" stroke-width="0.5"/>
+</g>
+<g transform="rotate(135 32 26)">
+<rect x="31.4" y="8" width="1.2" height="18" fill="#6e4526"/>
+<rect x="32.6" y="9" width="4" height="12" fill="#efe6d2" stroke="#c9bda4" stroke-width="0.5"/>
+</g>
+<g transform="rotate(225 32 26)">
+<rect x="31.4" y="8" width="1.2" height="18" fill="#6e4526"/>
+<rect x="32.6" y="9" width="4" height="12" fill="#efe6d2" stroke="#c9bda4" stroke-width="0.5"/>
+</g>
+<g transform="rotate(315 32 26)">
+<rect x="31.4" y="8" width="1.2" height="18" fill="#6e4526"/>
+<rect x="32.6" y="9" width="4" height="12" fill="#efe6d2" stroke="#c9bda4" stroke-width="0.5"/>
+</g>
+<circle cx="32" cy="26" r="2" fill="#4a3728"/>
+<path d="M29.5 58 v-6 a2.5 2.5 0 0 1 5 0 v6 z" fill="#6e4526"/>
+<circle cx="32" cy="41" r="2" fill="#f6e5c8" stroke="#6e4526" stroke-width="1"/>
+</symbol>
+
+<symbol id="lm-sagrada" viewBox="0 0 64 64">
+<path d="M19.8 50 L21.8 19 Q23 16 24.2 19 L26.2 50 Z" fill="#d9a86e"/>
+<path d="M37.8 50 L39.8 13 Q41 10 42.2 13 L44.2 50 Z" fill="#d9a86e"/>
+<path d="M25.8 50 L27.8 13 Q29 10 30.2 13 L32.2 50 Z" fill="#c9925a"/>
+<path d="M31.8 50 L33.8 19 Q35 16 36.2 19 L38.2 50 Z" fill="#c9925a"/>
+<circle cx="23" cy="17.5" r="1.4" fill="#f6c445"/>
+<circle cx="29" cy="11.5" r="1.4" fill="#f6c445"/>
+<circle cx="35" cy="17.5" r="1.4" fill="#f6c445"/>
+<circle cx="41" cy="11.5" r="1.4" fill="#f6c445"/>
+<rect x="17" y="50" width="30" height="8" fill="#c99e6a"/>
+<path d="M23 47 V41 M29 44 V37 M35 47 V41 M41 44 V37" stroke="#8a6a42" stroke-width="1.1"/>
+<path d="M29 58 v-4.5 a3 3 0 0 1 6 0 v4.5 z" fill="#8a6a42"/>
+</symbol>
+
+<symbol id="lm-petronas" viewBox="0 0 64 64">
+<polygon points="16,20 24,20 23,58 17,58" fill="#c3d2e0"/>
+<polygon points="21,20 24,20 23,58 21,58" fill="#9fb2c4"/>
+<polygon points="18,20 22,20 20,13" fill="#a9bbcc"/>
+<rect x="19.6" y="7" width="0.8" height="6" fill="#8fa3b5"/>
+<polygon points="40,20 48,20 47,58 41,58" fill="#c3d2e0"/>
+<polygon points="45,20 48,20 47,58 45,58" fill="#9fb2c4"/>
+<polygon points="42,20 46,20 44,13" fill="#a9bbcc"/>
+<rect x="43.6" y="7" width="0.8" height="6" fill="#8fa3b5"/>
+<path d="M17.5 26 H23 M17.5 32 H23 M17.5 38 H23 M17.5 44 H23 M17.5 50 H23 M41.5 26 H47 M41.5 32 H47 M41.5 38 H47 M41.5 44 H47 M41.5 50 H47" stroke="#93a9bd" stroke-width="0.8"/>
+<rect x="23" y="33" width="18" height="2.6" fill="#a9bbcc"/>
+<path d="M26 40 L28.5 35.6 M38 40 L35.5 35.6" stroke="#8fa3b5" stroke-width="1.3"/>
+</symbol>
+
+<symbol id="lm-mbs" viewBox="0 0 64 64">
+<polygon points="14,26 22,26 21,58 12,58" fill="#b3c6d8"/>
+<polygon points="27,26 35,26 35,58 27,58" fill="#b3c6d8"/>
+<polygon points="41,26 49,26 51,58 42,58" fill="#b3c6d8"/>
+<path d="M17 29 V56 M20 29 V56 M30 29 V56 M33 29 V56 M44 29 V56 M47.5 29 V56" stroke="#8fa3b5" stroke-width="0.9"/>
+<path d="M9 26 Q32 16 55 26 L55 21.5 Q32 11.5 9 21.5 Z" fill="#e8e0cc"/>
+<path d="M9 26 Q32 16 55 26" stroke="#c9c0a8" stroke-width="1" fill="none"/>
+</symbol>
+
+<symbol id="lm-cntower" viewBox="0 0 64 64">
+<polygon points="29.5,58 30,24 31,14 33,14 34,24 34.5,58" fill="#cdd3da"/>
+<ellipse cx="32" cy="27" rx="7.5" ry="3" fill="#aeb8c4"/>
+<rect x="24.5" y="27" width="15" height="4" rx="2" fill="#98a4b2"/>
+<rect x="30" y="17" width="4" height="3" rx="1" fill="#98a4b2"/>
+<rect x="31.4" y="4" width="1.2" height="10" fill="#8f9aa8"/>
+</symbol>
+
+<symbol id="lm-fuji" viewBox="0 0 64 64">
+<polygon points="32,16 6,58 58,58" fill="#6f83a8"/>
+<polygon points="32,16 58,58 32,58" fill="#5a6e94"/>
+<path d="M32 16 L21 35 L25 30.5 L28.5 35 L32 30.5 L35.5 35 L39 30.5 L43 35 Z" fill="#ffffff"/>
+</symbol>
+
+<symbol id="lm-atomium" viewBox="0 0 64 64">
+<path d="M32 32 L17 17 M32 32 L47 17 M32 32 L17 47 M32 32 L47 47 M17 47 L24 58 M47 47 L40 58" fill="none" stroke="#8fa0b0" stroke-width="2"/>
+<circle cx="17" cy="17" r="4.4" fill="#c9d2dd"/>
+<circle cx="47" cy="17" r="4.4" fill="#c9d2dd"/>
+<circle cx="17" cy="47" r="4.4" fill="#c9d2dd"/>
+<circle cx="47" cy="47" r="4.4" fill="#c9d2dd"/>
+<circle cx="32" cy="32" r="5.2" fill="#dde4ec"/>
+<circle cx="15.6" cy="15.6" r="1.2" fill="#ffffff"/>
+<circle cx="45.6" cy="15.6" r="1.2" fill="#ffffff"/>
+<circle cx="30.5" cy="30.4" r="1.4" fill="#ffffff"/>
+</symbol>
+
+<symbol id="lm-petra" viewBox="0 0 64 64">
+<path d="M10 58 L10 16 Q10 10 16 10 L48 10 Q54 10 54 16 L54 58 L44 58 L44 14 L20 14 L20 58 Z" fill="#b0603f"/>
+<rect x="20" y="14" width="24" height="44" fill="#8a4630"/>
+<polygon points="21.5,24 42.5,24 32,16.5" fill="#e0906a"/>
+<rect x="21.5" y="24" width="21" height="2.5" fill="#d9855f"/>
+<rect x="22.5" y="28" width="2.6" height="14" fill="#e0906a"/>
+<rect x="28" y="28" width="2.6" height="14" fill="#e0906a"/>
+<rect x="33.5" y="28" width="2.6" height="14" fill="#e0906a"/>
+<rect x="39" y="28" width="2.6" height="14" fill="#e0906a"/>
+<rect x="21.5" y="42" width="21" height="2.5" fill="#d9855f"/>
+<rect x="29" y="45" width="6" height="13" fill="#5f2f20"/>
+</symbol>
+
+<symbol id="lm-lighthouse" viewBox="0 0 64 64">
+<polygon points="27,20 37,20 41.5,58 22.5,58" fill="#f2ede4"/>
+<polygon points="26,28 38,28 38.8,35 25.2,35" fill="#e05656"/>
+<polygon points="24.3,43 39.7,43 40.5,50 23.5,50" fill="#e05656"/>
+<rect x="24.5" y="18" width="15" height="2.5" fill="#5d6470"/>
+<rect x="27.5" y="11" width="9" height="7" fill="#3a3f4a"/>
+<rect x="29.5" y="12.5" width="5" height="4" fill="#f6c445"/>
+<polygon points="26.5,11 32,4.5 37.5,11" fill="#e05656"/>
+<path d="M29.2 58 v-5.5 a2.75 2.75 0 0 1 5.5 0 v5.5 z" fill="#5d6470"/>
+</symbol>
+
+<symbol id="lm-gate" viewBox="0 0 64 64">
+<rect x="11" y="55" width="42" height="3" fill="#c8b78e"/>
+<rect x="14" y="28" width="4.5" height="27" fill="#e8dcc0"/>
+<rect x="17" y="28" width="1.5" height="27" fill="#c8b78e"/>
+<rect x="24.5" y="28" width="4.5" height="27" fill="#e8dcc0"/>
+<rect x="27.5" y="28" width="1.5" height="27" fill="#c8b78e"/>
+<rect x="35" y="28" width="4.5" height="27" fill="#e8dcc0"/>
+<rect x="38" y="28" width="1.5" height="27" fill="#c8b78e"/>
+<rect x="45.5" y="28" width="4.5" height="27" fill="#e8dcc0"/>
+<rect x="48.5" y="28" width="1.5" height="27" fill="#c8b78e"/>
+<rect x="12" y="22" width="40" height="6.5" fill="#ddd0b0"/>
+<rect x="11" y="20.5" width="42" height="2" fill="#c8b78e"/>
+<rect x="20" y="15.5" width="24" height="5" fill="#e8dcc0"/>
+<rect x="26.5" y="10.5" width="11" height="4" rx="1" fill="#7ba88f"/>
+<rect x="30.5" y="6" width="3" height="4.5" fill="#7ba88f"/>
+</symbol>
+
+<symbol id="lm-castle" viewBox="0 0 64 64">
+<rect x="25" y="34" width="14" height="24" fill="#ece4d4"/>
+<rect x="25" y="31" width="3.5" height="3" fill="#ece4d4"/>
+<rect x="30.2" y="31" width="3.5" height="3" fill="#ece4d4"/>
+<rect x="35.4" y="31" width="3.6" height="3" fill="#ece4d4"/>
+<rect x="13" y="24" width="10" height="34" fill="#e0d6c2"/>
+<rect x="20.5" y="24" width="2.5" height="34" fill="#c4b89e"/>
+<rect x="41" y="24" width="10" height="34" fill="#e0d6c2"/>
+<rect x="48.5" y="24" width="2.5" height="34" fill="#c4b89e"/>
+<polygon points="11.5,24 18,10 24.5,24" fill="#8b5cf6"/>
+<polygon points="18,10 24.5,24 18,24" fill="#6d43d8"/>
+<polygon points="39.5,24 46,10 52.5,24" fill="#8b5cf6"/>
+<polygon points="46,10 52.5,24 46,24" fill="#6d43d8"/>
+<rect x="17.6" y="4.5" width="0.8" height="6" fill="#5d6470"/>
+<polygon points="18.4,4.5 23,6 18.4,7.5" fill="#f6c445"/>
+<rect x="45.6" y="4.5" width="0.8" height="6" fill="#5d6470"/>
+<polygon points="46.4,4.5 51,6 46.4,7.5" fill="#f6c445"/>
+<path d="M28.5 58 v-7 a3.5 3.5 0 0 1 7 0 v7 z" fill="#5b4a86"/>
+<rect x="16.3" y="34" width="3.2" height="5.5" rx="1.6" fill="#5b4a86"/>
+<rect x="44.3" y="34" width="3.2" height="5.5" rx="1.6" fill="#5b4a86"/>
+<rect x="30.5" y="38" width="3" height="5" rx="1.5" fill="#5b4a86"/>
+</symbol>
+
+<symbol id="lm-fortress" viewBox="0 0 64 64">
+<rect x="16" y="38" width="32" height="20" fill="#c2b49a"/>
+<rect x="20" y="35" width="4" height="3" fill="#c2b49a"/>
+<rect x="27" y="35" width="4" height="3" fill="#c2b49a"/>
+<rect x="34" y="35" width="4" height="3" fill="#c2b49a"/>
+<rect x="41" y="35" width="4" height="3" fill="#c2b49a"/>
+<rect x="8" y="28" width="11" height="30" fill="#cdbfa5"/>
+<rect x="16" y="28" width="3" height="30" fill="#b3a488"/>
+<rect x="8" y="25" width="3" height="3" fill="#cdbfa5"/>
+<rect x="12" y="25" width="3" height="3" fill="#cdbfa5"/>
+<rect x="16" y="25" width="3" height="3" fill="#cdbfa5"/>
+<rect x="45" y="28" width="11" height="30" fill="#cdbfa5"/>
+<rect x="53" y="28" width="3" height="30" fill="#b3a488"/>
+<rect x="45" y="25" width="3" height="3" fill="#cdbfa5"/>
+<rect x="49" y="25" width="3" height="3" fill="#cdbfa5"/>
+<rect x="53" y="25" width="3" height="3" fill="#cdbfa5"/>
+<path d="M27.5 58 v-8 a4.5 4.5 0 0 1 9 0 v8 z" fill="#4a3f30"/>
+<rect x="11.5" y="34" width="2" height="5" fill="#6b5f48"/>
+<rect x="49.5" y="34" width="2" height="5" fill="#6b5f48"/>
+<rect x="23" y="44" width="2" height="4" fill="#6b5f48"/>
+<rect x="39" y="44" width="2" height="4" fill="#6b5f48"/>
+</symbol>
+
+<symbol id="lm-palace" viewBox="0 0 64 64">
+<rect x="10" y="34" width="44" height="24" fill="#f0dfae"/>
+<rect x="8.5" y="30" width="47" height="4.5" fill="#8a7a55"/>
+<polygon points="25,30 39,30 32,23.5" fill="#f5e8c0"/>
+<circle cx="32" cy="27.8" r="1.5" fill="#8a7a55"/>
+<rect x="14" y="40" width="3.6" height="7" rx="1.8" fill="#8a7a55"/>
+<rect x="21" y="40" width="3.6" height="7" rx="1.8" fill="#8a7a55"/>
+<rect x="39.5" y="40" width="3.6" height="7" rx="1.8" fill="#8a7a55"/>
+<rect x="46.5" y="40" width="3.6" height="7" rx="1.8" fill="#8a7a55"/>
+<rect x="14" y="51" width="3.6" height="4" fill="#d9c68e"/>
+<rect x="21" y="51" width="3.6" height="4" fill="#d9c68e"/>
+<rect x="39.5" y="51" width="3.6" height="4" fill="#d9c68e"/>
+<rect x="46.5" y="51" width="3.6" height="4" fill="#d9c68e"/>
+<path d="M29 58 v-8.5 a3 3 0 0 1 6 0 v8.5 z" fill="#8a7a55"/>
+</symbol>
+
+<symbol id="lm-church" viewBox="0 0 64 64">
+<rect x="25" y="38" width="24" height="20" fill="#ece4d4"/>
+<polygon points="24,39 36.5,28 50,39" fill="#b95a41"/>
+<rect x="15" y="24" width="10" height="34" fill="#f0e8d8"/>
+<polygon points="13.5,24 20,10 26.5,24" fill="#b95a41"/>
+<rect x="19.6" y="4" width="0.8" height="5.5" fill="#d99a1f"/>
+<rect x="18.2" y="5.6" width="3.6" height="0.8" fill="#d99a1f"/>
+<rect x="18" y="31" width="4" height="6.5" rx="2" fill="#8a6f52"/>
+<rect x="30" y="44" width="3.5" height="6" rx="1.75" fill="#8a6f52"/>
+<rect x="38" y="44" width="3.5" height="6" rx="1.75" fill="#8a6f52"/>
+<path d="M44 58 v-5.5 a2.75 2.75 0 0 1 5.5 0 v5.5 z" fill="#8a6f52" transform="translate(-1 0)"/>
+</symbol>
+
+<symbol id="lm-basilica" viewBox="0 0 64 64">
+<rect x="13" y="40" width="38" height="18" fill="#f2ead8"/>
+<rect x="21" y="36" width="22" height="4" fill="#e8dcc4"/>
+<path d="M21 36 A11 11 0 0 1 43 36 Z" fill="#9fb0c0"/>
+<path d="M32 25 V36 M26 27.5 Q26.8 31.5 26.5 36 M38 27.5 Q37.2 31.5 37.5 36" stroke="#7f92a4" stroke-width="1" fill="none"/>
+<rect x="29.5" y="20" width="5" height="6" fill="#e8dcc4"/>
+<polygon points="29,20 32,16 35,20" fill="#9fb0c0"/>
+<rect x="31.6" y="11.5" width="0.8" height="4.5" fill="#d99a1f"/>
+<rect x="30.2" y="12.8" width="3.6" height="0.8" fill="#d99a1f"/>
+<rect x="16" y="44" width="2.6" height="14" fill="#ddd2ba"/>
+<rect x="21.5" y="44" width="2.6" height="14" fill="#ddd2ba"/>
+<rect x="27" y="44" width="2.6" height="14" fill="#ddd2ba"/>
+<rect x="34.5" y="44" width="2.6" height="14" fill="#ddd2ba"/>
+<rect x="40" y="44" width="2.6" height="14" fill="#ddd2ba"/>
+<rect x="45.5" y="44" width="2.6" height="14" fill="#ddd2ba"/>
+<rect x="30.5" y="50" width="4.5" height="8" fill="#8a7a5e"/>
+</symbol>
+
+<symbol id="lm-orthodox" viewBox="0 0 64 64">
+<rect x="21" y="38" width="22" height="20" fill="#f4efe4"/>
+<rect x="39" y="38" width="4" height="20" fill="#e0d8c8"/>
+<rect x="27.5" y="27" width="9" height="11" fill="#efe9dc"/>
+<path d="M32 15 C26.5 17.5 26 23.5 27.5 27 L36.5 27 C38 23.5 37.5 17.5 32 15 Z" fill="#f6c445"/>
+<path d="M32 15 C37.5 17.5 38 23.5 36.5 27 L32 27 Z" fill="#d99a1f"/>
+<rect x="31.55" y="8" width="0.9" height="6" fill="#d99a1f"/>
+<rect x="30" y="9.8" width="4" height="0.9" fill="#d99a1f"/>
+<path d="M30.6 13.4 L33.4 12.2" stroke="#d99a1f" stroke-width="0.9"/>
+<rect x="24.5" y="44" width="3" height="6" rx="1.5" fill="#8a6f52"/>
+<rect x="36.5" y="44" width="3" height="6" rx="1.5" fill="#8a6f52"/>
+<path d="M29.5 58 v-5 a2.5 2.5 0 0 1 5 0 v5 z" fill="#8a6f52"/>
+</symbol>
+
+<symbol id="lm-mosque" viewBox="0 0 64 64">
+<rect x="17" y="38" width="30" height="20" fill="#eae2d2"/>
+<path d="M32 20 C24 23 22.5 30 24 38 L40 38 C41.5 30 40 23 32 20 Z" fill="#5fb8a5"/>
+<path d="M32 20 C40 23 41.5 30 40 38 L32 38 Z" fill="#45927f"/>
+<rect x="31.6" y="14" width="0.8" height="6" fill="#d99a1f"/>
+<circle cx="32" cy="13" r="1.4" fill="#f6c445"/>
+<rect x="9.5" y="20" width="3.6" height="38" fill="#eae2d2"/>
+<rect x="8.8" y="34" width="5" height="1.8" fill="#cfc4ac"/>
+<polygon points="9,20 11.3,13.5 13.6,20" fill="#5fb8a5"/>
+<rect x="50.9" y="20" width="3.6" height="38" fill="#eae2d2"/>
+<rect x="50.2" y="34" width="5" height="1.8" fill="#cfc4ac"/>
+<polygon points="50.4,20 52.7,13.5 55,20" fill="#5fb8a5"/>
+<path d="M29 58 V52 Q29 47.5 32 46.5 Q35 47.5 35 52 V58 Z" fill="#8a6f52"/>
+<rect x="21.5" y="44" width="3" height="5.5" rx="1.5" fill="#cfc4ac"/>
+<rect x="39.5" y="44" width="3" height="5.5" rx="1.5" fill="#cfc4ac"/>
+</symbol>
+
+<symbol id="lm-pagoda" viewBox="0 0 64 64">
+<rect x="23" y="46" width="18" height="12" fill="#e8d9b8"/>
+<polygon points="12,46 20,39 44,39 52,46" fill="#c94f4f"/>
+<rect x="26" y="31" width="12" height="8" fill="#e8d9b8"/>
+<polygon points="17,31 24,25 40,25 47,31" fill="#c94f4f"/>
+<rect x="28.5" y="19" width="7" height="6" fill="#e8d9b8"/>
+<polygon points="22,19 27,14 37,14 42,19" fill="#c94f4f"/>
+<rect x="31.6" y="7" width="0.8" height="7" fill="#d99a1f"/>
+<circle cx="32" cy="6.5" r="1.3" fill="#f6c445"/>
+<rect x="30" y="51" width="4" height="7" fill="#8a5a35"/>
+</symbol>
+
+<symbol id="lm-stupa" viewBox="0 0 64 64">
+<rect x="15" y="53" width="34" height="5" fill="#d9cba8"/>
+<rect x="19" y="49" width="26" height="4" fill="#c9b992"/>
+<path d="M21 49 C21 36 26 29.5 32 27.5 C38 29.5 43 36 43 49 Z" fill="#f6c445"/>
+<path d="M32 27.5 C38 29.5 43 36 43 49 L32 49 Z" fill="#e5ad2b"/>
+<rect x="29.5" y="22" width="5" height="5.5" fill="#d99a1f"/>
+<polygon points="29.8,22 34.2,22 32.6,9 31.4,9" fill="#d99a1f"/>
+<path d="M30.4 18.5 H33.8 M30.8 15 H33.4 M31.1 12 H33" stroke="#b8860f" stroke-width="0.9"/>
+</symbol>
+
+<symbol id="lm-parthenon" viewBox="0 0 64 64">
+<rect x="7" y="55" width="50" height="3" fill="#cdbb92"/>
+<rect x="9.5" y="52.5" width="45" height="2.5" fill="#ddd0b0"/>
+<rect x="12" y="32.5" width="3.4" height="20" fill="#e8dcc0"/>
+<rect x="19.3" y="32.5" width="3.4" height="20" fill="#e8dcc0"/>
+<rect x="26.6" y="32.5" width="3.4" height="20" fill="#e8dcc0"/>
+<rect x="33.9" y="32.5" width="3.4" height="20" fill="#e8dcc0"/>
+<rect x="41.2" y="32.5" width="3.4" height="20" fill="#e8dcc0"/>
+<rect x="48.5" y="32.5" width="3.4" height="20" fill="#e8dcc0"/>
+<rect x="10" y="28.5" width="44" height="4" fill="#ddd0b0"/>
+<polygon points="8.5,28.5 55.5,28.5 32,16" fill="#e8dcc0"/>
+<polygon points="14.5,26.5 49.5,26.5 32,19.2" fill="#cdbb92"/>
+</symbol>
+
+<symbol id="lm-tower" viewBox="0 0 64 64">
+<rect x="25" y="18" width="14" height="40" fill="#cfc4a8"/>
+<rect x="35" y="18" width="4" height="40" fill="#b3a685"/>
+<rect x="23" y="19" width="18" height="1.5" fill="#a89a78"/>
+<rect x="22" y="12" width="20" height="7" fill="#ddd2b6"/>
+<rect x="22" y="9" width="4" height="3" fill="#ddd2b6"/>
+<rect x="30" y="9" width="4" height="3" fill="#ddd2b6"/>
+<rect x="38" y="9" width="4" height="3" fill="#ddd2b6"/>
+<path d="M29 58 v-6 a3 3 0 0 1 6 0 v6 z" fill="#6b5f48"/>
+<rect x="29.5" y="26" width="4" height="6" rx="2" fill="#6b5f48"/>
+<rect x="29.5" y="38" width="4" height="6" rx="2" fill="#6b5f48"/>
+</symbol>
+
+<symbol id="lm-skyscraper" viewBox="0 0 64 64">
+<rect x="22" y="9" width="12" height="49" fill="#6fa8d8"/>
+<polygon points="34,9 40,6 40,55 34,58" fill="#4a7fa8"/>
+<polygon points="22,9 28,6 40,6 34,9" fill="#a8cbe8"/>
+<rect x="24" y="11" width="1.8" height="45" fill="#9cc4e8"/>
+<rect x="27.4" y="11" width="1.8" height="45" fill="#9cc4e8"/>
+<rect x="30.8" y="11" width="1.8" height="45" fill="#9cc4e8"/>
+<rect x="30" y="2" width="1" height="4.5" fill="#4a7fa8"/>
+</symbol>
+
+<symbol id="lm-bridge" viewBox="0 0 64 64">
+<rect x="6" y="53" width="52" height="5" fill="#4aa3e0"/>
+<path d="M12 58 L12 38.8 Q32 29 52 38.8 L52 58 L44 58 L44 45 Q32 36.5 20 45 L20 58 Z" fill="#c9b992"/>
+<path d="M6 34 Q32 24 58 34 L58 40 Q32 30 6 40 Z" fill="#d9c9a8"/>
+<path d="M6 34 Q32 24 58 34" stroke="#b3a077" stroke-width="1.2" fill="none"/>
+<rect x="8" y="27" width="8" height="13" fill="#cdbb92"/>
+<polygon points="7,27 12,20 17,27" fill="#8a7a55"/>
+</symbol>
+
+<symbol id="lm-statue" viewBox="0 0 64 64">
+<rect x="24" y="52" width="16" height="6" fill="#cfc4a8"/>
+<rect x="26.5" y="32.5" width="11" height="2.5" fill="#b3a685"/>
+<rect x="28" y="35" width="8" height="17" fill="#ddd2b6"/>
+<circle cx="32" cy="17.5" r="3" fill="#7ba88f"/>
+<polygon points="29,21 35,21 36,32.5 28,32.5" fill="#7ba88f"/>
+<polygon points="32,21 35,21 36,32.5 32,32.5" fill="#5f8f76"/>
+<polygon points="34.5,22 36.5,21 39.5,13.5 37.8,12.8" fill="#7ba88f"/>
+</symbol>
+
+<symbol id="lm-obelisk" viewBox="0 0 64 64">
+<polygon points="29.2,13 34.8,13 36.8,52 27.2,52" fill="#ddd0b0"/>
+<polygon points="32,13 34.8,13 36.8,52 32,52" fill="#c2b28c"/>
+<polygon points="29.2,13 32,5 34.8,13" fill="#f6c445"/>
+<rect x="25" y="52" width="14" height="3.2" fill="#c2b28c"/>
+<rect x="22.5" y="55.2" width="19" height="2.8" fill="#ddd0b0"/>
+<path d="M31 20 V24 M31 27 V31 M31.5 36 V40" stroke="#b3a077" stroke-width="1"/>
+</symbol>
+
+<symbol id="lm-mountain" viewBox="0 0 64 64">
+<polygon points="42,24 24,58 60,58" fill="#8593ab"/>
+<path d="M42 24 L36 35 L39 32.5 L42 36 L45 32.5 L48 35 Z" fill="#e8edf5"/>
+<polygon points="22,15 2,58 42,58" fill="#6b7a94"/>
+<polygon points="22,15 42,58 22,58" fill="#5a6a86"/>
+<path d="M22 15 L15.2 29.6 L18 26.6 L20.8 30.4 L23.6 26.8 L26.4 30.4 L29 29.2 Z" fill="#ffffff"/>
+</symbol>
+
+<symbol id="lm-volcano" viewBox="0 0 64 64">
+<circle cx="29" cy="15" r="4.2" fill="#b8bec8"/>
+<circle cx="37" cy="11" r="5.2" fill="#c8cdd6"/>
+<circle cx="44" cy="8.5" r="3.6" fill="#d4d8e0"/>
+<polygon points="25,24 8,58 56,58 39,24" fill="#7d5a4a"/>
+<polygon points="39,24 32,58 56,58" fill="#654639"/>
+<polygon points="25,24 39,24 36,27.5 28,27.5" fill="#f05a3a"/>
+<path d="M28 24.8 L33.5 24.8 L32.5 31 L34.5 36 L31 43 L32 48 L28.8 43.5 L30.5 36 L28 30 Z" fill="#f05a3a"/>
+</symbol>
+
+<symbol id="lm-waterfall" viewBox="0 0 64 64">
+<rect x="8" y="20" width="16" height="38" fill="#75808e"/>
+<rect x="40" y="20" width="16" height="38" fill="#67727f"/>
+<rect x="6" y="16.5" width="20" height="6" rx="3" fill="#58b56c"/>
+<rect x="38" y="16.5" width="20" height="6" rx="3" fill="#4da05f"/>
+<rect x="24" y="18" width="16" height="4" fill="#4aa3e0"/>
+<rect x="24" y="20" width="16" height="34" fill="#6fc2e8"/>
+<rect x="26.5" y="22" width="2" height="30" fill="#ffffff" opacity="0.65"/>
+<rect x="31.5" y="22" width="2" height="26" fill="#ffffff" opacity="0.5"/>
+<rect x="36" y="22" width="2" height="30" fill="#ffffff" opacity="0.65"/>
+<ellipse cx="32" cy="55.5" rx="20" ry="4" fill="#4aa3e0"/>
+<circle cx="24" cy="54" r="2" fill="#dff1fb"/>
+<circle cx="29" cy="55.6" r="2.2" fill="#dff1fb"/>
+<circle cx="36" cy="55" r="2.2" fill="#dff1fb"/>
+<circle cx="41" cy="54.2" r="1.8" fill="#dff1fb"/>
+</symbol>
+
+<symbol id="lm-island" viewBox="0 0 64 64">
+<ellipse cx="32" cy="54" rx="26" ry="5.5" fill="#4aa3e0"/>
+<path d="M13 56 Q32 42 51 56 Z" fill="#f2dca2"/>
+<path d="M31 51 C31.5 43 34 37 40 32.5" stroke="#8a5a35" stroke-width="3" fill="none" stroke-linecap="round"/>
+<path d="M40 32.5 Q46 25.5 54 27 Q47 31.5 40 32.5 Z" fill="#58b56c"/>
+<path d="M40 32.5 Q34 24.5 25.5 27.5 Q33 31 40 32.5 Z" fill="#4da05f"/>
+<path d="M40 32.5 Q49 31 54 36.5 Q46 37 40 32.5 Z" fill="#3d8a50"/>
+<path d="M40 32.5 Q33 33.5 28.5 39 Q36 38.5 40 32.5 Z" fill="#58b56c"/>
+<path d="M40 32.5 Q40.5 24 46.5 20.5 Q44 28 40 32.5 Z" fill="#4da05f"/>
+<circle cx="38.5" cy="34" r="1.5" fill="#6e4526"/>
+<circle cx="41.8" cy="34.8" r="1.5" fill="#6e4526"/>
+</symbol>
+
+<symbol id="lm-lake" viewBox="0 0 64 64">
+<polygon points="18,26 6,44 30,44" fill="#8593ab"/>
+<polygon points="34,22 20,44 48,44" fill="#6b7a94"/>
+<path d="M34 22 L29.5 29 L31.5 27.5 L33.5 30 L35.5 27.5 L37.5 29 Z" fill="#ffffff"/>
+<ellipse cx="32" cy="50" rx="23" ry="7.5" fill="#4aa3e0"/>
+<ellipse cx="27" cy="49" rx="11" ry="3.2" fill="#7cc4ed"/>
+<path d="M48 46 V40 M50.5 47 V42 M45.5 47 V42.5" stroke="#3d8a50" stroke-width="1.4" stroke-linecap="round"/>
+</symbol>
+
+<symbol id="lm-tree" viewBox="0 0 64 64">
+<path d="M29 34 L24 26.5 M35 34 L40 25.5 M32 34 L32 25" stroke="#a6714a" stroke-width="2.5" stroke-linecap="round"/>
+<ellipse cx="32" cy="23" rx="17" ry="9" fill="#58b56c"/>
+<path d="M15 23 A17 9 0 0 0 49 23 Z" fill="#4da05f"/>
+<path d="M26 58 L27.5 33 L36.5 33 L38 58 Z" fill="#a6714a"/>
+<path d="M32 33 L36.5 33 L38 58 L32 58 Z" fill="#8a5a35"/>
+</symbol>
+
+<symbol id="lm-elephant" viewBox="0 0 64 64">
+<path d="M13.5 38 C10.5 40 10 44 11.5 47" stroke="#8a94a6" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+<rect x="17" y="46" width="4.6" height="12" rx="1.6" fill="#8a94a6"/>
+<rect x="26" y="46" width="4.6" height="12" rx="1.6" fill="#98a2b3"/>
+<ellipse cx="27" cy="40" rx="14.5" ry="11" fill="#98a2b3"/>
+<rect x="40" y="46" width="4.6" height="12" rx="1.6" fill="#98a2b3"/>
+<circle cx="44" cy="36" r="8" fill="#98a2b3"/>
+<circle cx="40.5" cy="37" r="5.4" fill="#7d8798"/>
+<path d="M50.5 37.5 C54.5 41.5 55 48 51.5 53" stroke="#98a2b3" stroke-width="3.6" fill="none" stroke-linecap="round"/>
+<path d="M47.5 42.5 C49 44.5 49 46.5 47.5 48.2" stroke="#f2ede4" stroke-width="2" fill="none" stroke-linecap="round"/>
+<circle cx="46" cy="33.5" r="1.2" fill="#2e3440"/>
+</symbol>
+
+<symbol id="lm-lion" viewBox="0 0 64 64">
+<path d="M49.5 42 C54 40 56 44 54.5 48" stroke="#e0a94f" stroke-width="2" fill="none" stroke-linecap="round"/>
+<circle cx="54.8" cy="49.5" r="2" fill="#8a5a35"/>
+<ellipse cx="36" cy="46" rx="14" ry="9.5" fill="#e0a94f"/>
+<rect x="30" y="50" width="4.4" height="8" rx="1.6" fill="#d69b3e"/>
+<rect x="40" y="50" width="4.4" height="8" rx="1.6" fill="#e0a94f"/>
+<circle cx="14" cy="31.5" r="2.6" fill="#b5722a"/>
+<circle cx="24" cy="31.5" r="2.6" fill="#b5722a"/>
+<circle cx="19" cy="38" r="11" fill="#b5722a"/>
+<circle cx="19" cy="38" r="7" fill="#e0a94f"/>
+<ellipse cx="17.5" cy="41.5" rx="3.6" ry="2.8" fill="#f0cf9a"/>
+<circle cx="16.8" cy="40" r="1.2" fill="#6e4526"/>
+<circle cx="15.8" cy="36.3" r="1.1" fill="#2e3440"/>
+<circle cx="22.2" cy="36.3" r="1.1" fill="#2e3440"/>
+</symbol>
+
+<symbol id="lm-gorilla" viewBox="0 0 64 64">
+<path d="M20 58 C18 46 24 38 32 38 C40 38 46 46 44 58 Z" fill="#454a52"/>
+<ellipse cx="32" cy="49" rx="6.5" ry="7" fill="#5a616b"/>
+<path d="M23 42 C17 44 14 50 14.5 57.5" stroke="#454a52" stroke-width="6" fill="none" stroke-linecap="round"/>
+<path d="M41 42 C47 44 50 50 49.5 57.5" stroke="#454a52" stroke-width="6" fill="none" stroke-linecap="round"/>
+<circle cx="32" cy="27" r="9" fill="#454a52"/>
+<path d="M32 22.5 C28 22.5 25.5 25.5 25.5 28.5 C25.5 32 28 34.5 32 34.5 C36 34.5 38.5 32 38.5 28.5 C38.5 25.5 36 22.5 32 22.5 Z" fill="#8a93a0"/>
+<rect x="26" y="23.5" width="12" height="3" rx="1.5" fill="#454a52"/>
+<circle cx="29" cy="27.8" r="1.2" fill="#1d2126"/>
+<circle cx="35" cy="27.8" r="1.2" fill="#1d2126"/>
+<circle cx="30.5" cy="31.6" r="0.9" fill="#1d2126"/>
+<circle cx="33.5" cy="31.6" r="0.9" fill="#1d2126"/>
+</symbol>
+
+<symbol id="lm-turtle" viewBox="0 0 64 64">
+<ellipse cx="32" cy="56" rx="21" ry="3.2" fill="#f2dca2"/>
+<ellipse cx="21" cy="53" rx="4" ry="2.4" fill="#7fc98b"/>
+<ellipse cx="43" cy="53" rx="4" ry="2.4" fill="#7fc98b"/>
+<circle cx="51" cy="47" r="4.6" fill="#7fc98b"/>
+<circle cx="52.5" cy="45.8" r="1" fill="#1d2126"/>
+<path d="M17 46 A15 12 0 0 1 47 46 Z" fill="#4e9d5e"/>
+<path d="M24 37.5 V45 M32 34.5 V45 M40 37.5 V45 M19.5 41.5 H44.5" stroke="#3d7a4e" stroke-width="1.2"/>
+<rect x="15.5" y="45" width="33" height="4" rx="2" fill="#3d7a4e"/>
+</symbol>
+
+<symbol id="lm-ship" viewBox="0 0 64 64">
+<rect x="31.2" y="12" width="1.6" height="34" fill="#6e4526"/>
+<path d="M34.5 15 C43 22 46 33 44.5 43 L34.5 43 Z" fill="#f4f2ee"/>
+<path d="M29.5 18 C22.5 24 20 33 21 43 L29.5 43 Z" fill="#e6e0d0"/>
+<polygon points="32.8,12 39,13.8 32.8,15.6" fill="#e05656"/>
+<path d="M15 46 H49 L44 55 H20 Z" fill="#b95a41"/>
+<path d="M15 46 H49 L47.6 48.5 H16.4 Z" fill="#d9764f"/>
+<path d="M8 57 Q12 54.5 16 57 T24 57 T32 57 T40 57 T48 57 T56 57" stroke="#4aa3e0" stroke-width="2" fill="none"/>
+</symbol>
+
+<symbol id="lm-hut" viewBox="0 0 64 64">
+<rect x="21" y="38" width="22" height="20" fill="#d9a86e"/>
+<rect x="37" y="38" width="6" height="20" fill="#c08c52"/>
+<polygon points="13,39 32,17 51,39" fill="#b58a4a"/>
+<path d="M18.5 33 H45.5 M23 27.5 H41 M27 23 H37" stroke="#96703a" stroke-width="1"/>
+<rect x="13" y="38" width="38" height="2" rx="1" fill="#96703a"/>
+<path d="M28.5 58 v-8 a3.5 3.5 0 0 1 7 0 v8 z" fill="#6e4526"/>
+</symbol>
+
+<symbol id="lm-dune" viewBox="0 0 64 64">
+<circle cx="14" cy="14" r="5.5" fill="#f6c445"/>
+<path d="M2 58 Q23 14 44 58 Z" fill="#ecc985"/>
+<path d="M20 58 Q42 18 62 58 Z" fill="#e0b164"/>
+<path d="M41.2 25.5 Q52 40 62 58 L44 58 Q47 40 41.2 25.5 Z" fill="#cf9a4e"/>
+</symbol>
+
+<symbol id="lm-mesa" viewBox="0 0 64 64">
+<polygon points="17,20 47,20 55,58 9,58" fill="#c9855c"/>
+<polygon points="40,20 47,20 55,58 46,58" fill="#b06f48"/>
+<polygon points="17,20 47,20 48,24 16,24" fill="#e0a878"/>
+<path d="M14.5 32 H49.5 M12.5 41 H51.5 M10.5 50 H53.5" stroke="#a5643f" stroke-width="1.4"/>
+<circle cx="13" cy="56.5" r="2" fill="#58b56c"/>
+<circle cx="53" cy="56" r="2" fill="#4da05f"/>
+<circle cx="19" cy="57.2" r="1.4" fill="#4da05f"/>
+</symbol>
+
+</defs>
+</svg>

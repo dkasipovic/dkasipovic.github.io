@@ -136,6 +136,44 @@ body.has-app-bar .app {
     cursor: pointer;
 }
 
+/* ── Landmark markers ── */
+
+.landmarks {
+    pointer-events: none;
+}
+
+.lm {
+    pointer-events: all;
+    cursor: pointer;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+.lm.lm-hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.lm-hit {
+    fill: transparent;
+    stroke: none;
+    pointer-events: all;
+}
+
+.lm-shadow {
+    fill: rgba(0, 0, 0, 0.45);
+}
+
+.lm.selected {
+    filter: drop-shadow(0 0 6px rgba(139, 92, 246, 0.9));
+}
+
+.panel-landmark {
+    font-size: clamp(14px, 3vw, 18px);
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
 /* ── Toolbar ── */
 
 .map-toolbar {
