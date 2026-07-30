@@ -1,17 +1,15 @@
-const PRECACHE_NAME = 'tools-index-precache-v21';
-const RUNTIME_NAME = 'tools-index-runtime-v21';
+const PRECACHE_NAME = 'json-formatter-precache-v1';
+const RUNTIME_NAME = 'json-formatter-runtime-v1';
 
 const PRECACHE_ASSETS = [
   './',
   './index.html',
   './styles.css',
-  './updates.json',
+  './script.js',
   './manifest.json',
   './icon.svg',
-  './icon-192.png',
-  './icon-512.png',
-  './shared/styles.css',
-  './shared/app.js',
+  '/shared/styles.css',
+  '/shared/app.js',
 ];
 
 const BEST_EFFORT_EXTERNAL_ASSETS = [];

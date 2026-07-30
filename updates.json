@@ -1,5 +1,10 @@
 [
   {
+    "date": "2026-07-30T10:00:00Z",
+    "tool": "JSON Formatter",
+    "description": "Added JSON Formatter — a split view that pretty-prints pasted JSON with syntax highlighting, one-click copy, key sorting, and precise error locations"
+  },
+  {
     "date": "2026-07-06T12:00:00Z",
     "tool": "Гео",
     "description": "Added illustrated landmarks for every country — famous sights pop out of the map, and smaller countries reveal theirs when you zoom in"
