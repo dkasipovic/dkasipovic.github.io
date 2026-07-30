@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#8b5cf6">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="JSON">
+    <meta name="description" content="Paste JSON on the left, get a pretty-printed copy on the right — fully client-side">
+    <link rel="apple-touch-icon" href="icon.svg">
+    <link rel="icon" type="image/svg+xml" href="icon.svg">
+    <link rel="manifest" href="manifest.json">
+    <title>JSON Formatter - Kasipovic</title>
+    <link rel="stylesheet" href="/shared/styles.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="toolbar">
+            <div class="btn-group" id="indentGroup">
+                <button class="active" data-indent="2">2</button>
+                <button data-indent="4">4</button>
+                <button data-indent="tab">Tab</button>
+                <button data-indent="minify">Minify</button>
+            </div>
+            <button class="toggle-btn" id="sortBtn" aria-pressed="false">Sort keys</button>
+            <button class="toggle-btn" id="wrapBtn" aria-pressed="false">Wrap</button>
+            <div class="toolbar-spacer"></div>
+            <button class="btn-ghost" id="pasteBtn" hidden>Paste</button>
+            <button class="btn-ghost" id="sampleBtn">Sample</button>
+            <button class="btn-ghost" id="clearBtn">Clear</button>
+        </div>
+
+        <div class="pane-switch" id="paneSwitch">
+            <button class="active" data-pane="input">Input</button>
+            <button data-pane="output">Formatted</button>
+        </div>
+
+        <div class="error-bar" id="errorBar" hidden>
+            <div class="error-head">
+                <span class="error-msg" id="errorMsg"></span>
+                <button class="error-jump" id="errorJump">Go to error</button>
+            </div>
+            <pre class="error-snippet" id="errorSnippet"></pre>
+        </div>
+
+        <div class="split" id="split" data-active="input">
+            <section class="pane pane-input">
+                <header class="pane-header">
+                    <span class="pane-title">Input</span>
+                    <span class="pane-meta" id="inputMeta"></span>
+                </header>
+                <div class="pane-body">
+                    <textarea id="input" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off"
+                        placeholder="Paste JSON here…"></textarea>
+                </div>
+            </section>
+
+            <div class="divider" id="divider" role="separator" aria-orientation="vertical" tabindex="0"
+                aria-label="Resize panes"></div>
+
+            <section class="pane pane-output">
+                <header class="pane-header">
+                    <span class="pane-title">Formatted</span>
+                    <span class="status-chip" id="statusChip" hidden></span>
+                    <span class="pane-meta" id="outputMeta"></span>
+                    <div class="pane-actions">
+                        <button class="btn-action" id="downloadBtn" title="Download as .json" disabled>
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                <polyline points="7 10 12 15 17 10" />
+                                <line x1="12" y1="15" x2="12" y2="3" />
+                            </svg>
+                        </button>
+                        <button class="btn-action btn-primary" id="copyBtn" title="Copy formatted JSON" disabled>
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                            </svg>
+                            <span id="copyLabel">Copy</span>
+                        </button>
+                    </div>
+                </header>
+                <div class="pane-body">
+                    <pre class="output" id="output"></pre>
+                    <div class="placeholder" id="placeholder">
+                        <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M8 3H7a2 2 0 0 0-2 2v4a2 2 0 0 1-2 2 2 2 0 0 1 2 2v4a2 2 0 0 0 2 2h1" />
+                            <path d="M16 3h1a2 2 0 0 1 2 2v4a2 2 0 0 0 2 2 2 2 0 0 0-2 2v4a2 2 0 0 1-2 2h-1" />
+                        </svg>
+                        <p>Paste JSON on the left to see it formatted here</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <script src="/shared/app.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
