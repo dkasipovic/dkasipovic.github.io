@@ -28,11 +28,89 @@ figure {
     flex-direction: column;
 }
 
-img {
-    max-width: 100%;
-    height: auto;
-    display: block;
+.cam-frame {
+    position: relative;
+    /* Fixed box so the spinner has somewhere to sit before anything loads and
+       the page does not jump as cameras come in. The feeds are 16:9; anything
+       else is letterboxed rather than cropped. */
+    aspect-ratio: 16 / 9;
+    background-color: var(--bg-tertiary);
     border-radius: var(--radius-sm);
+    overflow: hidden;
+}
+
+/* Two stacked layers per camera: the visible frame and the one being loaded. */
+.cam-frame img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.cam-frame img.is-shown {
+    opacity: 1;
+}
+
+/* A refresh dims the current frame; a failed camera hides it altogether,
+   because a frame we could not refresh is exactly the stale image to avoid. */
+.cam-frame.is-loading img.is-shown {
+    opacity: 0.55;
+}
+
+.cam-frame.is-error img {
+    opacity: 0;
+}
+
+.cam-spinner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 28px;
+    height: 28px;
+    margin: -14px 0 0 -14px;
+    border: 2px solid var(--border-light);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s ease;
+    animation: cam-spin 0.7s linear infinite;
+}
+
+.cam-frame.is-loading .cam-spinner {
+    opacity: 1;
+}
+
+@keyframes cam-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .cam-spinner {
+        animation-duration: 2s;
+    }
+}
+
+.cam-error {
+    position: absolute;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    text-align: center;
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+.cam-frame.is-error .cam-error {
+    display: flex;
 }
 
 figcaption {
@@ -41,6 +119,16 @@ figcaption {
     font-size: 14px;
     color: var(--text-secondary);
     font-weight: 500;
+}
+
+.cam-time {
+    display: block;
+    margin-top: 2px;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--text-muted);
+    min-height: 14px;
 }
 
 /* Images not in a row */

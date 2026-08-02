@@ -1,5 +1,13 @@
-const PRECACHE_NAME = 'tools-index-precache-v21';
-const RUNTIME_NAME = 'tools-index-runtime-v21';
+const PRECACHE_NAME = 'tools-index-precache-v22';
+const RUNTIME_NAME = 'tools-index-runtime-v22';
+
+// Hosts serving live camera stills. A cached frame from these is stale by
+// definition, so their requests bypass the service worker entirely.
+const NEVER_CACHE_HOSTS = new Set([
+  'gp.satwork.net',
+  'hak.hr',
+  'www.hak.hr',
+]);
 
 const PRECACHE_ASSETS = [
   './',
@@ -51,6 +59,8 @@ self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
 
   const url = new URL(event.request.url);
+
+  if (NEVER_CACHE_HOSTS.has(url.hostname)) return;
 
   if (event.request.mode === 'navigate') {
     event.respondWith((async () => {
