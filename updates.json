@@ -1,5 +1,10 @@
 [
   {
+    "date": "2026-08-02T12:00:00Z",
+    "tool": "Kamere",
+    "description": "Camera views now always load the latest image instead of a cached one, with a spinner while each camera loads and an automatic refresh when you return to the page"
+  },
+  {
     "date": "2026-07-30T10:00:00Z",
     "tool": "JSON Formatter",
     "description": "Added JSON Formatter — a split view that pretty-prints pasted JSON with syntax highlighting, one-click copy, key sorting, and precise error locations"
