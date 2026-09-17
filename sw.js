@@ -1,5 +1,5 @@
-const PRECACHE_NAME = 'tools-index-precache-v22';
-const RUNTIME_NAME = 'tools-index-runtime-v22';
+const PRECACHE_NAME = 'tools-index-precache-v23';
+const RUNTIME_NAME = 'tools-index-runtime-v23';
 
 // Hosts serving live camera stills. A cached frame from these is stale by
 // definition, so their requests bypass the service worker entirely.

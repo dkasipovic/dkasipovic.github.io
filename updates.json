@@ -1,5 +1,10 @@
 [
   {
+    "date": "2026-09-17T12:00:00Z",
+    "tool": "Web Clip",
+    "description": "Added Web Clip — generates an iOS .mobileconfig profile that puts an exact URL on the iPhone home screen, with icon upload or favicon pull, full screen and manifest scope options"
+  },
+  {
     "date": "2026-08-02T12:00:00Z",
     "tool": "Kamere",
     "description": "Camera views now always load the latest image instead of a cached one, with a spinner while each camera loads and an automatic refresh when you return to the page"
