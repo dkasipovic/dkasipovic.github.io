@@ -1,5 +1,10 @@
 [
   {
+    "date": "2026-09-18T12:00:00Z",
+    "tool": "Torrent Player",
+    "description": "Added Torrent Player — paste a magnet link, pick a file, and stream it peer-to-peer in the browser over WebRTC, with nothing installed and nothing left on disk afterwards"
+  },
+  {
     "date": "2026-09-17T12:00:00Z",
     "tool": "Web Clip",
     "description": "Added Web Clip — generates an iOS .mobileconfig profile that puts an exact URL on the iPhone home screen, with icon upload or favicon pull, full screen and manifest scope options"

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#8b5cf6">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Torrent">
+    <meta name="description" content="Paste a magnet link, pick a file, and stream it peer-to-peer in your browser — no server, nothing installed">
+    <link rel="apple-touch-icon" href="icon.svg">
+    <link rel="icon" type="image/svg+xml" href="icon.svg">
+    <link rel="manifest" href="manifest.json">
+    <title>Torrent Player - Kasipovic</title>
+    <link rel="stylesheet" href="/shared/styles.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <p class="intro">
+            Paste a magnet link, pick a file, and it plays right here. Everything runs in this tab —
+            no server, no upload, nothing installed. Because a browser can only reach peers over
+            WebRTC, this finds peers for torrents that are seeded by WebTorrent-capable clients or
+            that carry a web seed. An ordinary public magnet will usually find nobody.
+        </p>
+
+        <section class="card" id="unsupportedCard" hidden>
+            <p class="status status-error" id="unsupportedText"></p>
+        </section>
+
+        <section class="card" id="sourceCard">
+            <div class="field">
+                <label for="magnetInput">Magnet link or info hash</label>
+                <input type="text" id="magnetInput" inputmode="url" autocapitalize="off" autocomplete="off"
+                    autocorrect="off" spellcheck="false" placeholder="magnet:?xt=urn:btih:…">
+                <p class="error-text" id="magnetError" hidden></p>
+            </div>
+
+            <div class="action-row">
+                <button class="btn btn-primary" id="loadBtn">Load torrent</button>
+                <button class="btn" id="pasteBtn" hidden>Paste</button>
+                <button class="btn btn-ghost" id="demoBtn">Try a demo</button>
+            </div>
+
+            <details class="trackers">
+                <summary>WebSocket trackers</summary>
+                <p class="hint">
+                    One per line. These are the only trackers a browser can talk to — plain
+                    <code>udp://</code> and <code>http://</code> trackers from a magnet link are
+                    unreachable from a tab and get ignored.
+                </p>
+                <textarea id="trackerInput" rows="4" spellcheck="false" autocapitalize="off"
+                    autocorrect="off"></textarea>
+                <button class="btn btn-ghost" id="resetTrackersBtn">Reset to defaults</button>
+            </details>
+        </section>
+
+        <section class="card" id="statusCard" hidden>
+            <div class="torrent-head">
+                <h2 id="torrentName">Fetching metadata…</h2>
+                <button class="btn btn-ghost" id="stopBtn">Stop &amp; clear</button>
+            </div>
+
+            <div class="progress" role="progressbar" aria-labelledby="torrentName">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+
+            <dl class="stats">
+                <div><dt>Progress</dt><dd class="mono" id="statProgress">0%</dd></div>
+                <div><dt>Peers</dt><dd class="mono" id="statPeers">0</dd></div>
+                <div><dt>Down</dt><dd class="mono" id="statDown">0 B/s</dd></div>
+                <div><dt>Up</dt><dd class="mono" id="statUp">0 B/s</dd></div>
+                <div><dt>Downloaded</dt><dd class="mono" id="statDownloaded">0 B</dd></div>
+                <div><dt>Remaining</dt><dd class="mono" id="statEta">—</dd></div>
+            </dl>
+
+            <p class="note" id="peerNote" hidden></p>
+        </section>
+
+        <section class="card" id="playerCard" hidden>
+            <video id="player" controls playsinline preload="metadata"></video>
+            <p class="note" id="playerNote" hidden></p>
+        </section>
+
+        <section class="card" id="filesCard" hidden>
+            <h2 class="card-title">Files</h2>
+            <ul class="file-list" id="fileList"></ul>
+        </section>
+
+        <section class="card guide">
+            <h2>Why a magnet may find no peers</h2>
+            <ol>
+                <li>A tab cannot open TCP or UDP sockets, so it can only reach peers over
+                    <strong>WebRTC</strong>, announced on <strong>wss://</strong> trackers. Every
+                    browser torrent client has this limit.</li>
+                <li>It works with torrents seeded by a WebTorrent-capable client — a browser tab,
+                    WebTorrent Desktop, Vuze, BiglyBT — and with magnets carrying a
+                    <strong>web seed</strong> (<code>ws=</code>), which is fetched over plain HTTPS
+                    and needs no peers at all. The demo is one of those.</li>
+                <li>Playback uses the browser's own decoder: <strong>MP4, MOV, WebM</strong> and
+                    (outside Firefox) <strong>MKV</strong> play. AVI, MPEG and WMV do not, and
+                    H.265 or AC3 inside an MP4 usually will not either. Those get a download link.</li>
+                <li>An MP4 whose index sits at the end of the file cannot start until it has
+                    downloaded in full. That is how the file was made, not a fault here.</li>
+                <li>Pieces are held in private browser storage while you watch and are deleted when
+                    you press <strong>Stop &amp; clear</strong> or close the tab. Nothing is kept.</li>
+            </ol>
+        </section>
+    </div>
+
+    <script src="/shared/app.js"></script>
+    <script type="module" src="script.js"></script>
+</body>
+
+</html>
