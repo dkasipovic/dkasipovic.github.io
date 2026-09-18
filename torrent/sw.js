@@ -1,28 +1,36 @@
-const PRECACHE_NAME = 'tools-index-precache-v24';
-const RUNTIME_NAME = 'tools-index-runtime-v24';
+// WebTorrent streams files to <video> through a service worker rather than through
+// MediaSource: client.createServer() hands this worker a MessageChannel, and the worker
+// answers range requests under `<scope>/webtorrent/...` by pulling pieces from the page.
+//
+// Its handler only calls respondWith() for URLs under `registration.scope + 'webtorrent/'`
+// and returns null for everything else, so it layers cleanly beneath the precache handler
+// further down. A service worker's own script must be same-origin, but importScripts() may
+// pull cross-origin — and imported scripts are stored in the registration's script map, so
+// this keeps working offline once installed.
+importScripts('https://cdn.jsdelivr.net/npm/webtorrent@3.0.21/dist/sw.min.js');
 
-// Hosts serving live camera stills. A cached frame from these is stale by
-// definition, so their requests bypass the service worker entirely.
-const NEVER_CACHE_HOSTS = new Set([
-  'gp.satwork.net',
-  'hak.hr',
-  'www.hak.hr',
-]);
+const PRECACHE_NAME = 'torrent-precache-v1';
+const RUNTIME_NAME = 'torrent-runtime-v1';
 
 const PRECACHE_ASSETS = [
   './',
   './index.html',
   './styles.css',
-  './updates.json',
+  './script.js',
   './manifest.json',
   './icon.svg',
-  './icon-192.png',
-  './icon-512.png',
-  './shared/styles.css',
-  './shared/app.js',
+  '/shared/styles.css',
+  '/shared/app.js',
 ];
 
-const BEST_EFFORT_EXTERNAL_ASSETS = [];
+// The WebTorrent bundle itself. Unlike the no-cors best-effort pattern the other tools use,
+// these must be fetched with CORS: an opaque response cannot satisfy a `type="module"`
+// import, and the browser would refuse the cached copy. jsDelivr sends
+// `access-control-allow-origin: *`, so a plain cache.add() gets a usable 'cors' response.
+const BEST_EFFORT_EXTERNAL_ASSETS = [
+  'https://cdn.jsdelivr.net/npm/webtorrent@3.0.21/dist/webtorrent.min.js',
+  'https://cdn.jsdelivr.net/npm/webtorrent@3.0.21/dist/sw.min.js',
+];
 
 self.addEventListener('install', (event) => {
   event.waitUntil((async () => {
@@ -31,15 +39,7 @@ self.addEventListener('install', (event) => {
 
     const runtime = await caches.open(RUNTIME_NAME);
     await Promise.allSettled(
-      BEST_EFFORT_EXTERNAL_ASSETS.map(async (url) => {
-        try {
-          const request = new Request(url, { mode: 'no-cors' });
-          const response = await fetch(request);
-          await runtime.put(request, response);
-        } catch {
-          // Ignore third-party caching failures.
-        }
-      })
+      BEST_EFFORT_EXTERNAL_ASSETS.map((url) => runtime.add(url))
     );
 
     await self.skipWaiting();
@@ -60,7 +60,10 @@ self.addEventListener('fetch', (event) => {
 
   const url = new URL(event.request.url);
 
-  if (NEVER_CACHE_HOSTS.has(url.hostname)) return;
+  // Streaming routes belong to the WebTorrent handler imported above, which has already
+  // claimed them. A second respondWith() on the same event throws InvalidStateError, and
+  // caching torrent pieces would be pointless anyway.
+  if (url.pathname.includes('/webtorrent/')) return;
 
   if (event.request.mode === 'navigate') {
     event.respondWith((async () => {
@@ -95,11 +98,16 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  // Cross-origin. Tracker traffic is WebSocket and WebRTC, which never reaches a fetch
+  // handler, so in practice this only serves the WebTorrent bundle and any web seed.
+  // Web seeds are range requests that must go to the network untouched.
+  if (event.request.headers.has('range')) return;
+
   event.respondWith((async () => {
     const cached = await caches.match(event.request);
     const fetchPromise = (async () => {
       const response = await fetch(event.request);
-      if (response.ok || response.type === 'opaque') {
+      if (response.ok) {
         const cache = await caches.open(RUNTIME_NAME);
         cache.put(event.request, response.clone());
       }
